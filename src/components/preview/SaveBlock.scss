@@ -1,0 +1,68 @@
+@import '../../style/variables.scss';
+
+.save-block {
+    padding: 0 2px 2px 2px;
+    min-width: 12rem;
+    border-radius: $corner-radius;
+    margin-bottom: 0.8rem;
+    background-color: var(--base-color);
+
+    &__header {
+        text-transform: uppercase;
+        text-align: center;
+        color: white;
+    }
+
+    &__content {
+        background-color: white;
+        padding: 1px;
+        border-radius: $corner-radius - 0.2rem;
+    }
+
+    &__rating {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &-label {
+            text-align: center;
+            flex: 1 auto;
+            padding: 2px;
+            display: flex;
+            flex-direction: column;
+
+            &-name {
+                font-size: 1rem;
+                line-height: 1.4rem;
+                font-style: italic;
+            }
+
+            &-attribute {
+                font-weight: bold;
+                font-size: 1.2rem;
+                line-height: 1rem;
+                font-style: italic;
+            }
+        }
+
+        &-number {
+            padding: 2px;
+            font-weight: bold;
+            width: 2rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        &--primary {
+            background-color: $primary-value-color;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            height: 1.8rem;
+            border-radius: $corner-radius - 0.3rem;
+        }
+        &--secondary:nth-child(n+3) {
+            border-top: 1px solid rgb(230,230,230);
+        }
+    }
+}

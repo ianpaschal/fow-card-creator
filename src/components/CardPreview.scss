@@ -1,0 +1,135 @@
+@import '../style/variables.scss';
+
+.card-preview {
+    h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1.8rem;
+    }
+    h2 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.4rem;
+    }
+    h3, h4 {
+        font-size: 0.8rem;
+        font-weight: 700;
+        line-height: 1rem;
+    }
+    border-radius: 2rem;
+    overflow: hidden;
+    
+    // h2, h3 {
+    //     font-size: 1rem;
+    //     font-weight: 700;
+    //     line-height: 1.6rem;
+    // }
+
+    // background: url('../assets/background-us.png');
+    // background-repeat: no-repeat;
+    // background-size: 464px 344px;
+    // background-position: center; 
+
+    display: grid;
+    grid-template-columns: 12rem auto 12rem;
+    grid-template-rows: 4rem auto auto auto;
+    column-gap: 8px;
+    row-gap: 8px;
+    grid-template-areas: 
+        "header header header"
+        "left center right"
+        "movement movement movement"
+        "weapons weapons weapons";
+    background-color: rgb(246, 248, 250);
+    border: 16px solid rgb(234, 236, 238);
+    padding: 0.8rem;
+    min-width: 57.2rem;
+    // min-height: 41.6rem;
+}
+
+.card-preview__header {
+    border-radius: 8px;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px 8px;
+    grid-area: header;
+    height: 4rem;
+    display: flex;
+    justify-content: space-between;
+}
+.card-preview__title {
+    display: flex;
+    flex: 1 auto;
+    flex-direction: column;
+    justify-content: center;
+}
+.card-preview__header-icon {
+    width: 3.2rem;
+    height: 3.2rem;
+    background-color: gold;
+    svg {
+        width: 100%;
+        height: 100%;
+        .st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
+    }
+}
+.card-preview__header-icon--formation-hq {
+    width: 3.2rem;
+    height: 3.2rem;
+    background-color: gold;
+    padding: 0.2rem 0.4rem 0.6rem;
+    svg {
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 1.2rem;
+        .st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
+    }
+}
+
+
+.card-preview__left {
+    grid-area: left;
+}
+
+.card-preview__center {
+    grid-area: center;
+    text-align: center;
+}
+
+.card-preview__right {
+    grid-area: right;
+}
+
+.card-preview__movement {
+    grid-area: movement;
+}
+
+.card-preview__weapons {
+    grid-area: weapons;
+}
+
+
+// New
+
+.card-preview {
+    .card-preview__header, .soft-stat-block, .mobility-block, .weapons-block {
+        background-color: var(--base-color);
+    }
+}
+
+.card-preview__special-rules {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.6rem;
+    text-transform: uppercase;
+
+    span:first-child:before {
+        content: " • ";
+    }
+    span:after {
+        content: " • ";
+    }
+}

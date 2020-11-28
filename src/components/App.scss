@@ -1,0 +1,36 @@
+@import '../style/variables.scss';
+
+.app {
+    height: 100vh;
+    width: 100vw;
+
+    &__header {
+        background-color: var(--base-color);
+        height: 6.4rem;
+        width: 100vw;
+        color: white;
+        position: fixed;
+        z-index: 10;
+    }
+    &__main {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        padding-top: 6.4rem;
+    }
+    &__edit-pane {
+        flex: 1 50%;
+        height: 100%;
+        overflow-y: scroll;
+        border-right: 1px solid rgb(225, 228, 232);
+        max-width: 400px;
+    }
+    &__preview-pane {
+        background-color: rgb(250, 251, 252);
+        height: 100%;
+        overflow-y: scroll;
+        flex: 1 50%;
+        min-width: 556px;
+        padding: 8px;
+    }
+}
