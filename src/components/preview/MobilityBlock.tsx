@@ -1,7 +1,10 @@
+// Copyright (c) 2020 Ian Paschal
+
 import React from 'react';
 import classNamesDedeupe from 'classnames/dedupe';
 import './MobilityBlock.scss';
 import { MobilityAttributes } from '../../enums/Mobility';
+import { FormattedDiceRoll } from './FormattedDiceRoll';
 
 export interface MobilityBlockProps {
 	className?: string;
@@ -32,7 +35,7 @@ export const MobilityBlock: React.FC<MobilityBlockProps> = ({
 					{Object.keys(mobility).map((key, i) => (
 						<div key={i} className="mobility-block__row-cell">
 							{key === 'cross' ? (
-								mobility[ key ] + '+'
+								<FormattedDiceRoll value={mobility[ key ]}/>
 							) : (
 								<>
 									{ mobility[ key ] > 0 ? (

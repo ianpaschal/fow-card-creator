@@ -2,6 +2,7 @@ import React from 'react';
 import classNamesDedeupe from 'classnames/dedupe';
 import './SaveBlock.scss';
 import { SaveRating } from '../../store/editor/editorSlice';
+import { UnitTypes } from '../../enums/UnitTypes';
 
 export interface SaveBlockProps {
 	className?: string;
@@ -18,7 +19,7 @@ export const SaveBlock: React.FC<SaveBlockProps> = ({
 			<div className="save-block__content">
 				<div className="save-block__rating">
 					<div className="save-block__rating-label">
-						{save.type}
+						{save.type === 'UNARMOURED_TANK' ? UnitTypes.TANK : UnitTypes[ save.type ]}
 					</div>
 					<div className="save-block__rating-number">
 						{save.value}

@@ -24,6 +24,7 @@ import { UnitSpecialRuleName } from '../enums/UnitSpecialRuleNames';
 import { ConnectedSoftStatEditorSection } from './editor/SoftStatEditorSection';
 import { getBaseColor } from '../utils/getBaseColor';
 import { ConnectedMobilityEditor, MobilityEditor } from './editor/MobilityEditor';
+import {ConnectedWeaponsEditor} from './editor/WeaponsEditor';
 
 const animatedComponents = makeAnimated();
 
@@ -113,7 +114,7 @@ export class CardEditor extends React.Component<CardEditorProps> {
 								value: UnitType,
 								label: string
 							}) => {
-								if (selection.value === 'TANK_UNIT') {
+								if (selection.value === 'TANK') {
 									setArmorRating({
 										front: 1,
 										sideRear: 1,
@@ -164,6 +165,7 @@ export class CardEditor extends React.Component<CardEditorProps> {
 				<ConnectedSoftStatEditorSection attribute="skill"/>
 				<ConnectedSoftStatEditorSection attribute="hitOn"/>
 				<ConnectedMobilityEditor />
+				<ConnectedWeaponsEditor />
 			</form>
 		);
 	}

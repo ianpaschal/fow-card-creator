@@ -9,7 +9,7 @@
             padding-bottom: 24px;
         }
     }
-    &__input-row, &__rating-modifier {
+    &__input-row, &__sub-section {
         margin: 1.6rem 0;
     }
 
@@ -35,7 +35,7 @@
         height: 64px;
     }
 
-    &__rating-modifier {
+    &__sub-section {
         display: grid;
         grid-template-columns: 3.2rem 3fr 1fr;
         grid-template-rows: 6.4rem 6.4rem;

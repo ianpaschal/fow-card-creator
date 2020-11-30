@@ -1,11 +1,11 @@
 export enum UnitTypes {
 	// TANK_FORMATION = 'Tank Formation',
-	TANK_UNIT = 'Tank Unit',
+	TANK = 'Tank',
 	UNARMOURED_TANK = 'Unarmoured Tank',
-	GUN_UNIT = 'Gun Unit',
+	GUN = 'Gun',
 	// INFANTRY_FORMATION = 'Intantry Formation',
-	INFANTRY_UNIT = 'Infantry Unit',
-	AIRCRAFT_UNIT = 'Aircraft Unit',
+	INFANTRY = 'Infantry',
+	AIRCRAFT = 'Aircraft',
 }
 
 export type UnitType = keyof typeof UnitTypes;

@@ -12,11 +12,13 @@ import { HitOnRating } from '../../enums/HitOnRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { MobilityAttribute } from '../../enums/Mobility';
 import { ArmorAttribute } from '../../enums/ArmorAttributes';
+import { DiceRollValue } from '../../components/preview/FormattedDiceRoll';
 
 export interface SoftStatModifier {
 	attribute: string;
 	name: string;
-	number: 1 | 2 | 3 | 4 | 5 | 6;
+	// TODO: Rename to value
+	number: DiceRollValue;
 }
 
 export interface ArmorRating {
@@ -27,7 +29,7 @@ export interface ArmorRating {
 
 export interface SaveRating {
 	type: UnitType;
-	value: number;
+	value: DiceRollValue;
 }
 
 export interface Weapon {
@@ -39,14 +41,14 @@ export interface Weapon {
 			moving: number;
 		}
 		antiTank: number;
-		firePower: number;
+		firePower: DiceRollValue;
 		notes: string[];
 	}
 	bombardment?: {
 		range: number;
 		template: 'artillery' | 'salvo';
 		antiTank: number;
-		firePower: number;
+		firePower: DiceRollValue;
 		notes: string[];
 	}
 }
@@ -78,18 +80,17 @@ export interface EditorState {
 			terrainDash: number;
 			crossCountryDash: number;
 			roadDash: number;
-			cross: number;
+			cross: DiceRollValue;
 		}
 		weapons: Weapon[];
 	};
 	availableSpecialRules: FormValue[];
-	distances: 'imperial' | 'metric';
 }
 
 export const initialState: EditorState = {
 	unit: {
 		nationality: undefined,
-		unitType: 'TANK_UNIT',
+		unitType: 'TANK',
 		era: undefined,
 		title: undefined,
 		subTitle: undefined,
@@ -192,7 +193,6 @@ export const initialState: EditorState = {
 		],
 	},
 	availableSpecialRules: filterUnitSpecialRules(undefined, undefined),
-	distances: 'imperial',
 };
 
 export const editorSlice = createSlice({
@@ -287,7 +287,7 @@ export const editorSlice = createSlice({
 		}),
 		addModifier: (
 			state: EditorState,
-			action: PayloadAction<{modifierType: string, modifier: any}>
+			action: PayloadAction<{modifierType: string, modifier: SoftStatModifier}>
 		): EditorState => ({
 			...state,
 			unit: {
@@ -303,7 +303,7 @@ export const editorSlice = createSlice({
 		}),
 		updateModifier: (
 			state: EditorState,
-			action: PayloadAction<{modifierType: string, index: number, modifier: any}>
+			action: PayloadAction<{modifierType: string, index: number, modifier: SoftStatModifier}>
 		): EditorState => ({
 			...state,
 			unit: {
@@ -389,6 +389,46 @@ export const editorSlice = createSlice({
 				},
 			};
 		},
+		addWeapon: (
+			state: EditorState,
+			action: PayloadAction<{weapon: Weapon}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons,
+					action.payload.weapon,
+				],
+			},
+		}),
+		updateWeapon: (
+			state: EditorState,
+			action: PayloadAction<{index: number, weapon: Weapon}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons.slice(0, action.payload.index),
+					action.payload.weapon,
+					...state.unit.weapons.slice(action.payload.index + 1),
+				],
+			},
+		}),
+		removeWeapon: (
+			state: EditorState,
+			action: PayloadAction<{index: number}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons.slice(0, action.payload.index),
+					...state.unit.weapons.slice(action.payload.index + 1),
+				],
+			},
+		}),
 	},
 });
 

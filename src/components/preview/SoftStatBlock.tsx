@@ -4,6 +4,7 @@ import './SoftStatBlock.scss';
 import { MotivationAttributes, MotivationNumbers, MotivationRatings } from '../../enums/MotivationRatings';
 import { SkillAttributes, SkillNumbers, SkillRatings } from '../../enums/SkillRatings';
 import { HitOnNumbers, HitOnRatings } from '../../enums/HitOnRatings';
+import {FormattedDiceRoll} from './FormattedDiceRoll';
 
 export interface SoftStatBlockProps {
 	className?: string;
@@ -50,7 +51,7 @@ export const SoftStatBlock: React.FC<SoftStatBlockProps> = ({
 						{ratingsEnum[ stat.baseRating ]}
 					</div>
 					<div className="soft-stat-block__rating-number">
-						{numbersEnum[ stat.baseRating ]}+
+						<FormattedDiceRoll value={numbersEnum[ stat.baseRating ]}/>
 					</div>
 				</div>
 				{stat.modifiers.map((modifier, i) => (
@@ -64,7 +65,7 @@ export const SoftStatBlock: React.FC<SoftStatBlockProps> = ({
 							</span>
 						</div>
 						<div className="soft-stat-block__rating-number">
-							{modifier.number}{modifier.number < 6 && '+'}
+							<FormattedDiceRoll value={modifier.number}/>
 						</div>
 					</div>
 				))}

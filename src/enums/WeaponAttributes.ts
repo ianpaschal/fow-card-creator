@@ -10,3 +10,5 @@ export enum WeaponAttributes {
 }
 
 export type WeaponAttribute = keyof typeof WeaponAttributes;
+
+export const WeaponAttributeKeys = Object.keys(WeaponAttributes);

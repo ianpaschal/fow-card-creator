@@ -36,11 +36,12 @@ export const MobilityEditor: React.FC<MobilityEditorProps> = ({
 				<input type="number"
 					id={attribute}
 					name={attribute}
-					min={attribute !== 'cross' ? '0' : '1'}
-					max={attribute !== 'cross' ? '72' : '6'}
-					step={attribute !== 'cross' ? '2' : undefined}
+					min={attribute === 'cross' ? '1' : '0'}
+					max={attribute === 'cross' ? '6' : '72'}
+					step={attribute === 'cross' ? undefined : 2}
 					onChange={(e) => {
-						setMobility(attribute, parseInt(e.target.value));
+						const value = parseInt(e.target.value);
+						setMobility(attribute, attribute === 'cross' ? Math.min(Math.max(1, value), 6) : value);
 					}}
 					value={mobility[ attribute ]}
 				/>

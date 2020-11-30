@@ -9,7 +9,7 @@ import { Nationality } from '../../enums/Nations';
 import { SkillRating } from '../../enums/SkillRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { UnitType } from '../../enums/UnitTypes';
-import { actions, ArmorRating, SaveRating } from './editorSlice';
+import { actions, ArmorRating, SaveRating, Weapon } from './editorSlice';
 
 export function setNationalityActionCreator(nationality: Nationality) {
 	return (dispatch: Dispatch) => {
@@ -105,5 +105,23 @@ export function setArmorAttributeActionCreator(attribute: ArmorAttribute, value:
 export function setSaveRatingActionCreator(rating: SaveRating) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.setSaveRating(rating));
+	};
+}
+
+export function addWeaponActionCreator(weapon: Weapon) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.addWeapon({ weapon }));
+	};
+}
+
+export function updateWeaponActionCreator(index: number, weapon: Weapon) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.updateWeapon({ index, weapon }));
+	};
+}
+
+export function removeWeaponActionCreator(index: number) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.removeWeapon({ index }));
 	};
 }

@@ -93,7 +93,7 @@ export class SoftStatEditorSection extends React.Component<SoftStatEditorSection
 				/>
 
 				{attribute !== 'hitOn' && unit[ attribute ].modifiers.map((modifier, i) => (
-					<div key={i} className="card-editor__rating-modifier">
+					<div key={i} className="card-editor__sub-section">
 						<button className='delete-button' onClick={(e) => {
 							e.preventDefault();
 							removeModifier(attribute, i);
