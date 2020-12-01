@@ -2,9 +2,8 @@
 
 import React from 'react';
 import classNamesDedeupe from 'classnames/dedupe';
+import { DiceRollValue } from '../../typing/DiceRollValue';
 import './MobilityBlock.scss';
-
-export type DiceRollValue = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface FormattedDiceRollProps {
 	className?: string;

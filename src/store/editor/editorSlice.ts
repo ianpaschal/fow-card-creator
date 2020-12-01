@@ -12,186 +12,20 @@ import { HitOnRating } from '../../enums/HitOnRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { MobilityAttribute } from '../../enums/Mobility';
 import { ArmorAttribute } from '../../enums/ArmorAttributes';
-import { DiceRollValue } from '../../components/preview/FormattedDiceRoll';
-
-export interface SoftStatModifier {
-	attribute: string;
-	name: string;
-	// TODO: Rename to value
-	number: DiceRollValue;
-}
-
-export interface ArmorRating {
-	front: number;
-	sideRear: number;
-	top: number;
-}
-
-export interface SaveRating {
-	type: UnitType;
-	value: DiceRollValue;
-}
-
-export interface Weapon {
-	name: string;
-	direct: {
-		range: number;
-		rof: {
-			halted: number;
-			moving: number;
-		}
-		antiTank: number;
-		firePower: DiceRollValue;
-		notes: string[];
-	}
-	bombardment?: {
-		range: number;
-		template: 'artillery' | 'salvo';
-		antiTank: number;
-		firePower: DiceRollValue;
-		notes: string[];
-	}
-}
+import { defaultUnit } from './defaultUnit';
+import { Unit } from '../../typing/Unit';
+import { SoftStatModifier } from '../../typing/SoftStatModifier';
+import { ArmorRating } from '../../typing/ArmorRating';
+import { SaveRating } from '../../typing/SaveRating';
+import { Weapon } from '../../typing/Weapon';
 
 export interface EditorState {
-	unit: {
-		era: Era;
-		nationality: Nationality;
-		unitType: UnitType;
-		title: string;
-		subTitle: string;
-		specialRules: UnitSpecialRuleName[];
-		motivation: {
-			baseRating: MotivationRating;
-			modifiers: SoftStatModifier[];
-		}
-		skill: {
-			baseRating: SkillRating;
-			modifiers: SoftStatModifier[];
-		}
-		hitOn: {
-			baseRating: HitOnRating;
-			modifiers: SoftStatModifier[];
-		}
-		armor?: ArmorRating;
-		save?: SaveRating;
-		mobility: {
-			tactical: number;
-			terrainDash: number;
-			crossCountryDash: number;
-			roadDash: number;
-			cross: DiceRollValue;
-		}
-		weapons: Weapon[];
-	};
+	unit: Unit;
 	availableSpecialRules: FormValue[];
 }
 
 export const initialState: EditorState = {
-	unit: {
-		nationality: undefined,
-		unitType: 'TANK',
-		era: undefined,
-		title: undefined,
-		subTitle: undefined,
-		specialRules: [],
-		motivation: {
-			baseRating: 'CONFIDENT',
-			modifiers: [],
-		},
-		skill: {
-			baseRating: 'TRAINED',
-			modifiers: [],
-		},
-		hitOn: {
-			baseRating: 'AGGRESSIVE',
-			modifiers: [],
-		},
-		armor: {
-			front: 6,
-			sideRear: 3,
-			top: 1,
-		},
-		mobility: {
-			tactical: 10,
-			terrainDash: 12,
-			crossCountryDash: 18,
-			roadDash: 24,
-			cross: 3,
-		},
-		weapons: [
-
-			{
-				name: '105mm howitzer',
-				direct: {
-					range: 24,
-					rof: {
-						halted: 1,
-						moving: 1,
-					},
-					antiTank: 9,
-					firePower: 2,
-					notes: [
-						'Brutal',
-						'Forward Firing',
-						'Slow Fiiring',
-						'Smoke',
-					],
-				},
-				bombardment: {
-					range: 72,
-					template: 'artillery',
-					antiTank: 3,
-					firePower: 2,
-					notes: [
-						'Forward Firing',
-						'Smoke Bombardment',
-					],
-				},
-			},
-			{
-				name: 'M3A1 (.50 cal MG)',
-				direct: {
-					range: 24,
-					rof: {
-						halted: 3,
-						moving: 2,
-					},
-					antiTank: 4,
-					firePower: 5,
-					notes: [],
-				},
-			},
-			{
-				name: '105mm howitzer',
-				direct: {
-					range: 24,
-					rof: {
-						halted: 1,
-						moving: 1,
-					},
-					antiTank: 9,
-					firePower: 2,
-					notes: [
-						'Brutal',
-						'Forward Firing',
-						'Slow Fiiring',
-						'Smoke',
-					],
-				},
-				bombardment: {
-					range: 72,
-					template: 'artillery',
-					antiTank: 3,
-					firePower: 2,
-					notes: [
-						'Forward Firing',
-						'Smoke Bombardment',
-					],
-				},
-			},
-		],
-	},
+	unit: defaultUnit,
 	availableSpecialRules: filterUnitSpecialRules(undefined, undefined),
 };
 
@@ -399,20 +233,6 @@ export const editorSlice = createSlice({
 				weapons: [
 					...state.unit.weapons,
 					action.payload.weapon,
-				],
-			},
-		}),
-		updateWeapon: (
-			state: EditorState,
-			action: PayloadAction<{index: number, weapon: Weapon}>
-		): EditorState => ({
-			...state,
-			unit: {
-				...state.unit,
-				weapons: [
-					...state.unit.weapons.slice(0, action.payload.index),
-					action.payload.weapon,
-					...state.unit.weapons.slice(action.payload.index + 1),
 				],
 			},
 		}),

@@ -4,7 +4,7 @@ import './SoftStatBlock.scss';
 import { MotivationAttributes, MotivationNumbers, MotivationRatings } from '../../enums/MotivationRatings';
 import { SkillAttributes, SkillNumbers, SkillRatings } from '../../enums/SkillRatings';
 import { HitOnNumbers, HitOnRatings } from '../../enums/HitOnRatings';
-import {FormattedDiceRoll} from './FormattedDiceRoll';
+import { FormattedDiceRoll } from './FormattedDiceRoll';
 
 export interface SoftStatBlockProps {
 	className?: string;

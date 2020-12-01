@@ -7,7 +7,7 @@ import './EditorSubSection.scss';
 export interface EditorSubSectionProps {
 	className?: string;
 	children: React.ReactNode;
-	onRemove: (e: React.MouseEvent<HTMLInputElement>) => void;
+	onRemove: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const EditorSubSection: React.FC<EditorSubSectionProps> = ({
@@ -16,7 +16,14 @@ export const EditorSubSection: React.FC<EditorSubSectionProps> = ({
 	onRemove,
 }: EditorSubSectionProps) => (
 	<div className={classNamesDedupe('editor-sub-section', extraClassName)}>
-		<button className='editor-sub-section__delete-button' onClick={onRemove}>X</button>
+		<button className='editor-sub-section__delete-button'
+			onClick={(e) => {
+				e.preventDefault();
+				onRemove(e);
+			}}
+		>
+			X
+		</button>
 		<div className='editor-sub-section__children'>
 			{children}
 		</div>

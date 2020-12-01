@@ -1,7 +1,7 @@
 import React from 'react';
 import classNamesDedeupe from 'classnames/dedupe';
 import './SaveBlock.scss';
-import { SaveRating } from '../../store/editor/editorSlice';
+import { SaveRating } from '../../typing/SaveRating';
 import { UnitTypes } from '../../enums/UnitTypes';
 
 export interface SaveBlockProps {

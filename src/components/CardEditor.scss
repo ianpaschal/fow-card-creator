@@ -1,5 +1,28 @@
 .card-editor {
 
+    &__toolbar {
+        display: flex;
+        flex-direction: row;
+        padding: 1rem 2rem;
+
+        Button {
+            margin-left: 1.6rem;
+        }
+
+        Button:first-of-type {
+            margin-left: 0;
+        }
+        
+        Button:last-of-type {
+            margin-left: auto;
+        }
+    }
+
+
+    .MuiFormControl-root {
+        width: 100%;
+    }
+
     &__section {
         border-bottom: 1px solid rgb(234, 236, 239);
         padding: 24px;
@@ -27,7 +50,6 @@
         background-color: rgb(250, 251, 252);
         width: 100%;
         display: block;
-        font-size: 14px;
         font-weight: bold;
     }
     textarea {

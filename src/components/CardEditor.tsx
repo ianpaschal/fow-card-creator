@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -24,7 +25,7 @@ import { UnitSpecialRuleName } from '../enums/UnitSpecialRuleNames';
 import { ConnectedSoftStatEditorSection } from './editor/SoftStatEditorSection';
 import { getBaseColor } from '../utils/getBaseColor';
 import { ConnectedMobilityEditor, MobilityEditor } from './editor/MobilityEditor';
-import {ConnectedWeaponsEditor} from './editor/WeaponsEditor';
+import { ConnectedWeaponsEditor } from './editor/WeaponsEditor';
 
 const animatedComponents = makeAnimated();
 
@@ -66,6 +67,11 @@ export class CardEditor extends React.Component<CardEditorProps> {
 		} = this.props;
 		return (
 			<form className="card-editor">
+				<div className="card-editor__toolbar">
+					<button>Save &amp; Close</button>
+					<button>Duplicate</button>
+					<button>Preview</button>
+				</div>
 				<div className="card-editor__section">
 					<h1>General</h1>
 

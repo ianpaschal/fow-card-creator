@@ -114,12 +114,6 @@ export function addWeaponActionCreator(weapon: Weapon) {
 	};
 }
 
-export function updateWeaponActionCreator(index: number, weapon: Weapon) {
-	return (dispatch: Dispatch) => {
-		dispatch(actions.updateWeapon({ index, weapon }));
-	};
-}
-
 export function removeWeaponActionCreator(index: number) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.removeWeapon({ index }));

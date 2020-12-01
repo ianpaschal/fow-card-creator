@@ -69,7 +69,7 @@ export class CardPreview extends React.Component<CardEditorProps> {
 				</div>
 				<div className="card-preview__center">
 					<div className="card-preview__special-rules">
-						<span>{unit.unitType === 'UNARMOURED_TANK' ? UnitTypes[ unit.unitType ]: `${UnitTypes[ unit.unitType ]} Unit`}</span>
+						<span>{unit.unitType === 'UNARMOURED_TANK' ? UnitTypes[ unit.unitType ] : `${UnitTypes[ unit.unitType ]} Unit`}</span>
 						{unit.specialRules.map((rule, key) => (
 							<span key={key}>{UnitSpecialRuleNames[ rule ]}</span>
 						))}

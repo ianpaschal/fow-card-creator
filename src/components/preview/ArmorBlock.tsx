@@ -1,7 +1,7 @@
 import React from 'react';
 import classNamesDedeupe from 'classnames/dedupe';
 import './ArmorBlock.scss';
-import { ArmorRating } from '../../store/editor/editorSlice';
+import { ArmorRating } from '../../typing/ArmorRating';
 
 export interface ArmorBlockProps {
 	className?: string;
