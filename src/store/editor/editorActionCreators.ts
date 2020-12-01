@@ -114,6 +114,12 @@ export function addWeaponActionCreator(weapon: Weapon) {
 	};
 }
 
+export function updateWeaponActionCreator(index: number, mode: 'direct' | 'bombardment', attribute: string, value: any) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.updateWeapon({ index, mode, attribute, value }));
+	};
+}
+
 export function removeWeaponActionCreator(index: number) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.removeWeapon({ index }));

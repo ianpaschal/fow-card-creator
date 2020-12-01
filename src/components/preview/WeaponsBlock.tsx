@@ -52,7 +52,11 @@ export const WeaponsBlock: React.FC<WeaponsBlockProps> = ({
 									<p>{weapon.bombardment.antiTank}</p>
 								</div>
 								<div className="weapons-block__row-cell">
-									<p>{weapon.bombardment.firePower}{weapon.bombardment.firePower < 6 && '+'}</p>
+									{weapon.bombardment.firePower === 1 ? (
+										<p>AUTO</p>
+									) : (
+										<p>{weapon.bombardment.firePower}{weapon.bombardment.firePower < 6 && '+'}</p>
+									)}
 								</div>
 								<div className="weapons-block__row-cell">
 									{weapon.bombardment.notes.map((note, n) => (
@@ -79,7 +83,11 @@ export const WeaponsBlock: React.FC<WeaponsBlockProps> = ({
 								<p>{weapon.direct.antiTank}</p>
 							</div>
 							<div className="weapons-block__row-cell">
-								<p>{weapon.direct.firePower}{weapon.direct.firePower < 6 && '+'}</p>
+								{weapon.direct.firePower === 1 ? (
+									<p>AUTO</p>
+								) : (
+									<p>{weapon.direct.firePower}{weapon.direct.firePower < 6 && '+'}</p>
+								)}
 							</div>
 							<div className="weapons-block__row-cell">
 								{weapon.direct.notes.map((note, n) => (

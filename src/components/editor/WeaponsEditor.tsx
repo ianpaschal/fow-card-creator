@@ -10,6 +10,7 @@ import { WeaponAttributes, WeaponAttributeKeys } from '../../enums/WeaponAttribu
 import {
 	addWeaponActionCreator,
 	removeWeaponActionCreator,
+	updateWeaponActionCreator,
 } from '../../store/editor/editorActionCreators';
 import Select from 'react-select';
 import { defaultWeapon } from '../../store/editor/defaultWeapon';
@@ -22,6 +23,7 @@ const connector = connect(
 	}),
 	(dispatch) => bindActionCreators({
 		addWeapon: addWeaponActionCreator,
+		updateWeapon: updateWeaponActionCreator,
 		removeWeapon: removeWeaponActionCreator,
 	}, dispatch),
 );
@@ -38,6 +40,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 	className: extraClassName,
 	weapons,
 	addWeapon,
+	updateWeapon,
 	removeWeapon,
 }: WeaponsEditorProps) => (
 	<div className={classNamesDedupe('weapons-editor', 'card-editor__section', extraClassName)}>
@@ -85,19 +88,37 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 					</>
 				)}
 				<label htmlFor="direct-range">Range</label>
-				<input type="number" id="direct-range" name="direct-range" onChange={(e) => {}}/>
+				<input type="number" id="direct-range" name="direct-range"
+					value={weapon.direct.range}
+					onChange={(e) => updateWeapon(i, 'direct', 'range', e.target.value)}
+				/>
 
 				<label htmlFor="direct-rof-halted">Halted ROF</label>
-				<input type="number" id="direct-rof-halted" name="direct-rof-halted" onChange={(e) => {}}/>
+				<input type="number" id="direct-rof-halted" name="direct-rof-halted"
+					value={weapon.direct.rof.halted}
+					onChange={(e) => updateWeapon(i, 'direct', 'rof', { ...weapon.direct.rof, halted: parseInt(e.target.value) })}
+				/>
 
 				<label htmlFor="direct-rof-moving">Moving ROF</label>
-				<input type="number" id="direct-rof-moving" name="direct-rof-moving" onChange={(e) => {}}/>
+				<input type="number" id="direct-rof-moving" name="direct-rof-moving"
+					value={weapon.direct.rof.moving}
+					onChange={(e) => updateWeapon(i, 'direct', 'rof', { ...weapon.direct.rof, moving: parseInt(e.target.value) })}
+				/>
 
 				<label htmlFor="direct-anti-tank">Anti-Tank</label>
-				<input type="number" id="direct-anti-tank" name="direct-anti-tank" onChange={(e) => {}}/>
+				<input type="number" id="direct-anti-tank" name="direct-anti-tank"
+					value={weapon.direct.antiTank}
+					onChange={(e) => updateWeapon(i, 'direct', 'antiTank', parseInt(e.target.value))}
+				/>
 
 				<label htmlFor="direct-fire-power">Firepower</label>
-				<input type="number" id="direct-fire-power" name="direct-fire-power" onChange={(e) => {}}/>
+				<input type="number" id="direct-fire-power" name="direct-fire-power"
+					value={weapon.direct.firePower}
+					onChange={(e) => {
+						const value = parseInt(e.target.value);
+						updateWeapon(i, 'direct', 'firePower', Math.min(Math.max(1, value), 6));
+					}}
+				/>
 
 				<label htmlFor="direct-special-rules">Special Rules</label>
 				{/* <Select

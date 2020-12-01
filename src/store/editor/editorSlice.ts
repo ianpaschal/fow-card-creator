@@ -236,6 +236,26 @@ export const editorSlice = createSlice({
 				],
 			},
 		}),
+		updateWeapon: (
+			state: EditorState,
+			action: PayloadAction<{index: number, mode: 'direct' | 'bombardment', attribute: string, value: any}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons.slice(0, action.payload.index),
+					{
+						...state.unit.weapons[ action.payload.index ],
+						[ action.payload.mode ]: {
+							...state.unit.weapons[ action.payload.index ][ action.payload.mode ],
+							[ action.payload.attribute ]: action.payload.value,
+						},
+					},
+					...state.unit.weapons.slice(action.payload.index + 1),
+				],
+			},
+		}),
 		removeWeapon: (
 			state: EditorState,
 			action: PayloadAction<{index: number}>
