@@ -6,11 +6,15 @@ import { DiceRollValue } from '../../typing/DiceRollValue';
 import { Unit } from '../../typing/Unit';
 
 export const defaultUnit: Unit = {
-	nationality: undefined,
+	nationality: '',
 	unitType: 'TANK' as UnitType,
-	era: undefined,
-	title: undefined,
-	subTitle: undefined,
+	isFormation: false,
+	accentColor: '#000000',
+	isComponent: false,
+	passengers: 0,
+	era: '',
+	title: '',
+	subTitle: '',
 	specialRules: [],
 	motivation: {
 		baseRating: 'CONFIDENT' as MotivationRating,
@@ -36,75 +40,5 @@ export const defaultUnit: Unit = {
 		roadDash: 24,
 		cross: 3 as DiceRollValue,
 	},
-	weapons: [
-		{
-			name: '105mm howitzer',
-			direct: {
-				range: 24,
-				rof: {
-					halted: 1,
-					moving: 1,
-				},
-				antiTank: 9,
-				firePower: 2 as DiceRollValue,
-				notes: [
-					'Brutal',
-					'Forward Firing',
-					'Slow Fiiring',
-					'Smoke',
-				],
-			},
-			bombardment: {
-				range: 72,
-				template: 'artillery',
-				antiTank: 3,
-				firePower: 2 as DiceRollValue,
-				notes: [
-					'Forward Firing',
-					'Smoke Bombardment',
-				],
-			},
-		},
-		{
-			name: 'M3A1 (.50 cal MG)',
-			direct: {
-				range: 24,
-				rof: {
-					halted: 3,
-					moving: 2,
-				},
-				antiTank: 4,
-				firePower: 5 as DiceRollValue,
-				notes: [],
-			},
-		},
-		{
-			name: '105mm howitzer',
-			direct: {
-				range: 24,
-				rof: {
-					halted: 1,
-					moving: 1,
-				},
-				antiTank: 9,
-				firePower: 2 as DiceRollValue,
-				notes: [
-					'Brutal',
-					'Forward Firing',
-					'Slow Fiiring',
-					'Smoke',
-				],
-			},
-			bombardment: {
-				range: 72,
-				template: 'artillery',
-				antiTank: 3,
-				firePower: 2 as DiceRollValue,
-				notes: [
-					'Forward Firing',
-					'Smoke Bombardment',
-				],
-			},
-		},
-	],
+	weapons: [],
 };

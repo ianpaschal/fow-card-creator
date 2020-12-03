@@ -1,23 +1,33 @@
 import React from 'react';
 import Firebase from 'firebase';
-import { ConnectedCardEditor }from './CardEditor';
-import { ConnectedCardPreview }from './CardPreview';
+import { Link, Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
+import { ConnectedEditView }from './views/EditView';
+import { MyCardsView } from './views/MyCardsView';
+import { Unit } from '../typing/Unit';
 import './App.scss';
-import { Link, Route, Switch } from 'react-router-dom';
 
-interface AppProps {
-  db: Firebase.firestore.Firestore;
+interface OwnProps {
+	db: Firebase.firestore.Firestore;
 }
 
-class App extends React.Component<AppProps> {
+interface AppState {
+	cards: any[];
+}
+
+export type AppProps = OwnProps & RouteComponentProps;
+
+class App extends React.Component<AppProps, AppState> {
 	constructor(props: AppProps) {
 		super(props);
-		this._loadAllConfigs = this._loadAllConfigs.bind(this);
+		this.state = {
+			cards: [],
+		};
+		this._loadAllCards = this._loadAllCards.bind(this);
+		this._saveCard = this._saveCard.bind(this);
 	}
 
-	private async _loadAllConfigs(): Promise<void> {
+	private async _loadAllCards(): Promise<void> {
 		const { db } = this.props;
-
 		const docs = await db.collection('cards').get();
 		const cards = [];
 		docs.forEach((doc) => {
@@ -26,14 +36,33 @@ class App extends React.Component<AppProps> {
 				id: doc.id,
 		  });
 		});
-		console.log(cards);
+		this.setState({ cards });
+	}
 
-		// this.setState({ allListConfigs: loadedListConfigs });
-	}
+	private async _saveCard(unit: Unit): Promise<void> {
+		const { db, history } = this.props;
+		// const newListConfig: Omit<ListConfig, 'id'> = {
+		//   userId,
+		//   name: `Untitled ${factionsDB.getFactionById(factionId).name} List`,
+		//   factionId: factionId,
+		//   formationConfigs: [],
+		// };
+
+		console.log(unit);
+
+		const docRef = await db.collection('cards').add(unit);
+
+		// await this._loadAllConfigs();
+		console.log(docRef.id);
+		history.push('/');
+	  }
+
 	componentDidMount() {
-		this._loadAllConfigs();
+		this._loadAllCards();
 	}
+
 	render() {
+		const { cards } = this.state;
 		return (
 			<div className="app">
 				<div className="app__header">
@@ -47,21 +76,18 @@ class App extends React.Component<AppProps> {
 				<div className="app__main">
 					<Switch>
 						<Route path="/" exact>
-							<div>
-								My Cards
+							<div className="app__page">
+								<MyCardsView cards={cards} />
 							</div>
 						</Route>
 						<Route path="/help" exact>
-							<div>
+							<div className="app__page">
 								Help
 							</div>
 						</Route>
 						<Route path="/edit">
-							<div className="app__edit-pane">
-								<ConnectedCardEditor />
-							</div>
-							<div className="app__preview-pane">
-								<ConnectedCardPreview />
+							<div className="app__page">
+								<ConnectedEditView onSave={this._saveCard}/>
 							</div>
 						</Route>
 						{/* <Route path="/">
@@ -76,4 +102,4 @@ class App extends React.Component<AppProps> {
 	}
 }
 
-export default App;
+export default withRouter(App);

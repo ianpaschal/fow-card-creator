@@ -2,9 +2,9 @@
 
 .soft-stat-block {
     padding: 0 2px 2px 2px;
-    min-width: 12rem;
+    min-width: 120px;
     border-radius: $corner-radius;
-    margin-bottom: 0.8rem;
+    margin-bottom: 8px;
 
     &__header {
         text-transform: uppercase;
@@ -15,7 +15,7 @@
     &__content {
         background-color: white;
         padding: 1px;
-        border-radius: $corner-radius - 0.2rem;
+        border-radius: $corner-radius - 2px;
     }
 
     &__rating {
@@ -31,15 +31,15 @@
             flex-direction: column;
 
             &-name {
-                font-size: 1rem;
-                line-height: 1.4rem;
+                font-size: 10px;
+                line-height: 14px;
                 font-style: italic;
             }
 
             &-attribute {
                 font-weight: bold;
-                font-size: 1.2rem;
-                line-height: 1rem;
+                font-size: 12px;
+                line-height: 10px;
                 font-style: italic;
             }
         }
@@ -47,7 +47,7 @@
         &-number {
             padding: 2px;
             font-weight: bold;
-            width: 2rem;
+            width: 20px;
             text-align: center;
         }
 
@@ -56,8 +56,8 @@
             font-weight: bold;
             text-transform: uppercase;
             color: white;
-            height: 1.8rem;
-            border-radius: $corner-radius - 0.3rem;
+            height: 18px;
+            border-radius: $corner-radius - 3px;
         }
         &--secondary:nth-child(n+3) {
             border-top: 1px solid rgb(230,230,230);

@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
 import React from 'react';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';;
 import { getFormValues } from '../../utils/getFormValues';
-import '../CardEditor.scss';
+import { Dropdown } from 'primereact/dropdown';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
@@ -15,17 +16,17 @@ import {
 } from '../../store/editor/editorActionCreators';
 import {
 	MotivationAttributes,
-	MotivationRating,
 	MotivationRatings,
 } from '../../enums/MotivationRatings';
 import {
 	SkillAttributes,
-	SkillRating,
 	SkillRatings,
 } from '../../enums/SkillRatings';
-import { HitOnRating, HitOnRatings } from '../../enums/HitOnRatings';
+import { HitOnRatings } from '../../enums/HitOnRatings';
+import { EditorSubSection } from './EditorSubSection';
+import { FormItem } from './FormItem';
+import './SoftStatEditorSection.scss';
 
-const animatedComponents = makeAnimated();
 const connector = connect(
 	(state: RootState) => ({
 		unit: state.editor.unit,
@@ -75,86 +76,66 @@ export class SoftStatEditorSection extends React.Component<SoftStatEditorSection
 			heading = 'Is Hit On';
 		}
 		return (
-			<div className="card-editor__section">
-				<label htmlFor={attribute}>{heading}</label>
-				<Select
-					options={getFormValues(ratingsEnum)}
-					components={animatedComponents}
-					onChange={(selection: {
-							value: MotivationRating | SkillRating | HitOnRating,
-							label: string
-						}) => {
-						setBaseRating(attribute, selection.value);
-					}}
-					value={unit[ attribute ].baseRating ? {
-						value: unit[ attribute ].baseRating,
-						label: ratingsEnum[ unit[ attribute ].baseRating ],
-					} : undefined}
-				/>
-
+			<div className="soft-stat-section">
+				<FormItem label={heading}>
+					<Dropdown
+						value={unit[ attribute ].baseRating}
+						options={getFormValues(ratingsEnum)}
+						onChange={(e) => setBaseRating(attribute, e.value)}
+						placeholder={heading}
+					/>
+				</FormItem>
 				{attribute !== 'hitOn' && unit[ attribute ].modifiers.map((modifier, i) => (
-					<div key={i} className="card-editor__sub-section">
-						<button className='delete-button' onClick={(e) => {
-							e.preventDefault();
-							removeModifier(attribute, i);
-						}}>X</button>
-						<div className='attribute-select'>
-							<label htmlFor="type">Type</label>
-							<Select
+					<EditorSubSection key={i} onRemove={() => removeModifier(attribute, i)}>
+						<FormItem label="Name">
+							<InputText
+								value={modifier.name}
+								onChange={(e) => updateModifier(attribute, i, {
+									name: e.currentTarget.value,
+								})}
+								placeholder="Custom Name"
+							/>
+						</FormItem>
+						<FormItem label="Type">
+							<Dropdown
+								value={modifier.attribute}
 								options={getFormValues(attributesEnum)}
-								components={animatedComponents}
-								onChange={(selected: {
-									value: string,
-									label: string,
-								}) => {
-									updateModifier(attribute, i, {
-										attribute: selected.value,
-									});
-								}}
-								value={{
-									value: modifier.attribute,
-									label: attributesEnum[ modifier.attribute ],
-								}}
-							/>
-						</div>
-						<div className='name-input'>
-							<label htmlFor="name">Custom Name</label>
-							<input
-								type="text"
-								id="name"
-								name="name"
 								onChange={(e) => {
 									updateModifier(attribute, i, {
-										name: e.target.value,
+										attribute: e.target.value,
 									});
 								}}
+								placeholder="Select a type"
 							/>
-						</div>
-						<div className='value-input'>
-							<label htmlFor="value">Value</label>
-							<input
-								type="number"
+						</FormItem>
+						<FormItem label="Value">
+							<InputNumber
 								id="value"
-								name="value"
-								min="1"
-								max="6"
-								onChange={(e) => {
+								value={modifier.number}
+								onValueChange={(e) => {
 									updateModifier(attribute, i, {
 										number: Math.min(Math.max(1, parseInt(e.target.value)), 6),
 									});
 								}}
-								value={String(modifier.number)}
+								showButtons
+								min={1}
+								max={6}
 							/>
-						</div>
-					</div>
+						</FormItem>
+					</EditorSubSection>
 				))}
 				{attribute !== 'hitOn' && (
-					<button onClick={(e) => {
-						e.preventDefault();
-						addModifier(attribute, { attribute: Object.keys(attributesEnum)[ 0 ], number: 4 });
-					}}>
-						Add modifier
-					</button>
+					<div className="soft-stat-section__add-button">
+						<Button
+
+							label="Add modifier"
+							icon="pi pi-plus" iconPos="left"
+							onClick={(e) => {
+								e.preventDefault();
+								addModifier(attribute, { attribute: Object.keys(attributesEnum)[ 0 ], number: 4 });
+							}}
+						/>
+					</div>
 				)}
 			</div>
 		);

@@ -18,15 +18,25 @@ import { SoftStatModifier } from '../../typing/SoftStatModifier';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
 import { Weapon } from '../../typing/Weapon';
+import { getBaseColor } from '../../utils/getBaseColor';
 
 export interface EditorState {
+	authorID: string;
+	rating: number;
+	created: Date;
+	isPublic: boolean;
 	unit: Unit;
+	formation?: any;
 	availableSpecialRules: FormValue[];
 }
 
 export const initialState: EditorState = {
+	authorID: 'Ian',
+	rating: 5,
+	created: new Date(),
+	isPublic: false,
 	unit: defaultUnit,
-	availableSpecialRules: filterUnitSpecialRules(undefined, undefined),
+	availableSpecialRules: filterUnitSpecialRules(undefined),
 };
 
 export const editorSlice = createSlice({
@@ -38,24 +48,42 @@ export const editorSlice = createSlice({
 			unit: {
 				...state.unit,
 				era: action.payload,
+				accentColor: getBaseColor(state.unit.nationality, action.payload),
 			},
 		}),
-		setNationality: (state: EditorState, action: PayloadAction<Nationality>): EditorState => ({
-			...state,
-			unit: {
-				...state.unit,
-				nationality: action.payload,
-			},
-			availableSpecialRules: filterUnitSpecialRules(state.unit.unitType, action.payload),
-		}),
-		setUnitType: (state: EditorState, action: PayloadAction<UnitType>): EditorState => ({
-			...state,
-			unit: {
-				...state.unit,
-				unitType: action.payload,
-			},
-			availableSpecialRules: filterUnitSpecialRules(action.payload, state.unit.nationality),
-		}),
+		setNationality: (state: EditorState, action: PayloadAction<Nationality>): EditorState => {
+			const availableSpecialRules = filterUnitSpecialRules({ ...state.unit, nationality: action.payload });
+			return {
+				...state,
+				unit: {
+					...state.unit,
+					nationality: action.payload,
+					accentColor: getBaseColor(action.payload, state.unit.era),
+					specialRules: state.unit.specialRules.filter((existingRule) => {
+						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
+					}),
+				},
+				availableSpecialRules,
+			};
+		},
+		setUnitType: (state: EditorState, action: PayloadAction<UnitType>): EditorState => {
+			const availableSpecialRules = filterUnitSpecialRules({ ...state.unit, unitType: action.payload });
+			return {
+				...state,
+				unit: {
+					...state.unit,
+					unitType: action.payload,
+					specialRules: state.unit.specialRules.filter((existingRule) => {
+						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
+					}),
+					passengers: [
+						'TANK',
+						'UNARMOURED_TANK',
+					].includes(action.payload) ? state.unit.passengers : 0,
+				},
+				availableSpecialRules,
+			};
+		},
 		setTitle: (state: EditorState, action: PayloadAction<string>): EditorState => ({
 			...state,
 			unit: {
@@ -70,6 +98,43 @@ export const editorSlice = createSlice({
 				subTitle: action.payload,
 			},
 		}),
+		setIsFormation: (
+			state: EditorState,
+			action: PayloadAction<{isFormation: boolean}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				isFormation: action.payload.isFormation,
+			},
+		}),
+		setIsComponent: (
+			state: EditorState,
+			action: PayloadAction<{isComponent: boolean}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				isComponent: action.payload.isComponent,
+			},
+		}),
+		setPassengers: (
+			state: EditorState,
+			action: PayloadAction<{passengers: number}>
+		): EditorState => {
+			const availableSpecialRules = filterUnitSpecialRules({ ...state.unit, passengers: action.payload.passengers });
+			return {
+				...state,
+				unit: {
+					...state.unit,
+					passengers: action.payload.passengers,
+					specialRules: state.unit.specialRules.filter((existingRule) => {
+						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
+					}),
+				},
+				availableSpecialRules,
+			};
+		},
 		setSpecialRules: (
 			state: EditorState,
 			action: PayloadAction<UnitSpecialRuleName[]>
@@ -236,6 +301,23 @@ export const editorSlice = createSlice({
 				],
 			},
 		}),
+		addWeaponBombardment: (
+			state: EditorState,
+			action: PayloadAction<{index: number, bombardment: any}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons.slice(0, action.payload.index),
+					{
+						...state.unit.weapons[ action.payload.index ],
+						bombardment: action.payload.bombardment,
+					},
+					...state.unit.weapons.slice(action.payload.index + 1),
+				],
+			},
+		}),
 		updateWeapon: (
 			state: EditorState,
 			action: PayloadAction<{index: number, mode: 'direct' | 'bombardment', attribute: string, value: any}>
@@ -256,6 +338,23 @@ export const editorSlice = createSlice({
 				],
 			},
 		}),
+		updateWeaponName: (
+			state: EditorState,
+			action: PayloadAction<{index: number, name: string}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons.slice(0, action.payload.index),
+					{
+						...state.unit.weapons[ action.payload.index ],
+						name: action.payload.name,
+					},
+					...state.unit.weapons.slice(action.payload.index + 1),
+				],
+			},
+		}),
 		removeWeapon: (
 			state: EditorState,
 			action: PayloadAction<{index: number}>
@@ -265,6 +364,23 @@ export const editorSlice = createSlice({
 				...state.unit,
 				weapons: [
 					...state.unit.weapons.slice(0, action.payload.index),
+					...state.unit.weapons.slice(action.payload.index + 1),
+				],
+			},
+		}),
+		removeWeaponBombardment: (
+			state: EditorState,
+			action: PayloadAction<{index: number}>
+		): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				weapons: [
+					...state.unit.weapons.slice(0, action.payload.index),
+					{
+						...state.unit.weapons[ action.payload.index ],
+						bombardment: undefined,
+					},
 					...state.unit.weapons.slice(action.payload.index + 1),
 				],
 			},

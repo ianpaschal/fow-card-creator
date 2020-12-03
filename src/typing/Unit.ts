@@ -12,12 +12,23 @@ import { HitOnRating } from '../enums/HitOnRatings';
 import { SaveRating } from './SaveRating';
 
 export interface Unit {
-	era: Era;
-	nationality: Nationality;
+
+	// General Section
+	era: Era | '';
+	nationality: Nationality | '';
+	// region: string;
 	unitType: UnitType;
+	isFormation: boolean;
 	title: string;
-	subTitle: string;
+	accentColor: string;
+	subTitle?: string;
+
+	// Special Properties Section
 	specialRules: UnitSpecialRuleName[];
+	passengers: number,
+
+	// Soft Stat Section
+	isComponent: boolean;
 	motivation: {
 		baseRating: MotivationRating;
 		modifiers: SoftStatModifier[];
@@ -30,8 +41,12 @@ export interface Unit {
 		baseRating: HitOnRating;
 		modifiers: SoftStatModifier[];
 	}
+
+	// Armor & Save Section
 	armor?: ArmorRating;
 	save?: SaveRating;
+
+	// Mobility Section
 	mobility: {
 		tactical: number;
 		terrainDash: number;
@@ -39,5 +54,9 @@ export interface Unit {
 		roadDash: number;
 		cross: DiceRollValue;
 	}
+
+	// Weapons Section
 	weapons: Weapon[];
+
+	// Composition Section
 }

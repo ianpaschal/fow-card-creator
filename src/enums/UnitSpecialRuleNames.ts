@@ -11,6 +11,8 @@ export enum UnitSpecialRuleNames {
 	SPEARHEAD = 'Spearhead',
 	OBSERVER = 'Observer',
 	INDEPENDENT = 'Independent',
+	MOUNTED_ASSAULT = 'Mounted Assault',
+	TRACTOR = 'Tractor'
 }
 
 export type UnitSpecialRuleName = keyof typeof UnitSpecialRuleNames;

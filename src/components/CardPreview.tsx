@@ -32,11 +32,14 @@ export class CardPreview extends React.Component<CardEditorProps> {
 	render() {
 		const { unit, className } = this.props;
 		return (
-			<div className={classNamesDedeupe(
-				'card-preview',
-				`card-preview--${unit.nationality}-${unit.era}`,
-				className
-			)}>
+			<div
+				className={classNamesDedeupe(
+					'card-preview',
+					`card-preview--${unit.nationality}-${unit.era}`,
+					className
+				)}
+				style={{ '--base-color':  unit.accentColor } as React.CSSProperties}
+			>
 				<div className="card-preview__header">
 					<div className="card-preview__header-icon">
 						<svg
@@ -69,7 +72,7 @@ export class CardPreview extends React.Component<CardEditorProps> {
 				</div>
 				<div className="card-preview__center">
 					<div className="card-preview__special-rules">
-						<span>{unit.unitType === 'UNARMOURED_TANK' ? UnitTypes[ unit.unitType ] : `${UnitTypes[ unit.unitType ]} Unit`}</span>
+						<span>{unit.unitType === 'UNARMOURED_TANK' ? UnitTypes[ unit.unitType ] : `${UnitTypes[ unit.unitType ]} ${unit.isFormation ? 'Formation' : 'Unit'}`}</span>
 						{unit.specialRules.map((rule, key) => (
 							<span key={key}>{UnitSpecialRuleNames[ rule ]}</span>
 						))}
@@ -85,7 +88,9 @@ export class CardPreview extends React.Component<CardEditorProps> {
 					)}
 				</div>
 				<MobilityBlock className="card-preview__movement" mobility={unit.mobility}/>
-				<WeaponsBlock className="card-preview__weapons" weapons={unit.weapons}/>
+				{unit.weapons.length > 0 && (
+					<WeaponsBlock className="card-preview__weapons" weapons={unit.weapons}/>
+				)}
 			</div>
 		);
 	}

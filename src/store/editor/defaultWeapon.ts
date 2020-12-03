@@ -1,3 +1,5 @@
+import { DiceRollValue } from '../../typing/DiceRollValue';
+
 export const defaultWeapon = {
 	name: undefined,
 	direct: {
@@ -7,16 +9,16 @@ export const defaultWeapon = {
 			moving: 1,
 		},
 		antiTank: 1,
-		firePower: 6,
+		firePower: 6 as DiceRollValue,
 		notes: [],
 	},
 };
 
-export const defaultBombardemtn = {
+export const defaultBombardment = {
 	range: 72,
 	template: 'artillery',
 	antiTank: 3,
-	firePower: 2,
+	firePower: 2 as DiceRollValue,
 	notes: [
 		'Forward Firing',
 		'Smoke Bombardment',

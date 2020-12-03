@@ -1,0 +1,43 @@
+// Copyright (c) 2020 Ian Paschal
+
+.form-item {
+    display: flex;
+    flex-direction: row;
+
+    .form-item__label {
+        line-height: 16px;
+        padding: 8px 0;
+        display: block;
+        font-weight: 700;
+        min-width: 96px;
+        margin-right: 16px;
+    }
+    .form-item__children {
+        flex: 1 auto;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+
+        label {
+            line-height: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-left: 8px;
+            padding: 8px 0;
+            margin-right: 16px;
+            font-weight: 600;
+        }
+    }
+
+    .p-dropdown, .p-multiselect, .p-inputnumber, .p-inputtext {
+        width: 100%;
+    }
+    .p-checkbox, .p-radiobutton {
+        margin: 6px 0;
+    }
+    .p-inputnumber {
+        width: 48px;
+    }
+}
+
+

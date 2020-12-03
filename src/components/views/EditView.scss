@@ -1,0 +1,74 @@
+// Copyright (c) 2020 Ian Paschal
+
+@import '../../style/variables.scss';
+
+.edit-view {
+    .edit-view__toolbar {
+        position: fixed;
+        top: 64px;
+        background-color: white;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        padding: 16px 32px;
+        border-bottom: 1px solid rgb(225, 228, 232);
+        z-index: 5;
+
+        .edit-view__toolbar-section {
+            margin-left: 1rem;
+        }
+
+        .edit-view__toolbar-section:first-of-type {
+            margin-left: 0;
+        }
+        
+        .edit-view__toolbar-section:last-of-type {
+            margin-left: auto;
+        }
+    }
+    .edit-view__main {
+        display: flex;
+        flex-direction: row;
+        height: calc(100vh - 64px); // Account for the header
+        padding-top: 64px; // Account for the toolbar
+        .edit-view__edit-pane {
+            flex: 1 50%;
+            height: 100%;
+            overflow-y: scroll;
+            border-right: 1px solid rgb(225, 228, 232);
+            min-width: 360px;
+    
+            h1 {
+                font-size: 16px;
+                line-height: 24px;
+                padding: 4px 0;
+                text-transform: uppercase;
+                font-weight: 600;
+                color: rgb(128, 130, 132);
+                letter-spacing: 0.5px;
+            }
+            h2 {
+                font-size: 12px;
+                line-height: 24px;
+                padding: 4px 0;
+                text-transform: uppercase;
+                font-weight: 600;
+                color: rgb(128, 130, 132);
+                letter-spacing: 0.5px;
+                border-bottom: 1px solid $border-color;
+            }
+            
+        }
+        .edit-view__preview-pane {
+            background-color: rgb(250, 251, 252);
+            height: 100%;
+            overflow-y: scroll;
+            flex: 1 50%;
+            min-width: 588px;
+            padding: 8px;
+        }
+    }
+    .form-item, .editor-sub-section {
+        margin: 16px 0;
+    }
+}

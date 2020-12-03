@@ -2,37 +2,25 @@
 
 .card-preview {
     h1 {
-        font-size: 2.2rem;
+        font-size: 22px;
         font-weight: 700;
-        line-height: 1.8rem;
+        line-height: 18px;
     }
     h2 {
-        font-size: 1.2rem;
+        font-size: 12px;
         font-weight: 700;
-        line-height: 1.4rem;
+        line-height: 14px;
     }
     h3, h4 {
-        font-size: 0.8rem;
+        font-size: 8px;
         font-weight: 700;
-        line-height: 1rem;
+        line-height: 10px;
     }
-    border-radius: 2rem;
+    border-radius: 20px;
     overflow: hidden;
-    
-    // h2, h3 {
-    //     font-size: 1rem;
-    //     font-weight: 700;
-    //     line-height: 1.6rem;
-    // }
-
-    // background: url('../assets/background-us.png');
-    // background-repeat: no-repeat;
-    // background-size: 464px 344px;
-    // background-position: center; 
-
     display: grid;
-    grid-template-columns: 12.8rem auto 12.8rem;
-    grid-template-rows: 4rem auto auto auto;
+    grid-template-columns: 128px auto 128px;
+    grid-template-rows: 40px auto auto auto;
     column-gap: 8px;
     row-gap: 8px;
     grid-template-areas: 
@@ -42,9 +30,9 @@
         "weapons weapons weapons";
     background-color: rgb(246, 248, 250);
     border: 16px solid rgb(234, 236, 238);
-    padding: 0.8rem;
-    min-width: 57.2rem;
-    // min-height: 41.6rem;
+    padding: 8px;
+    width: 572px;
+    height: 416px;
 }
 
 .card-preview__header {
@@ -54,7 +42,7 @@
     text-align: center;
     padding: 4px 8px;
     grid-area: header;
-    height: 4rem;
+    height: 40px;
     display: flex;
     justify-content: space-between;
 }
@@ -65,8 +53,8 @@
     justify-content: center;
 }
 .card-preview__header-icon {
-    width: 3.2rem;
-    height: 3.2rem;
+    width: 32px;
+    height: 32px;
     background-color: gold;
     svg {
         width: 100%;
@@ -76,14 +64,14 @@
     }
 }
 .card-preview__header-icon--formation-hq {
-    width: 3.2rem;
-    height: 3.2rem;
+    width: 32px;
+    height: 32px;
     background-color: gold;
-    padding: 0.2rem 0.4rem 0.6rem;
+    padding: 2px 4px 6px;
     svg {
-        width: 2.4rem;
-        height: 2.4rem;
-        border-radius: 1.2rem;
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
         .st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
 	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
     }
@@ -121,9 +109,9 @@
 }
 
 .card-preview__special-rules {
-    font-size: 1.2rem;
+    font-size: 12px;
     font-weight: 700;
-    line-height: 1.6rem;
+    line-height: 16px;
     text-transform: uppercase;
 
     span:first-child:before {

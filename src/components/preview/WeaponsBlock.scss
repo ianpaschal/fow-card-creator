@@ -2,7 +2,7 @@
 
 .weapons-block {
     padding: 0 2px 2px 2px;
-    min-width: 12rem;
+    min-width: 120px;
     border-radius: $corner-radius;
 
     &__header {
@@ -10,9 +10,9 @@
         text-align: center;
         color: white;
         flex-direction: row;
-        font-size: 1rem;
+        font-size: 10px;
         display: grid;
-        grid-template-columns: calc(40% - 6.4rem) 6.4rem 9.6rem 3.2rem 3.2rem auto;
+        grid-template-columns: calc(40% - 64px) 64px 96px 32px 32px auto;
         align-items: center;
 
         &-cell:first-child {
@@ -36,11 +36,11 @@
         display: grid;
         flex-direction: row;
         font-weight: normal;
-        grid-template-columns: calc(40% - 6.4rem) 6.4rem 9.6rem 3.2rem 3.2rem auto;
+        grid-template-columns: calc(40% - 64px) 64px 96px 32px 32px auto;
 
         &--direct-fire {
             .weapons-block__row-cell:first-child {
-                padding-left: 2rem;
+                padding-left: 20px;
             }
         }
 
@@ -52,10 +52,10 @@
             padding: 2px;
             text-align: center;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 12px;
 
             .metric-unit {
-                font-size: 0.9rem;
+                font-size: 9px;
             }
 
             &--rate-of-fire {
@@ -71,7 +71,7 @@
                 border-bottom: 1px solid black;
                 border-left: 1px solid var(--base-color);
                 text-transform: uppercase;
-                font-size: 1.4rem;
+                font-size: 14px;
                 text-align: center;
             }
         }
@@ -80,7 +80,7 @@
         }
         &-cell:last-child {
             font-style: italic;
-            font-size: 1rem;
+            font-size: 10px;
         }
     }
     .weapons-block__row:not(:first-child) {

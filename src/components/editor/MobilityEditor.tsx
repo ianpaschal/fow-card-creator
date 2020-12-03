@@ -1,10 +1,13 @@
 import React from 'react';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
+import { InputNumber } from 'primereact/inputnumber';
 import { RootState } from '../../store';
 import classNamesDedupe from 'classnames/dedupe';
 import { MobilityAttribute, MobilityAttributeKeys, MobilityAttributes } from '../../enums/Mobility';
 import { setMobilityActionCreator } from '../../store/editor/editorActionCreators';
+import { EditorSection } from './EditorSection';
+import { FormItem } from './FormItem';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -15,40 +18,31 @@ const connector = connect(
 	}, dispatch),
 );
 
-export interface OwnProps {
-	className?: string;
-}
-
 export type ReduxProps = ConnectedProps<typeof connector>;
 
-export type MobilityEditorProps = OwnProps & ReduxProps;
+export type MobilityEditorProps = ReduxProps;
 
 export const MobilityEditor: React.FC<MobilityEditorProps> = ({
-	className: extraClassName,
 	mobility,
 	setMobility,
 }: MobilityEditorProps) => (
-	<div className={classNamesDedupe('card-editor__section', extraClassName)}>
-
+	<EditorSection className='mobility-editor' title="Mobility">
 		{MobilityAttributeKeys.map((attribute: MobilityAttribute, i: number) => (
-			<div key={i} className="card-editor__input-row">
-				<label htmlFor={attribute}>{MobilityAttributes[ attribute ]}</label>
-				<input type="number"
-					id={attribute}
-					name={attribute}
-					min={attribute === 'cross' ? '1' : '0'}
-					max={attribute === 'cross' ? '6' : '72'}
-					step={attribute === 'cross' ? undefined : 2}
-					onChange={(e) => {
+			<FormItem key={i} label={MobilityAttributes[ attribute ]}>
+				<InputNumber
+					value={mobility[ attribute ]}
+					onValueChange={(e) => {
 						const value = parseInt(e.target.value);
 						setMobility(attribute, attribute === 'cross' ? Math.min(Math.max(1, value), 6) : value);
 					}}
-					value={mobility[ attribute ]}
+					showButtons
+					min={attribute === 'cross' ? 1 : 0}
+					max={attribute === 'cross' ? 6 : 72}
+					step={attribute === 'cross' ? undefined : 2}
 				/>
-			</div>
+			</FormItem>
 		))}
-
-	</div>
+	</EditorSection>
 );
 
 export const ConnectedMobilityEditor = connector(MobilityEditor);

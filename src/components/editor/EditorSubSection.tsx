@@ -3,6 +3,7 @@
 import React from 'react';
 import classNamesDedupe from 'classnames/dedupe';
 import './EditorSubSection.scss';
+import { Button } from 'primereact/button';
 
 export interface EditorSubSectionProps {
 	className?: string;
@@ -16,14 +17,16 @@ export const EditorSubSection: React.FC<EditorSubSectionProps> = ({
 	onRemove,
 }: EditorSubSectionProps) => (
 	<div className={classNamesDedupe('editor-sub-section', extraClassName)}>
-		<button className='editor-sub-section__delete-button'
-			onClick={(e) => {
-				e.preventDefault();
-				onRemove(e);
-			}}
-		>
-			X
-		</button>
+		<div className='editor-sub-section__delete-button'>
+			<Button
+				className='p-button-icon-only p-button-danger p-button-text'
+				icon="pi pi-trash"
+				onClick={(e) => {
+					e.preventDefault();
+					onRemove(e);
+				}}
+			/>
+		</div>
 		<div className='editor-sub-section__children'>
 			{children}
 		</div>

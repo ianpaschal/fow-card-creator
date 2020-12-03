@@ -1,54 +1,37 @@
 @import '../style/variables.scss';
 
 .app {
-    height: 100vh;
-    width: 100vw;
+    .app__page {
+        padding-top: 64px;
+    }
 
-    &__header {
-        background-color: var(--base-color);
-        height: 6.4rem;
+    .app__header {
+        background-color: $header-bg-color;
+        height: 64px;
         width: 100vw;
         color: white;
         position: fixed;
         z-index: 10;
         display: flex;
         flex-direction: row;
+        align-items: center;
+        padding: 16px 32px;
+        column-gap: 32px;
 
+        h1 {
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
         a {
             color: white;
             text-transform: uppercase;
-            font-size: 1.4rem;
-            line-height: 1.6rem;
-            font-weight: 700;
+            font-size: 14px;
+            line-height: 16px;
             text-decoration: none;
-            letter-spacing: 0.05rem;
-            height: 6.4rem;
+            letter-spacing: 0.5px;
             // border-bottom: 4px solid white;
         }
-        h1, a {
-            padding: 2px;
-            margin: 0 16px;
-        }
-    }
-    &__main {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        padding-top: 6.4rem;
-    }
-    &__edit-pane {
-        flex: 1 50%;
-        height: 100%;
-        overflow-y: scroll;
-        border-right: 1px solid rgb(225, 228, 232);
-        max-width: 500px;
-    }
-    &__preview-pane {
-        background-color: rgb(250, 251, 252);
-        height: 100%;
-        overflow-y: scroll;
-        flex: 1 50%;
-        min-width: 556px;
-        padding: 8px;
     }
 }
