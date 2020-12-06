@@ -1,20 +1,24 @@
 {
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "declaration": true,
         "importHelpers": true,
         "jsx": "react",
         "module": "commonjs",
+        "noEmit": true,
         "noEmitOnError": true,
         "noImplicitAny": false,
-        "outDir": "dist",
+        "outDir": "tmp",
         "sourceMap": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
         "strictBindCallApply": true,
         "target": "es5"
     },
     "include": [
-        "src/server/**/*", "src/server.ts",
+        "src/**/*",
     ],
     "exclude": [
         "node_modules",

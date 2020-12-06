@@ -16,6 +16,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { setBaseRatingActionCreator, addModifierActionCreator, updateModifierActionCreator, removeModifierActionCreator } from '../../store/editor/editorActionCreators';
 import { Unit } from '../../typing/Unit';
+import { ConnectedPrintFront } from '../print/PrintFront';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -102,7 +103,8 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					)}
 					{(view === 'preview' || view === 'split') && (
 						<div className="edit-view__preview-pane">
-							<ConnectedCardPreview />
+							<ConnectedPrintFront/>
+							{/* <ConnectedCardPreview /> */}
 						</div>
 					)}
 				</div>
