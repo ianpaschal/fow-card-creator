@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
-
-// @ts-ignore
-import UnitCardPaper from '../../assets/unit-card-paper.png';
-// @ts-ignore
-import FlagUS from '../../assets/flag-us.png';
+import { SoftStatBlock } from './SoftStatBlock';
+import { Background } from './Background';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -35,9 +32,16 @@ export const PrintFront: React.FC<PrintFrontProps> = ({
 			viewBox="0 0 110 80"
 			style={{ borderRadius: '8px' }}
 		>
-			<image xlinkHref={FlagUS} width="116" height="86" x="-3" y="-3" />
-			<image xlinkHref={UnitCardPaper} width="116" height="86" x="-3" y="-3" />
-			<text textAnchor="middle" dominantBaseline="middle" fontSize="2" x="50%" y="50%">Foo</text>
+			<Background nation={unit.nationality} />
+
+			{/* HEADER */}
+			<rect x="5" y="5" width="100" height="8.25" rx="1" fill={unit.accentColor}/>
+			<rect x="6.25" y="6.25" width="5.75" height="5.75" fill="white"/>
+			<text textAnchor="middle" dominantBaseline="middle" fontSize="2" x="55" y="10" fill="white">{unit.title}</text>
+
+			<SoftStatBlock isComponent={unit.isComponent} attribute="motivation" x="5" y="15.125" stat={unit.motivation} accentColor={unit.accentColor} />
+			<SoftStatBlock isComponent={unit.isComponent} attribute="skill" x="5" y="30" stat={unit.skill} accentColor={unit.accentColor} />
+			<SoftStatBlock isComponent={unit.isComponent} attribute="hitOn" x="82" y="15.125" stat={unit.hitOn} accentColor={unit.accentColor} />
 		</svg>
 	);
 };

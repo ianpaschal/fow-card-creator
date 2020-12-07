@@ -53,9 +53,16 @@ const COLORS = {
 		LW: 'rgb(1, 40, 70)', // Fortress Europe & D-Day
 		MW: 'rgb(70, 64, 42)', // Fighting First
 	},
+
+	// Japanese
+	JP: {
+		EW: 'rgb(151,153,156)', // Rising Sun (v3)
+		MW: 'rgb(189,0,0)', // Banzai (v3)
+		LW: 'rgb(189,0,0)', // Banzai (v3)
+	},
 };
 
-export function getBaseColor(nationality: Nationality, era?: Era, modifier?: string) {
+export function getBaseColor(nationality?: Nationality, era?: Era, modifier?: string) {
 	const defaultColor = 'rgb(36, 41, 46)';
 	if (!COLORS[ nationality ]) {
 		console.warn(`Nationality '${nationality}' not found; using default.`);

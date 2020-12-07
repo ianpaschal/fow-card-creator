@@ -4,12 +4,13 @@ import { SkillRating } from '../../enums/SkillRatings';
 import { UnitType } from '../../enums/UnitTypes';
 import { DiceRollValue } from '../../typing/DiceRollValue';
 import { Unit } from '../../typing/Unit';
+import { getBaseColor } from '../../utils/getBaseColor';
 
 export const defaultUnit: Unit = {
 	nationality: '',
 	unitType: 'TANK' as UnitType,
 	isFormation: false,
-	accentColor: '#000000',
+	accentColor: getBaseColor(),
 	isComponent: false,
 	passengers: 0,
 	era: '',
