@@ -3,7 +3,8 @@ import { HitOnRating } from '../../enums/HitOnRatings';
 import { MotivationRating } from '../../enums/MotivationRatings';
 import { SkillRating } from '../../enums/SkillRatings';
 import { SoftStatModifier } from '../../typing/SoftStatModifier';
-import { SoftStatBaseRating } from './SoftStatBaseRatingSVG';
+import { SoftStatBaseRatingSVG } from './SoftStatBaseRatingSVG';
+import { SoftStatModifierSVG } from './SoftStatModifierSVG';
 
 export interface SoftStatBlockProps {
 	isComponent?: boolean;
@@ -13,8 +14,8 @@ export interface SoftStatBlockProps {
 	}
 	accentColor?: string;
 	attribute: 'motivation' | 'skill' | 'hitOn';
-	x: string;
-	y: string;
+	x?: string;
+	y?: string;
 }
 
 export const SoftStatBlock: React.FC<SoftStatBlockProps> = ({
@@ -26,7 +27,7 @@ export const SoftStatBlock: React.FC<SoftStatBlockProps> = ({
 	y,
 }: SoftStatBlockProps) => {
 	return (
-		<g transform={`translate(${x} ${y})`}>
+		<g transform={`translate(${x || 0} ${y || 0})`}>
 			<path
 				className="svg-soft-stat-block__header-bg"
 				fill={accentColor}
@@ -46,9 +47,9 @@ export const SoftStatBlock: React.FC<SoftStatBlockProps> = ({
 				{attribute === 'hitOn' ? 'IS HIT ON' : attribute.toUpperCase()}
 			</text>
 			<rect x="0.125" y="2.025" width="22.75" height={`${(stat.modifiers.length * 4.45) + 4.05}`} rx="0.875" stroke={accentColor} strokeWidth="0.25" fill="none"/>
-			<SoftStatBaseRating isComponent={isComponent} x="0.5" y="2.4" type={attribute} rating={stat.baseRating}/>
-			{stat.modifiers.map((mod, i) => (
-				<rect key={i} x="0.5" y={`${5.95 + (i * 4.45)}`} width="22" height="4.2" rx="0.5" fill="rgb(255,255,255)"/>
+			<SoftStatBaseRatingSVG isComponent={isComponent} x="0.5" y="2.4" type={attribute} rating={stat.baseRating}/>
+			{stat.modifiers.map((modifier, i) => (
+				<SoftStatModifierSVG key={i} x="0.5" y={`${5.95 + (i * 4.45)}`} modifier={modifier}/>
 			))}
 		</g>
 	);

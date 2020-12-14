@@ -7,7 +7,6 @@ import { ConnectedGeneralEditor } from '../editor/GeneralEditor';
 import { ConnectedMobilityEditor } from '../editor/MobilityEditor';
 import { ConnectedCharacteristicsEditor } from '../editor/CharacteristicsEditor';
 import { ConnectedWeaponsEditor } from '../editor/WeaponsEditor';
-import { ConnectedCardPreview } from '../CardPreview';
 import { SelectButton } from 'primereact/selectbutton';
 import './EditView.scss';
 import { ConnectedSoftStatEditor } from '../editor/SoftStatEditor';
@@ -16,7 +15,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { setBaseRatingActionCreator, addModifierActionCreator, updateModifierActionCreator, removeModifierActionCreator } from '../../store/editor/editorActionCreators';
 import { Unit } from '../../typing/Unit';
-import { ConnectedPrintFront } from '../print/PrintFront';
+import { CardFrontSVG } from '../print/CardFrontSVG';
+import ReactDOMServer from 'react-dom/server';
+import PDFKit from 'pdfkit';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -49,7 +50,52 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		this.state = {
 			view: 'split',
 		};
+		this.downloadSVG = this.downloadSVG.bind(this);
+		this.downloadPDF = this.downloadPDF.bind(this);
 	}
+
+	downloadPDF(e) {
+		e.preventDefault();
+
+		const { unit } = this.props;
+		const doc = new PDFKit();
+		const chunks = [];
+		const stream = doc.pipe({
+			// writable stream implementation
+			write: (chunk) => chunks.push(chunk),
+			end: () => {
+				const pdfBlob = new Blob(chunks, {
+					type: 'application/octet-stream',
+				});
+				const blobUrl = URL.createObjectURL(pdfBlob);
+				window.open(blobUrl);
+			},
+			// readable streaaam stub iplementation
+			on: (event, action) => {},
+			once: (...args) => {},
+			emit: (...args) => {},
+		});
+
+		PDFKit.SVGtoPDF(doc, ReactDOMServer.renderToString(<CardFrontSVG unit={unit}/>), 0, 0);
+
+		doc.end();
+	};
+
+	downloadSVG(e) {
+		const { unit } = this.props;
+		e.preventDefault();
+		const plainText = ReactDOMServer.renderToString(<CardFrontSVG unit={unit}/>);
+		console.log(plainText);
+
+		const element = document.createElement('a');
+		const file = new Blob([ plainText ], { type: 'text/plain;charset=utf-8' });
+		element.href = URL.createObjectURL(file);
+		element.download = 'my-unit-card.svg';
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	}
+
 	render() {
 		const { className, onSave, unit } = this.props;
 		const { view } = this.state;
@@ -82,12 +128,14 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					</div>
 					<div className="edit-view__toolbar-section">
 						<Button
-							className="p-disabled"
-							label="Export PDF"
+							// className="p-disabled"
+							label="Export SVG"
 							icon="pi pi-download"
 							iconPos="right"
-							tooltip="Coming soon!"
-							tooltipOptions={{ position: 'bottom' }}/>
+							// tooltip="Coming soon!"
+							tooltipOptions={{ position: 'bottom' }}
+							onClick={this.downloadPDF}
+						/>
 					</div>
 				</div>
 
@@ -103,8 +151,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					)}
 					{(view === 'preview' || view === 'split') && (
 						<div className="edit-view__preview-pane">
-							<ConnectedPrintFront/>
-							{/* <ConnectedCardPreview /> */}
+							<CardFrontSVG unit={unit}/>
 						</div>
 					)}
 				</div>

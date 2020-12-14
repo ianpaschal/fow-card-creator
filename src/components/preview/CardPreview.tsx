@@ -1,18 +1,18 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import classNamesDedeupe from 'classnames/dedupe';
-import { MotivationAttributes, MotivationNumbers, MotivationRatings } from '../enums/MotivationRatings';
-import { UnitSpecialRuleNames } from '../enums/UnitSpecialRuleNames';
-import { UnitTypes } from '../enums/UnitTypes';
-import { RootState } from '../store';
+import { MotivationAttributes, MotivationNumbers, MotivationRatings } from '../../enums/MotivationRatings';
+import { UnitSpecialRuleNames } from '../../enums/UnitSpecialRuleNames';
+import { UnitTypes } from '../../enums/UnitTypes';
+import { RootState } from '../../store';
 import './CardPreview.scss';
-import { SkillNumbers, SkillRatings } from '../enums/SkillRatings';
-import { HitOnNumbers, HitOnRatings } from '../enums/HitOnRatings';
-import { SoftStatBlock } from './preview/SoftStatBlock';
-import { MobilityBlock } from './preview/MobilityBlock';
-import { WeaponsBlock } from './preview/WeaponsBlock';
-import { ArmorBlock } from './preview/ArmorBlock';
-import { SaveBlock } from './preview/SaveBlock';
+import { SkillNumbers, SkillRatings } from '../../enums/SkillRatings';
+import { HitOnNumbers, HitOnRatings } from '../../enums/HitOnRatings';
+import { SoftStatBlock } from './SoftStatBlock';
+import { MobilityBlock } from './MobilityBlock';
+import { WeaponsBlock } from './WeaponsBlock';
+import { ArmorBlock } from './ArmorBlock';
+import { SaveBlock } from './SaveBlock';
 
 const connector = connect(
 	(state: RootState) => ({

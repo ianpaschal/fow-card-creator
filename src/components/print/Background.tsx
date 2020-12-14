@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { CanvasHTMLAttributes } from 'react';
 
 // @ts-ignore
 import UnitCardPaper from '../../assets/unit-card-paper.png';
+
+import { paperBackground } from '../../assets/paperBackground';
 
 import FlagBE from '../../assets/flags/flag-be.svg';
 import FlagBR from '../../assets/flags/flag-br.svg';
@@ -22,6 +24,16 @@ import FlagUS from '../../assets/flags/flag-us.svg';
 export interface BackgroundProps {
 	nation?: string;
 }
+
+// function encodeImageFileAsURL(element) {
+// 	const file = element.files[ 0 ];
+// 	const reader = new FileReader();
+// 	reader.onloadend = function() {
+// 	  console.log('RESULT', reader.result);
+// 	};
+// 	reader.readAsDataURL(Background);
+// }
+// <input type="file" onchange="encodeImageFileAsURL(this)" />
 
 export const Background: React.FC<BackgroundProps> = ({
 	nation,

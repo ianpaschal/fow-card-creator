@@ -60,6 +60,10 @@ const COLORS = {
 		MW: 'rgb(189,0,0)', // Banzai (v3)
 		LW: 'rgb(189,0,0)', // Banzai (v3)
 	},
+
+	NL: {
+		EW: 'rgb(222, 118, 28)', // Team Yankee Free Nations
+	},
 };
 
 export function getBaseColor(nationality?: Nationality, era?: Era, modifier?: string) {

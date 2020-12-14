@@ -1,9 +1,22 @@
 import React from 'react';
-import { HitOnNumbers, HitOnRating, HitOnRatings } from '../../enums/HitOnRatings';
-import { MotivationAttributes, MotivationNumbers, MotivationRating, MotivationRatings } from '../../enums/MotivationRatings';
-import { SkillNumbers, SkillRating, SkillRatings } from '../../enums/SkillRatings';
+import {
+	HitOnNumbers,
+	HitOnRating,
+	HitOnRatings,
+} from '../../enums/HitOnRatings';
+import {
+	MotivationNumbers,
+	MotivationRating,
+	MotivationRatings,
+} from '../../enums/MotivationRatings';
+import {
+	SkillNumbers,
+	SkillRating,
+	SkillRatings,
+} from '../../enums/SkillRatings';
+import { formatDiceRoll } from '../../utils/formatDiceRoll';
 
-export interface SoftStatBaseRatingProps {
+export interface SoftStatBaseRatingSVGProps {
 	isComponent?: boolean;
 	type: 'motivation' | 'skill' | 'hitOn';
 	rating: MotivationRating | SkillRating | HitOnRating;
@@ -11,13 +24,13 @@ export interface SoftStatBaseRatingProps {
 	y?: string;
 }
 
-export const SoftStatBaseRating: React.FC<SoftStatBaseRatingProps> = ({
+export const SoftStatBaseRatingSVG: React.FC<SoftStatBaseRatingSVGProps> = ({
 	isComponent,
 	type,
 	rating,
 	x,
 	y,
-}: SoftStatBaseRatingProps) => {
+}: SoftStatBaseRatingSVGProps) => {
 	let ratingsEnum;
 	let numbersEnum;
 	if (type === 'motivation') {
@@ -32,8 +45,6 @@ export const SoftStatBaseRating: React.FC<SoftStatBaseRatingProps> = ({
 		ratingsEnum = HitOnRatings;
 		numbersEnum = HitOnNumbers;
 	}
-	const numericValue = numbersEnum[ rating ];
-	const textualValue = `${ratingsEnum[ rating ]}`.toUpperCase();
 	return (
 		<g transform={`translate(${x || 0} ${y || 0})`}>
 			<rect
@@ -49,10 +60,10 @@ export const SoftStatBaseRating: React.FC<SoftStatBaseRatingProps> = ({
 					<text
 						textAnchor="middle"
 						dominantBaseline="middle"
-						fontSize="2.5"
+						fontSize="3"
 						x="11"
-						y="1.85"
-						fontWeight="700"
+						y="1.9"
+						fontWeight="800"
 						fontFamily="Open Sans"
 						fill="rgb(255,255,255)"
 						letterSpacing="-0.1"
@@ -65,31 +76,31 @@ export const SoftStatBaseRating: React.FC<SoftStatBaseRatingProps> = ({
 					<text
 						textAnchor="middle"
 						dominantBaseline="middle"
-						fontSize="2.5"
+						fontSize="3"
 						x="9"
-						y="1.85"
-						fontWeight="700"
+						y="1.9"
+						fontWeight="800"
 						fontFamily="Open Sans"
 						fill="rgb(255,255,255)"
 						letterSpacing="-0.1"
 					>
-						{textualValue}
+						{`${ratingsEnum[ rating ]}`.toUpperCase()}
 					</text>
 					<text
 						textAnchor="middle"
 						dominantBaseline="middle"
-						fontSize="2.5"
+						fontSize="3"
 						x="20"
-						y="1.85"
-						fontWeight="700"
+						y="1.9"
+						fontWeight="800"
 						fontFamily="Open Sans"
 						fill="rgb(255,255,255)"
+						letterSpacing="-0.1"
 					>
-						{numericValue + (numericValue < 6 && '+')}
+						{formatDiceRoll(numbersEnum[ rating ])}
 					</text>
 				</>
 			)}
-
 		</g>
 	);
 };
