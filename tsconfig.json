@@ -4,6 +4,7 @@
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "declaration": true,
+        "esModuleInterop": true,
         "importHelpers": true,
         "jsx": "react",
         "module": "commonjs",
@@ -11,14 +12,16 @@
         "noEmitOnError": true,
         "noImplicitAny": false,
         "outDir": "tmp",
-        "sourceMap": true,
         "skipDefaultLibCheck": true,
         "skipLibCheck": true,
+        "sourceMap": true,
         "strictBindCallApply": true,
         "target": "es5"
     },
     "include": [
+        "index.d.ts",
         "src/**/*",
+        "assets/**/*"
     ],
     "exclude": [
         "node_modules",

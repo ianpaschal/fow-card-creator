@@ -76,10 +76,7 @@ export const editorSlice = createSlice({
 					specialRules: state.unit.specialRules.filter((existingRule) => {
 						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
 					}),
-					passengers: [
-						'TANK',
-						'UNARMOURED_TANK',
-					].includes(action.payload) ? state.unit.passengers : 0,
+					passengers: ['TANK', 'UNARMOURED_TANK'].includes(action.payload) ? state.unit.passengers : 0,
 				},
 				availableSpecialRules,
 			};
@@ -96,6 +93,13 @@ export const editorSlice = createSlice({
 			unit: {
 				...state.unit,
 				subTitle: action.payload,
+			},
+		}),
+		setSubTitleAboveTitle: (state: EditorState, action: PayloadAction<boolean>): EditorState => ({
+			...state,
+			unit: {
+				...state.unit,
+				subTitleAboveTitle: action.payload,
 			},
 		}),
 		setIsFormation: (
@@ -193,10 +197,7 @@ export const editorSlice = createSlice({
 				...state.unit,
 				[ action.payload.modifierType ]: {
 					...state.unit[ action.payload.modifierType ],
-					modifiers: [
-						...state.unit[ action.payload.modifierType ].modifiers,
-						action.payload.modifier,
-					],
+					modifiers: [...state.unit[ action.payload.modifierType ].modifiers, action.payload.modifier],
 				},
 			},
 		}),
@@ -229,10 +230,7 @@ export const editorSlice = createSlice({
 				...state.unit,
 				[ action.payload.modifierType ]: {
 					...state.unit[ action.payload.modifierType ],
-					modifiers: [
-						...state.unit[ action.payload.modifierType ].modifiers.slice(0, action.payload.index),
-						...state.unit[ action.payload.modifierType ].modifiers.slice(action.payload.index + 1),
-					],
+					modifiers: [...state.unit[ action.payload.modifierType ].modifiers.slice(0, action.payload.index), ...state.unit[ action.payload.modifierType ].modifiers.slice(action.payload.index + 1)],
 				},
 			},
 		}),
@@ -295,10 +293,7 @@ export const editorSlice = createSlice({
 			...state,
 			unit: {
 				...state.unit,
-				weapons: [
-					...state.unit.weapons,
-					action.payload.weapon,
-				],
+				weapons: [...state.unit.weapons, action.payload.weapon],
 			},
 		}),
 		addWeaponBombardment: (
@@ -362,10 +357,7 @@ export const editorSlice = createSlice({
 			...state,
 			unit: {
 				...state.unit,
-				weapons: [
-					...state.unit.weapons.slice(0, action.payload.index),
-					...state.unit.weapons.slice(action.payload.index + 1),
-				],
+				weapons: [...state.unit.weapons.slice(0, action.payload.index), ...state.unit.weapons.slice(action.payload.index + 1)],
 			},
 		}),
 		removeWeaponBombardment: (

@@ -22,6 +22,7 @@ export interface Unit {
 	title: string;
 	accentColor: string;
 	subTitle?: string;
+	subTitleAboveTitle: boolean;
 
 	// Special Properties Section
 	specialRules: UnitSpecialRuleName[];

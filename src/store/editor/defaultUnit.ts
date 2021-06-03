@@ -16,6 +16,7 @@ export const defaultUnit: Unit = {
 	era: '',
 	title: '',
 	subTitle: '',
+	subTitleAboveTitle: false,
 	specialRules: [],
 	motivation: {
 		baseRating: 'CONFIDENT' as MotivationRating,

@@ -5,69 +5,69 @@ const COLORS = {
 	// British
 	BR: {
 		EW: {
-			africa: 'rgb(85, 0, 21)', // Hellfire and Back! (v3)
-			france: 'rgb(106,97,76)', // Blitzkrieg! (v3)
+			africa: '#550015', // Hellfire and Back! (v3)
+			france: '#6a614c', // Blitzkrieg! (v3)
 		},
-		LW: 'rgb(83, 29, 45)', // Fortress Europe, D-Day
-		MW: 'rgb(0, 62, 109)', // Armored Fist & Desert Rats
+		LW: '#531d2d', // Fortress Europe, D-Day
+		MW: '#003e6d', // Armored Fist & Desert Rats
 	},
 
 	// Finns
 	FI: {
-		EW: 'rgb(74,118,149)', // Rising Sun, Barbarossa (v3)
-		MW: 'rgb(74,118,149)', // Eastern Front (v3)
+		EW: '#4a7695', // Rising Sun, Barbarossa (v3)
+		MW: '#4a7695', // Eastern Front (v3)
 	},
 
 	// French
 	FR: {
-		EW: 'rgb(54,67,54)', // Burning Empires (v3), Blitzkrieg! (v3)
-		MW: 'rgb(54,67,54)', // Burning Empires (v3)
+		EW: '#364336', // Burning Empires (v3), Blitzkrieg! (v3)
+		MW: '#364336', // Burning Empires (v3)
 		LW: {
-			italy: 'rgb(0,40,64)', // Road to Rome (v3)
-			france: 'rgb(20,50,90)', // Overlord (v3)
+			italy: '#002840', // Road to Rome (v3)
+			france: '#14325a', // Overlord (v3)
 		},
 	},
 
 	// Germans
 	GE: {
-		LW: 'rgb(63, 71, 60)', // Fortress Europe, D-Day & Waffen SS
+		LW: '#3f473c', // Fortress Europe, D-Day & Waffen SS
 		MW: {
-			africa: 'rgb(100, 81, 60)', // Afrika Korps
-			east: 'rgb(65, 64, 66)', // Iron Cross & Ghost Panzers
+			africa: '#64513c', // Afrika Korps
+			east: '#414042', // Iron Cross & Ghost Panzers
 		},
 	},
 
 	// Italians
 	IT: {
-		MW: 'rgb(7, 84, 43)', // Avanti
+		MW: '#07542b', // Avanti
 	},
 
 	// Soviets
 	SU: {
-		LW: 'rgb(95, 76, 48)', // Fortress Europe & Bagration
-		MW: 'rgb(122, 7, 8)', // Red Banner & Enemy at the Gates
+		LW: '#5f4c30', // Fortress Europe & Bagration
+		MW: '#7a0708', // Red Banner & Enemy at the Gates
 	},
 
 	// Americans
 	US: {
-		LW: 'rgb(1, 40, 70)', // Fortress Europe & D-Day
-		MW: 'rgb(70, 64, 42)', // Fighting First
+		LW: '#012846', // Fortress Europe & D-Day
+		MW: '#46402a', // Fighting First
 	},
 
 	// Japanese
 	JP: {
-		EW: 'rgb(151,153,156)', // Rising Sun (v3)
-		MW: 'rgb(189,0,0)', // Banzai (v3)
-		LW: 'rgb(189,0,0)', // Banzai (v3)
+		EW: '#97999c', // Rising Sun (v3)
+		MW: '#bd0000', // Banzai (v3)
+		LW: '#bd0000', // Banzai (v3)
 	},
 
 	NL: {
-		EW: 'rgb(222, 118, 28)', // Team Yankee Free Nations
+		EW: '#de761c', // Team Yankee Free Nations
 	},
 };
 
-export function getBaseColor(nationality?: Nationality, era?: Era, modifier?: string) {
-	const defaultColor = 'rgb(36, 41, 46)';
+export function getBaseColor(nationality?: Nationality | '', era?: Era | '', modifier?: string) {
+	const defaultColor = '#24292e';
 	if (!COLORS[ nationality ]) {
 		console.warn(`Nationality '${nationality}' not found; using default.`);
 		return defaultColor;

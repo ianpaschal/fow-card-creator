@@ -38,6 +38,12 @@ export function setSubTitleActionCreator(subTitle: string) {
 	};
 }
 
+export function setSubTitleAboveTitleActionCreator(subTitleAboveTitle: boolean) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.setSubTitleAboveTitle(subTitleAboveTitle));
+	};
+}
+
 export function setEraActionCreator(era: Era) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.setEra(era));

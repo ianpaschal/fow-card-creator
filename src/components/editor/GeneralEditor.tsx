@@ -9,12 +9,14 @@ import {
 	setNationalityActionCreator,
 	setSubTitleActionCreator,
 	setTitleActionCreator,
+	setSubTitleAboveTitleActionCreator,
 } from '../../store/editor/editorActionCreators';
 import { getFormValues } from '../../utils/getFormValues';
 import { Nations } from '../../enums/Nations';
 import { Eras } from '../../enums/Eras';
 import { EditorSection } from './EditorSection';
 import { FormItem } from './FormItem';
+import { Checkbox } from 'primereact/checkbox';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -25,6 +27,7 @@ const connector = connect(
 		setNationality: setNationalityActionCreator,
 		setSubTitle: setSubTitleActionCreator,
 		setTitle: setTitleActionCreator,
+		setSubTitleAboveTitle: setSubTitleAboveTitleActionCreator,
 	}, dispatch),
 );
 
@@ -38,6 +41,7 @@ export const GeneralEditor: React.FC<GeneralEditorProps> = ({
 	setNationality,
 	setSubTitle,
 	setTitle,
+	setSubTitleAboveTitle,
 }: GeneralEditorProps) => (
 	<EditorSection className='general-editor' title="General">
 		<FormItem label="Title">
@@ -54,13 +58,8 @@ export const GeneralEditor: React.FC<GeneralEditorProps> = ({
 				placeholder="Sub-Title"
 			/>
 		</FormItem>
-		<FormItem label="Era">
-			<Dropdown
-				value={unit.era}
-				options={getFormValues(Eras)}
-				onChange={(e) => setEra(e.value)}
-				placeholder="Select an era"
-			/>
+		<FormItem label="Above Title?">
+			<Checkbox onChange={(e) => setSubTitleAboveTitle(e.checked)} checked={unit.subTitleAboveTitle} />
 		</FormItem>
 		<FormItem label="Nation">
 			<Dropdown
@@ -68,6 +67,14 @@ export const GeneralEditor: React.FC<GeneralEditorProps> = ({
 				options={getFormValues(Nations)}
 				onChange={(e) => setNationality(e.value)}
 				placeholder="Select a nationality"
+			/>
+		</FormItem>
+		<FormItem label="Era">
+			<Dropdown
+				value={unit.era}
+				options={getFormValues(Eras)}
+				onChange={(e) => setEra(e.value)}
+				placeholder="Select an era"
 			/>
 		</FormItem>
 	</EditorSection>

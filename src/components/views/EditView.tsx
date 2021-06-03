@@ -1,6 +1,5 @@
-// Copyright (c) 2020 Ian Paschal
-
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useState, useEffect } from 'react';
 import classNamesDedupe from 'classnames/dedupe';
 import { Button } from 'primereact/button';
 import { ConnectedGeneralEditor } from '../editor/GeneralEditor';
@@ -10,25 +9,16 @@ import { ConnectedWeaponsEditor } from '../editor/WeaponsEditor';
 import { SelectButton } from 'primereact/selectbutton';
 import './EditView.scss';
 import { ConnectedSoftStatEditor } from '../editor/SoftStatEditor';
-import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
-import { setBaseRatingActionCreator, addModifierActionCreator, updateModifierActionCreator, removeModifierActionCreator } from '../../store/editor/editorActionCreators';
 import { Unit } from '../../typing/Unit';
-import { CardFrontSVG } from '../print/CardFrontSVG';
-import ReactDOMServer from 'react-dom/server';
-import PDFKit from 'pdfkit';
+import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
+import { UnitCard } from '../card/UnitCard';
 
 const connector = connect(
 	(state: RootState) => ({
 		unit: state.editor.unit,
-	}),
-	(dispatch) => bindActionCreators({
-		setBaseRating: setBaseRatingActionCreator,
-		addModifier: addModifierActionCreator,
-		updateModifier: updateModifierActionCreator,
-		removeModifier: removeModifierActionCreator,
-	}, dispatch),
+	})
 );
 
 export interface OwnProps {
@@ -48,53 +38,16 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 	constructor(props: EditViewProps) {
 		super(props);
 		this.state = {
-			view: 'split',
+			view: window.innerWidth > 959 ? 'split' : 'preview',
 		};
-		this.downloadSVG = this.downloadSVG.bind(this);
 		this.downloadPDF = this.downloadPDF.bind(this);
 	}
 
-	downloadPDF(e) {
+	downloadPDF(e: React.MouseEvent) {
 		e.preventDefault();
-
 		const { unit } = this.props;
-		const doc = new PDFKit();
-		const chunks = [];
-		const stream = doc.pipe({
-			// writable stream implementation
-			write: (chunk) => chunks.push(chunk),
-			end: () => {
-				const pdfBlob = new Blob(chunks, {
-					type: 'application/octet-stream',
-				});
-				const blobUrl = URL.createObjectURL(pdfBlob);
-				window.open(blobUrl);
-			},
-			// readable streaaam stub iplementation
-			on: (event, action) => {},
-			once: (...args) => {},
-			emit: (...args) => {},
-		});
-
-		PDFKit.SVGtoPDF(doc, ReactDOMServer.renderToString(<CardFrontSVG unit={unit}/>), 0, 0);
-
-		doc.end();
+		createUnitCardPDF(unit);
 	};
-
-	downloadSVG(e) {
-		const { unit } = this.props;
-		e.preventDefault();
-		const plainText = ReactDOMServer.renderToString(<CardFrontSVG unit={unit}/>);
-		console.log(plainText);
-
-		const element = document.createElement('a');
-		const file = new Blob([ plainText ], { type: 'text/plain;charset=utf-8' });
-		element.href = URL.createObjectURL(file);
-		element.download = 'my-unit-card.svg';
-		document.body.appendChild(element);
-		element.click();
-		document.body.removeChild(element);
-	}
 
 	render() {
 		const { className, onSave, unit } = this.props;
@@ -107,15 +60,14 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 				<div className="edit-view__toolbar">
 					<div className="edit-view__toolbar-section">
 						<Button label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left"/>
-						{/* <Button label="Duplicate"
-					className="p-button-secondary p-button-outlined" /> */}
+						{/* <Button label="Duplicate" className="p-button-secondary p-button-outlined" /> */}
 					</div>
 					<div className="edit-view__toolbar-section">
 						<SelectButton
 							value={view}
 							options={[
 								{ label: 'Editor', value: 'editor' },
-								{ label: 'Split', value: 'split' },
+								...(window.innerWidth > 959 ? [{ label: 'Split', value: 'split' }] : []),
 								{ label: 'Preview', value: 'preview' },
 							]}
 							onChange={(e) => {
@@ -128,11 +80,9 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					</div>
 					<div className="edit-view__toolbar-section">
 						<Button
-							// className="p-disabled"
-							label="Export SVG"
+							label="Export PDF"
 							icon="pi pi-download"
 							iconPos="right"
-							// tooltip="Coming soon!"
 							tooltipOptions={{ position: 'bottom' }}
 							onClick={this.downloadPDF}
 						/>
@@ -151,7 +101,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					)}
 					{(view === 'preview' || view === 'split') && (
 						<div className="edit-view__preview-pane">
-							<CardFrontSVG unit={unit}/>
+							<UnitCard.SVG unit={unit}/>
 						</div>
 					)}
 				</div>

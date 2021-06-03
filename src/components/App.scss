@@ -1,8 +1,20 @@
 @import '../style/variables.scss';
 
+#root {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .app {
-    .app__page {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    .app__main {
         padding-top: 64px;
+        height: 100vh;
+        width: 100vw;
     }
 
     .app__header {
