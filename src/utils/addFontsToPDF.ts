@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { FontNames } from '../enums/FontNames';
 import OpenSansBold from '../../assets/fonts/OpenSans-Bold';
 import OpenSansBoldItalic from '../../assets/fonts/OpenSans-BoldItalic';
 import OpenSansExtraBold from '../../assets/fonts/OpenSans-ExtraBold';
@@ -21,20 +22,20 @@ interface FontDefinition {
 
 export function addFontsToPDF(doc: jsPDF) {
 	const fonts: FontDefinition[] = [
-		{ name: 'OpenSans-Bold', data: OpenSansBold },
-		{ name: 'OpenSans-BoldItalic', data: OpenSansBoldItalic },
-		{ name: 'OpenSans-ExtraBold', data: OpenSansExtraBold },
-		{ name: 'OpenSans-ExtraBoldItalic', data: OpenSansExtraBoldItalic },
-		{ name: 'OpenSans-Light', data: OpenSansLight },
-		{ name: 'OpenSans-LightItalic', data: OpenSansLightItalic },
-		{ name: 'OpenSans-Regular', data: OpenSansRegular },
-		{ name: 'OpenSans-RegularItalic', data: OpenSansRegularItalic },
-		{ name: 'OpenSans-SemiBold', data: OpenSansSemiBold },
-		{ name: 'OpenSans-SemiBoldItalic', data: OpenSansSemiBoldItalic },
-		{ name: 'PTSans-Bold', data: PTSansBold },
-		{ name: 'PTSans-BoldItalic', data: PTSansBoldItalic },
-		{ name: 'PTSans-Regular', data: PTSansRegular },
-		{ name: 'PTSans-RegularItalic', data: PTSansRegularItalic },
+		{ name: FontNames.OPEN_SANS_BOLD_ITALIC, data: OpenSansBoldItalic },
+		{ name: FontNames.OPEN_SANS_BOLD, data: OpenSansBold },
+		{ name: FontNames.OPEN_SANS_EXTRA_BOLD_ITALIC, data: OpenSansExtraBoldItalic },
+		{ name: FontNames.OPEN_SANS_EXTRA_BOLD, data: OpenSansExtraBold },
+		{ name: FontNames.OPEN_SANS_LIGHT_ITALIC, data: OpenSansLightItalic },
+		{ name: FontNames.OPEN_SANS_LIGHT, data: OpenSansLight },
+		{ name: FontNames.OPEN_SANS_REGULAR_ITALIC, data: OpenSansRegularItalic },
+		{ name: FontNames.OPEN_SANS_REGULAR, data: OpenSansRegular },
+		{ name: FontNames.OPEN_SANS_SEMI_BOLD_ITALIC, data: OpenSansSemiBoldItalic },
+		{ name: FontNames.OPEN_SANS_SEMI_BOLD, data: OpenSansSemiBold },
+		{ name: FontNames.PT_SANS_BOLD_ITALIC, data: PTSansBoldItalic },
+		{ name: FontNames.PT_SANS_BOLD, data: PTSansBold },
+		{ name: FontNames.PT_SANS_REGULAR_ITALIC, data: PTSansRegularItalic },
+		{ name: FontNames.PT_SANS_REGULAR, data: PTSansRegular },
 	];
 	fonts.forEach((font: FontDefinition) => {
 		const { name, data } = font;
