@@ -6,4 +6,5 @@ export const Constants = {
 	BEZIER_CORNER_OFFSET,
 	MM_PER_INCH,
 	PT_PER_INCH,
+	OPEN_SANS_RENDER_PROPORTION: 0.71386, // Roughly...
 };

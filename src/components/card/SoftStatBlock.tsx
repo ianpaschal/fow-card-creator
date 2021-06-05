@@ -67,6 +67,7 @@ export class SoftStatBlock {
 			text: attribute === 'hitOn' ? 'IS HIT ON' : attribute.toUpperCase(),
 			stroke: unit.accentColor,
 			fontSize: Settings.STAT_HEADER_FONT_SIZE,
+			fill: '#FFFFFF',
 		});
 
 		SoftStatBaseRating.PDF(doc, {
@@ -103,6 +104,7 @@ export class SoftStatBlock {
 					text={attribute === 'hitOn' ? 'IS HIT ON' : attribute.toUpperCase()}
 					stroke={unit.accentColor}
 					fontSize={Settings.STAT_HEADER_FONT_SIZE}
+					fill={'#FFFFFF'}
 				/>
 				<SoftStatBaseRating.SVG
 					x={SoftStatBlock.innerMargin}

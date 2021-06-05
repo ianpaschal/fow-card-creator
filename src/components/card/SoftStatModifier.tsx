@@ -40,14 +40,14 @@ export const SoftStatModifierPDF = (doc: jsPDF, {
 
 	doc.setTextColor('#000000');
 
-	doc.setFont('PTSans-RegularItalic');
+	doc.setFont('PTSans-Regular-Italic');
 	doc.setFontSize(Settings.SOFT_STAT_SECONDARY_RATING_NAME_FONT_SIZE);
 	doc.text(modifier.name || 'No-Name', x + (textWidth / 2), y + pt(1.2, 'mm'), {
 		align: 'center',
 		baseline: 'middle',
 	});
 
-	doc.setFont('PTSans-BoldItalic');
+	doc.setFont('PTSans-Bold-Italic');
 	doc.setFontSize(Settings.SOFT_STAT_SECONDARY_RATING_ATTRIBUTE_FONT_SIZE);
 	doc.text(getAttributeName(modifier), x + (textWidth / 2), y + pt(3, 'mm'), {
 		align: 'center',

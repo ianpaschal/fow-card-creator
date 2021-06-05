@@ -82,6 +82,7 @@ export class SoftStatBaseRating {
 			doc.text(`${ratingEnum[ baseRating ]}`.toUpperCase(), x + (w - pt(4, 'mm')) / 2, y + (h / 2), {
 				align: 'center',
 				baseline: 'middle',
+				charSpace: -0.15,
 			});
 			doc.text(formatDiceRoll(numberEnum[ baseRating ]), x + w - pt(2, 'mm'), y + (h / 2), {
 				align: 'center',
@@ -140,6 +141,7 @@ export class SoftStatBaseRating {
 							fontWeight="700"
 							fontFamily="Open Sans"
 							fill="#FFFFFF"
+							letterSpacing={-0.15}
 						>
 							{`${ratingEnum[ baseRating ]}`.toUpperCase()}
 						</text>

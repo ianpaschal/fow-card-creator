@@ -7,7 +7,7 @@ import { UnitTypes } from '../../enums/UnitTypes';
 import { Settings } from '../../Settings';
 import { Unit } from '../../typing/Unit';
 import { pt } from '../../utils/convertDistance';
-import { RectangleRoundedProps } from './primitives/Rectangle';
+import { RectangleRoundedProps } from './generic/Rectangle';
 
 export interface Area {
 	x: number;
@@ -59,6 +59,7 @@ export class SaveBlockLayout {
 			fontSize: Settings.STAT_HEADER_FONT_SIZE,
 			r: Settings.CORNER_RADIUS,
 			stroke: this.unit.accentColor,
+			fill: '#FFFFFF',
 		};
 	}
 
@@ -70,7 +71,7 @@ export class SaveBlockLayout {
 		return {
 			x: this.x + Settings.STAT_BLOCK_INNER_MARGIN,
 			y: this.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH,
-			w: pt(17, 'mm'),
+			w: pt(16, 'mm'),
 			h: Settings.ARMOR_RATING_MISC_HEIGHT,
 			r: Settings.CORNER_RADIUS - Settings.STAT_BLOCK_INNER_MARGIN,
 			fill: this.unit.accentColor,

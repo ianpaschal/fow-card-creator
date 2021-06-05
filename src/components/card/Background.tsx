@@ -1,66 +1,68 @@
-import React, { CanvasHTMLAttributes } from 'react';
+import React from 'react';
 import jsPDF from 'jspdf';
 import { pt } from '../../utils/convertDistance';
-import { Settings } from '../../Settings';
-import PaperBackgroundPNG from '../../../assets/images/unit-card-background-paper.png';
+import { Nationality } from '../../enums/Nations';
+import { Era } from '../../enums/Eras';
 
-// import FlagBE from '../../assets/flags/flag-be.svg';
-// import FlagBR from '../../assets/flags/flag-br.svg';
-// import FlagCN from '../../assets/flags/flag-cn.svg';
-// import FlagFI from '../../assets/flags/flag-fi.svg';
-// import FlagFR from '../../assets/flags/flag-fr.svg';
-// import FlagGE from '../../assets/flags/flag-ge.svg';
-// import FlagHU from '../../assets/flags/flag-hu.svg';
-// import FlagIT from '../../assets/flags/flag-it.svg';
-// import FlagJP from '../../assets/flags/flag-jp.svg';
-// import FlagNL from '../../assets/flags/flag-nl.svg';
-// import FlagNO from '../../assets/flags/flag-no.svg';
-// import FlagPL from '../../assets/flags/flag-pl.svg';
-// import FlagRO from '../../assets/flags/flag-ro.svg';
-// import FlagSU from '../../assets/flags/flag-su.svg';
-// import FlagUS from '../../assets/flags/flag-us.svg';
+import MWBackgroundPNG from '../../../assets/images/unit-card-background-mw.png';
+import LWBackgroundPNG from '../../../assets/images/unit-card-background-lw.png';
+// import FlagFI from '../../../assets/images/flags/print/flag-fi.png';
+// import FlagFR from '../../../assets/images/flags/print/flag-fr.png';
+// import FlagHU from '../../../assets/images/flags/print/flag-hu.png';
+// import FlagIT from '../../../assets/images/flags/print/flag-it.png';
+// import FlagJP from '../../../assets/images/flags/print/flag-jp.png';
+// import FlagNL from '../../../assets/images/flags/print/flag-nl.png';
+// import FlagNO from '../../../assets/images/flags/print/flag-no.png';
+// import FlagPL from '../../../assets/images/flags/print/flag-pl.png';
+// import FlagRO from '../../../assets/images/flags/print/flag-ro.png';
+import FlagBE from '../../../assets/images/flags/print/flag-be.png';
+import FlagBR from '../../../assets/images/flags/print/flag-br.png';
+import FlagCN from '../../../assets/images/flags/print/flag-cn.png';
+import FlagGE from '../../../assets/images/flags/print/flag-ge.png';
+import FlagSU from '../../../assets/images/flags/print/flag-su.png';
+import FlagUS from '../../../assets/images/flags/print/flag-us.png';
 
 export interface BackgroundProps {
 	nationality?: string;
+	era?: Era;
 }
 
-// function encodeImageFileAsURL(element) {
-// 	const file = element.files[ 0 ];
-// 	const reader = new FileReader();
-// 	reader.onloadend = function() {
-// 	  console.log('RESULT', reader.result);
-// 	};
-// 	reader.readAsDataURL(Background);
-// }
-// <input type="file" onchange="encodeImageFileAsURL(this)" />
+const flags: Record<Nationality, string> = {
+	'BE': FlagBE,
+	'BR': FlagBR,
+	'CN': FlagCN,
+	'GE': FlagGE,
+	'SU': FlagSU,
+	'US': FlagUS,
+	'FI': null,
+	'FR': null,
+	'HU': null,
+	'IT': null,
+	'JP': null,
+	'NL': null,
+	'NO': null,
+	'PL': null,
+	'RO': null,
+};
 
 export class Background {
 	static SVG: React.FC<BackgroundProps> = ({
 		nationality,
+		era,
 	}: BackgroundProps) => {
-		// const backgrounds = {
-		// 	FlagBE,
-		// 	FlagBR,
-		// 	FlagCN,
-		// 	FlagFI,
-		// 	FlagFR,
-		// 	FlagGE,
-		// 	FlagHU,
-		// 	FlagIT,
-		// 	FlagJP,
-		// 	FlagNL,
-		// 	FlagNO,
-		// 	FlagPL,
-		// 	FlagRO,
-		// 	FlagSU,
-		// 	FlagUS,
-		// };
-		// const Background = backgrounds[ `Flag${nation}` ];
 		return (
 			<>
-				{/* <image xlinkHref={Background} width="116" height="86" x="-3" y="-3" /> */}
+				{nationality && flags[ nationality ] && (
+					<image
+						xlinkHref={flags[ nationality ]}
+						width={pt(116, 'mm')}
+						height={ pt(86, 'mm')}
+						x={pt(-3, 'mm')}
+						y={pt(-3, 'mm')}
+					/>
+				)}
 				<image
-					xlinkHref={PaperBackgroundPNG}
+					xlinkHref={era === 'LW' ? LWBackgroundPNG : MWBackgroundPNG}
 					width={pt(116, 'mm')}
 					height={ pt(86, 'mm')}
 					x={pt(-3, 'mm')}
@@ -72,7 +74,11 @@ export class Background {
 
 	static PDF = (doc: jsPDF, {
 		nationality,
+		era,
 	}: BackgroundProps) => {
-		doc.addImage(PaperBackgroundPNG, 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
+		if (nationality && flags[ nationality ]) {
+			doc.addImage(flags[ nationality ], 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
+		}
+		doc.addImage(era === 'LW' ? LWBackgroundPNG : MWBackgroundPNG, 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
 	}
 }

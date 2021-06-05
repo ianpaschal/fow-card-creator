@@ -13,3 +13,5 @@ export enum HitOnNumbers {
 }
 
 export type HitOnNumber = keyof typeof HitOnNumbers;
+
+export const HitOnKeys = Object.keys(HitOnRatings);

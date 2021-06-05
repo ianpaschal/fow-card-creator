@@ -14,8 +14,8 @@ import { SaveRating } from './SaveRating';
 export interface Unit {
 
 	// General Section
-	era: Era | '';
-	nationality: Nationality | '';
+	era?: Era;
+	nationality?: Nationality;
 	// region: string;
 	unitType: UnitType;
 	isFormation: boolean;

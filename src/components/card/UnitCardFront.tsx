@@ -93,7 +93,7 @@ export class UnitCardFrontLayout {
 	}
 }
 
-export class UnitCard {
+export class UnitCardFront {
 	static SVG: React.FC<UnitCardProps> = ({
 		unit,
 	}: UnitCardProps) => {
@@ -109,7 +109,7 @@ export class UnitCard {
 				viewBox={`0 0 ${pt(110, 'mm')} ${pt(80, 'mm')}`}
 				preserveAspectRatio="xMidYMid meet"
 			>
-				<Background.SVG nationality={unit.nationality} />
+				<Background.SVG nationality={unit.nationality} era={unit.era} />
 				<HeaderBlock.SVG unit={unit} />
 				<SoftStatBlock.SVG {...layout.motivationBlockProps} />
 				<SoftStatBlock.SVG {...layout.skillBlockProps} />
@@ -129,7 +129,7 @@ export class UnitCard {
 		const layout = new UnitCardFrontLayout({ unit });
 
 		// TODO: Switch to new format:
-		Background.PDF(doc, { nationality: unit.nationality });
+		Background.PDF(doc, { ...unit });
 		HeaderBlock.PDF(doc, {
 			unit,
 		});

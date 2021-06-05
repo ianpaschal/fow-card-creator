@@ -77,10 +77,7 @@ export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
 		<FormItem label="Is Formation">
 			<Checkbox onChange={(e) => setUnitIsFormation(e.checked)} checked={unit.isFormation} />
 		</FormItem>
-		{[
-			'TANK',
-			'UNARMOURED_TANK',
-		].includes(unit.unitType) && (
+		{['TANK', 'UNARMOURED_TANK'].includes(unit.unitType) && (
 			<>
 				<FormItem label="Is Transport">
 					<Checkbox onChange={(e) => setUnitPassengers(e.checked ? 1 : 0)}

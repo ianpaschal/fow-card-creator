@@ -2,10 +2,11 @@ import jsPDF from 'jspdf';
 import React from 'react';
 import { LabeledRectangle, LabeledRectangleProps } from '../../drawing/LabeledRectangle';
 import { RoundedRectangle, RoundedRectangleProps, RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
+import { ArmorAttributeKeys } from '../../enums/ArmorAttributes';
 import { Settings } from '../../Settings';
 import { Unit } from '../../typing/Unit';
 import { pt } from '../../utils/convertDistance';
-import { TextPDF, TextProps, TextSVG } from './primitives/Text';
+import { TextPDF, TextProps, TextSVG } from './generic/Text';
 
 export interface Area {
 	x: number;
@@ -110,9 +111,9 @@ export class ArmorBlockLayout {
 			w: pt(3, 'mm'),
 			h: Settings.ARMOR_RATING_TANK_HEIGHT,
 			color: '#000000',
-			font: 'OpenSans-SemiBold',
+			font: 'OpenSans-Bold',
 			fontSize: 12,
-			text: this.unit.armor[ key ],
+			text: this.unit.armor[ key ].toString(),
 			align: 'center',
 		};
 	}
@@ -121,9 +122,10 @@ export class ArmorBlockLayout {
 export const ArmorBlockPDF = (doc: jsPDF, props: ArmorBlockProps) => {
 	const layout = new ArmorBlockLayout(props);
 	LabeledRectangle.PDF(doc, layout.frameProps);
-	Object.keys(props.unit.armor).forEach((key, i) => {
+	ArmorAttributeKeys.forEach((key, i) => {
 		RoundedRectangle.PDF(doc, layout.calcRatingNameArea(i));
 		TextPDF(doc, layout.getRatingLabelProps(key, i));
+		TextPDF(doc, layout.getRatingValueProps(key, i));
 	});
 };
 
@@ -132,7 +134,7 @@ export const ArmorBlockSVG: React.FC<ArmorBlockProps> = (props: ArmorBlockProps)
 	return (
 		<>
 			<LabeledRectangle.SVG {...layout.frameProps} />
-			{Object.keys(props.unit.armor).map((key, i) => (
+			{ArmorAttributeKeys.map((key, i) => (
 				<React.Fragment key={i}>
 					<RoundedRectangleSVG  {...layout.calcRatingNameArea(i)} />
 					<TextSVG {...layout.getRatingLabelProps(key, i)} />

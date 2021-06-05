@@ -271,6 +271,7 @@ export const editorSlice = createSlice({
 					...state.unit.armor,
 					[ action.payload.attribute ]: action.payload.value,
 				},
+				save: null,
 			},
 		}),
 		setSaveRating: (
@@ -283,6 +284,7 @@ export const editorSlice = createSlice({
 				unit: {
 					...unitWithoutArmor,
 					save: action.payload,
+					armor: null,
 				},
 			};
 		},

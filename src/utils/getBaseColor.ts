@@ -16,6 +16,7 @@ const COLORS = {
 	FI: {
 		EW: '#4a7695', // Rising Sun, Barbarossa (v3)
 		MW: '#4a7695', // Eastern Front (v3)
+		LW: '#00467a', // Bagration: Axis-Allies (v4) (tentative)
 	},
 
 	// French

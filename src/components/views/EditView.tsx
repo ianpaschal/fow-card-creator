@@ -13,7 +13,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { Unit } from '../../typing/Unit';
 import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
-import { UnitCard } from '../card/UnitCard';
+import { UnitCardFront } from '../card/UnitCardFront';
+import { UnitCardBackSVG } from '../card/UnitCardBack';
+import { ConnectedArmorEditor } from '../editor/ArmorEditor';
+import { ConnectedSaveEditor } from '../editor/SaveEditor';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -94,6 +97,12 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 						<div className="edit-view__edit-pane">
 							<ConnectedGeneralEditor/>
 							<ConnectedCharacteristicsEditor/>
+							{unit.armor && (
+								<ConnectedArmorEditor/>
+							)}
+							{unit.save && (
+								<ConnectedSaveEditor/>
+							)}
 							<ConnectedSoftStatEditor/>
 							<ConnectedMobilityEditor/>
 							<ConnectedWeaponsEditor/>
@@ -101,7 +110,8 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					)}
 					{(view === 'preview' || view === 'split') && (
 						<div className="edit-view__preview-pane">
-							<UnitCard.SVG unit={unit}/>
+							<UnitCardFront.SVG unit={unit} />
+							<UnitCardBackSVG unit={unit} />
 						</div>
 					)}
 				</div>

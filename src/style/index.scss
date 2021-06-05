@@ -90,6 +90,9 @@
     line-height: 16px;
     --base-color: rgb(7, 7, 7);
     -moz-osx-font-smoothing: grayscale;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
 }
 
 Button {
