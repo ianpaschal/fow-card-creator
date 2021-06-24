@@ -12,34 +12,29 @@ import { FormItem } from './FormItem';
 
 const connector = connect(
 	(state: RootState) => ({
-		unit: state.editor.unit,
+		isComponent: state.editor.unitCard.unit.isComponent,
 	}),
 	(dispatch) => bindActionCreators({
 		setUnitIsComponent: setUnitIsComponentActionCreator,
 	}, dispatch),
 );
 
-export interface OwnProps {
-	className?: string;
-}
-
 export type ReduxProps = ConnectedProps<typeof connector>;
 
-export type SoftStatEditorProps = OwnProps & ReduxProps;
+export type SoftStatEditorProps = ReduxProps;
 
 export const SoftStatEditor: React.FC<SoftStatEditorProps> = ({
-	className: extraClassName,
-	unit,
+	isComponent,
 	setUnitIsComponent,
 }: SoftStatEditorProps) => (
 	<EditorSection className='soft-stat-editor' title="Soft Stats">
 		<FormItem label="Is Component">
 			<Checkbox
 				onChange={(e) => setUnitIsComponent(e.checked)}
-				checked={unit.isComponent}
+				checked={isComponent}
 			/>
 		</FormItem>
-		{!unit.isComponent && (
+		{!isComponent && (
 			<>
 				<ConnectedSoftStatEditorSection attribute="motivation"/>
 				<ConnectedSoftStatEditorSection attribute="skill"/>

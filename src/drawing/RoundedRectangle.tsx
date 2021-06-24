@@ -4,11 +4,11 @@ import { BEZIER_CORNER_OFFSET } from '../Constants';
 import { Settings } from '../Settings';
 
 export interface RoundedRectanglePathProps {
-	w: number;
-	h: number;
+	width: number;
+	height: number;
 	x: number;
 	y: number;
-	r: number;
+	radius: number;
 }
 
 export interface RoundedRectangleProps extends RoundedRectanglePathProps {
@@ -18,7 +18,7 @@ export interface RoundedRectangleProps extends RoundedRectanglePathProps {
 
 export class RoundedRectangle {
 	static createSVGPath(options: RoundedRectanglePathProps, end = true): string {
-		const { x, y, w, h, r } = options;
+		const { x, y, width: w, height: h, radius: r } = options;
 		return `
 			M${x + r},${y}
 			h${w - (r + r)}
@@ -34,7 +34,7 @@ export class RoundedRectangle {
 	}
 
 	static createPDFPath(options: RoundedRectanglePathProps): any[] {
-		const { x, y, w, h, r } = options;
+		const { x, y, width: w, height: h, radius: r } = options;
 		const b = BEZIER_CORNER_OFFSET * r; // Offset of bezier handles from corner
 
 		/* eslint-disable array-element-newline */
@@ -94,13 +94,15 @@ export class RoundedRectangle {
 
 	static SVG: React.FC<RoundedRectangleProps> = (props: RoundedRectangleProps) => {
 		return (
-			<rect x={props.x} y={props.y} width={props.w} height={props.h} rx={props.r} fill={props.fill} />
+			<rect
+				x={props.x} y={props.y} width={props.width}
+				height={props.height} rx={props.radius} fill={props.fill} />
 		);
 	};
 }
 
 export const RoundedRectangleSVG: React.FC<RoundedRectangleProps> = (props: RoundedRectangleProps) => {
 	return (
-		<rect x={props.x} y={props.y} width={props.w} height={props.h} rx={props.r} fill={props.fill} />
+		<rect x={props.x} y={props.y} width={props.width} height={props.height} rx={props.radius} fill={props.fill} />
 	);
 };

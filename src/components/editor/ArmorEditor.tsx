@@ -11,7 +11,7 @@ import { FormItem } from './FormItem';
 
 const connector = connect(
 	(state: RootState) => ({
-		armor: state.editor.unit.armor,
+		armor: state.editor.unitCard.unit.armor,
 	}),
 	(dispatch) => bindActionCreators({
 		setArmorAttribute: setArmorAttributeActionCreator,

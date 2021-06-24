@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
-import { Dispatch } from '@reduxjs/toolkit';
+import { createAction, Dispatch } from '@reduxjs/toolkit';
 import { ArmorAttribute } from '../../enums/ArmorAttributes';
 import { Era } from '../../enums/Eras';
 import { HitOnRating } from '../../enums/HitOnRatings';
+import { ImageFormat, ImageFormats } from '../../enums/ImageFormats';
 import { MobilityAttribute } from '../../enums/Mobility';
 import { MotivationRating } from '../../enums/MotivationRatings';
 import { Nationality } from '../../enums/Nations';
@@ -11,8 +12,36 @@ import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { UnitType } from '../../enums/UnitTypes';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
+import { UnitCard } from '../../typing/UnitCard';
 import { Weapon } from '../../typing/Weapon';
 import { actions } from './editorSlice';
+
+export const setHasChanges = (hasChanges: boolean) => (dispatch: Dispatch) => {
+	dispatch(actions.setHasChanges(hasChanges));
+};
+
+export const setUnitCardActionCreator = (unitCard: UnitCard) => (dispatch: Dispatch) => {
+	dispatch(actions.setUnitCard(unitCard));
+};
+
+export function setIsPublicActionCreator(isPublic: boolean) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.setIsPublic(isPublic));
+	};
+}
+
+export function setPrimaryImageURLActionCreator(url: string) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.setPrimaryImageURL(url));
+	};
+}
+
+export function setPrimaryImageFormatActionCreator(format: ImageFormat) {
+	return (dispatch: Dispatch) => {
+		console.log('set format to ', format);
+		dispatch(actions.setPrimaryImageFormat(format));
+	};
+}
 
 export function setNationalityActionCreator(nationality: Nationality) {
 	return (dispatch: Dispatch) => {

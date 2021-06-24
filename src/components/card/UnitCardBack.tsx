@@ -27,7 +27,7 @@ export class UnitCardBackLayout {
 		const { unit } = this;
 		return {
 			x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
-			y: pt(15.125, 'mm') + SoftStatBlock.calcHeight(unit.hitOn) + Settings.SOFT_STAT_MARGIN_BOTTOM,
+			y: pt(15.125, 'mm') + SoftStatBlock.calcHeight(unit.hitOn) + Settings.BLOCK_MARGIN,
 			unit,
 		};
 	}
@@ -46,7 +46,7 @@ export class UnitCardBackLayout {
 		const { unit } = this;
 		return {
 			x: Settings.CARD_MARGINS,
-			y: pt(15.125, 'mm') + SoftStatBlock.calcHeight(unit.motivation) + Settings.SOFT_STAT_MARGIN_BOTTOM,
+			y: pt(15.125, 'mm') + SoftStatBlock.calcHeight(unit.motivation) + Settings.BLOCK_MARGIN,
 			unit,
 			attribute: 'skill',
 		};
@@ -67,9 +67,9 @@ export class UnitCardBackLayout {
 		let h = 0;
 		h += pt(15.125, 'mm');
 		h += SoftStatBlock.calcHeight(unit.motivation);
-		h += Settings.SOFT_STAT_MARGIN_BOTTOM;
+		h += Settings.BLOCK_MARGIN;
 		h += SoftStatBlock.calcHeight(unit.skill);
-		h += Settings.SOFT_STAT_MARGIN_BOTTOM;
+		h += Settings.BLOCK_MARGIN;
 		return h;
 	}
 
@@ -78,9 +78,9 @@ export class UnitCardBackLayout {
 		let h = 0;
 		h += pt(15.125, 'mm');
 		h += SoftStatBlock.calcHeight(unit.hitOn);
-		h += Settings.SOFT_STAT_MARGIN_BOTTOM;
+		h += Settings.BLOCK_MARGIN;
 		h += unit.armor ? ArmorBlockLayout.height : SaveBlockLayout.height;
-		h += Settings.SOFT_STAT_MARGIN_BOTTOM;
+		h += Settings.BLOCK_MARGIN;
 		return h;
 	}
 

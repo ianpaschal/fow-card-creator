@@ -1,6 +1,5 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { RoundedRectangle } from '../../drawing/RoundedRectangle';
 import {
 	HitOnNumbers,
 	HitOnRatings,
@@ -14,19 +13,19 @@ import {
 	SkillRatings,
 } from '../../enums/SkillRatings';
 import { Settings } from '../../Settings';
-import { formatDiceRoll } from '../../utils/formatDiceRoll';
 import { pt } from '../../utils/convertDistance';
-import { Unit } from '../../typing/Unit';
+import { formatDiceRoll } from '../../utils/formatDiceRoll';
+import { RoundedRectanglePDF, RoundedRectangleProps, RoundedRectangleSVG } from './generic/RoundedRectangle';
+import { TextPDF, TextProps, TextSVG } from './generic/Text';
 
 export interface SoftStatBaseRatingProps {
 	x: number;
 	y: number;
-	unit: Unit;
-	attribute: 'motivation' | 'skill' | 'hitOn';
+	label: string;
+	value?: number;
 }
 
-export class SoftStatBaseRating {
-
+export class SoftStatBaseRatingLayout {
 	static getRatingEnum(attribute: string) {
 		if (attribute === 'motivation') {
 			return MotivationRatings;
@@ -50,116 +49,77 @@ export class SoftStatBaseRating {
 		}
 	}
 
-	static PDF = (doc: jsPDF, {
-		x,
-		y,
-		unit,
-		attribute,
-	}: SoftStatBaseRatingProps) => {
-		const ratingEnum = SoftStatBaseRating.getRatingEnum(attribute);
-		const numberEnum = SoftStatBaseRating.getNumberEnum(attribute);
-		const { isComponent } = unit;
-		const { baseRating } = unit[ attribute ];
-		const w = Settings.STAT_BLOCK_WIDTH - (2 * pt(0.5, 'mm'));
-		const h = Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		const r = Settings.CORNER_RADIUS - pt(0.5, 'mm');
+	// Passed
+	label: string;
+	value: number;
+	x: number;
+	y: number;
 
-		RoundedRectangle.PDF(doc, {
-			x, y, w, h, r,
-			fill: Settings.SOFT_STAT_PRIMARY_RATING_BACKGROUND_COLOR,
+	// Static
+	width: number = Settings.STAT_BLOCK_WIDTH - (2 * pt(0.5, 'mm'));
+	height: number = Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
+	radius: number = Settings.CORNER_RADIUS - pt(0.5, 'mm');
+	fill: string = Settings.SOFT_STAT_PRIMARY_RATING_BACKGROUND_COLOR;
+
+	constructor(props: SoftStatBaseRatingProps) {
+		Object.keys(props).forEach((key) => {
+			this[ key ] = props[ key ];
 		});
-
-		doc.setTextColor('#FFFFFF');
-		doc.setFont('OpenSans-Bold');
-		doc.setFontSize(Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE);
-
-		if (isComponent) {
-			doc.text('AS PER UNIT', x + w / 2, y + (h / 2), {
-				align: 'center',
-				baseline: 'middle',
-			});
-		} else {
-			doc.text(`${ratingEnum[ baseRating ]}`.toUpperCase(), x + (w - pt(4, 'mm')) / 2, y + (h / 2), {
-				align: 'center',
-				baseline: 'middle',
-				charSpace: -0.15,
-			});
-			doc.text(formatDiceRoll(numberEnum[ baseRating ]), x + w - pt(2, 'mm'), y + (h / 2), {
-				align: 'center',
-				baseline: 'middle',
-			});
-		}
 	}
 
-	static SVG: React.FC<SoftStatBaseRatingProps> = ({
-		x,
-		y,
-		unit,
-		attribute,
-	}: SoftStatBaseRatingProps) => {
-		const ratingEnum = SoftStatBaseRating.getRatingEnum(attribute);
-		const numberEnum = SoftStatBaseRating.getNumberEnum(attribute);
-		const { isComponent } = unit;
-		const { baseRating } = unit[ attribute ];
-		const w = Settings.STAT_BLOCK_WIDTH - (2 * pt(0.5, 'mm'));
-		const h = Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		const r = Settings.CORNER_RADIUS - pt(0.5, 'mm');
+	get baseProps(): RoundedRectangleProps {
+		return { ...this };
+	}
 
-		return (
-			<g transform={`translate(${x} ${y})`}>
-				<rect
-					x="0"
-					y="0"
-					width={w}
-					height={h}
-					rx={r}
-					fill={Settings.SOFT_STAT_PRIMARY_RATING_BACKGROUND_COLOR}
-				/>
-				{isComponent ? (
-					<>
-						<text
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fontSize={Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE}
-							x={w / 2}
-							y={h * 0.55}
-							fontWeight="700"
-							fontFamily="Open Sans"
-							fill="#FFFFFF"
-						>
-							AS PER UNIT
-						</text>
-					</>
-				) : (
-					<>
-						<text
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fontSize={Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE}
-							x={(w - pt(4, 'mm')) / 2}
-							y={h * 0.55}
-							fontWeight="700"
-							fontFamily="Open Sans"
-							fill="#FFFFFF"
-							letterSpacing={-0.15}
-						>
-							{`${ratingEnum[ baseRating ]}`.toUpperCase()}
-						</text>
-						<text
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fontSize={Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE}
-							x={w - pt(2, 'mm')}
-							y={h * 0.55}
-							fontWeight="700"
-							fontFamily="Open Sans"
-							fill="#FFFFFF"
-						>
-							{formatDiceRoll(numberEnum[ baseRating ])}
-						</text>
-					</>
-				)}
-			</g>
-		);
+	get labelProps(): TextProps {
+		return {
+			align: 'center',
+			color: '#FFFFFF',
+			font: 'OpenSans-Bold',
+			fontSize: Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE,
+			height: this.height,
+			lineHeight: this.height,
+			text: this.label,
+			width: this.value ? this.width - pt(4, 'mm') : this.width,
+			x: this.x,
+			y: this.y,
+		};
+	}
+
+	get valueProps(): TextProps {
+		return {
+			align: 'center',
+			color: '#FFFFFF',
+			font: 'OpenSans-Bold',
+			fontSize: Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE,
+			height: this.height,
+			lineHeight: this.height,
+			text: formatDiceRoll(this.value),
+			width: pt(4, 'mm'),
+			x: this.x + this.width - pt(4, 'mm'),
+			y: this.y,
+		};
 	}
 }
+
+export const SoftStatBaseRatingPDF = (doc: jsPDF, props: SoftStatBaseRatingProps) => {
+	const layout = new SoftStatBaseRatingLayout(props);
+	RoundedRectanglePDF(doc, layout.baseProps);
+	TextPDF(doc, layout.labelProps);
+	if (props.value) {
+		TextPDF(doc, layout.valueProps);
+	}
+};
+
+export const SoftStatBaseRatingSVG: React.FC<SoftStatBaseRatingProps> = (props: SoftStatBaseRatingProps) => {
+	const layout = new SoftStatBaseRatingLayout(props);
+	return (
+		<>
+			<RoundedRectangleSVG {...layout.baseProps} />
+			<TextSVG {...layout.labelProps} />
+			{props.value && (
+				<TextSVG {...layout.valueProps} />
+			)}
+		</>
+	);
+};

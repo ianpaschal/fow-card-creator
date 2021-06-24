@@ -1,8 +1,10 @@
 import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
 
+import { reducer as auth } from './auth/authSlice';
 import { reducer as editor } from './editor/editorSlice';
 
 export const rootReducer = combineReducers({
+	auth,
 	editor,
 });
 

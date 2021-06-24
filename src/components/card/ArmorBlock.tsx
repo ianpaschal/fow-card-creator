@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { LabeledRectangle, LabeledRectangleProps } from '../../drawing/LabeledRectangle';
+import { LabeledRectangle, LabeledRectangleProps } from './generic/LabeledRectangle.old';
 import { RoundedRectangle, RoundedRectangleProps, RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
 import { ArmorAttributeKeys } from '../../enums/ArmorAttributes';
 import { Settings } from '../../Settings';
@@ -20,13 +20,12 @@ export interface AreaRound extends Area {
 
 export interface ArmorBlockProps {
 	unit: Unit;
-	x: number;
 	y: number;
 }
 
 export class ArmorBlockLayout {
 	unit: Unit;
-	x: number;
+	x: number = Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH);
 	y: number;
 
 	// eslint-disable-next-line max-len
@@ -34,7 +33,6 @@ export class ArmorBlockLayout {
 
 	constructor(props: ArmorBlockProps) {
 		this.unit = props.unit;
-		this.x = props.x;
 		this.y = props.y;
 	}
 

@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 import jsPDF from 'jspdf';
 import React from 'react';
-import { LabeledRectangle, LabeledRectangleProps } from '../../drawing/LabeledRectangle';
+import { LabeledRectangle, LabeledRectangleProps } from './generic/LabeledRectangle.old';
 import { RoundedRectangle, RoundedRectangleProps, RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
 import { UnitTypes } from '../../enums/UnitTypes';
 import { Settings } from '../../Settings';
 import { Unit } from '../../typing/Unit';
 import { pt } from '../../utils/convertDistance';
-import { RectangleRoundedProps } from './generic/Rectangle';
+import { RectangleRoundedProps } from './generic/Frame';
 
 export interface Area {
 	x: number;
@@ -18,13 +18,12 @@ export interface Area {
 
 export interface SaveBlockProps {
 	unit: Unit;
-	x: number;
 	y: number;
 }
 
 export class SaveBlockLayout {
 	unit: Unit;
-	x: number;
+	x: number = Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH);
 	y: number;
 
 	private static innerBlockMargin: number = pt(0.5, 'mm');
@@ -33,7 +32,6 @@ export class SaveBlockLayout {
 
 	constructor(props: SaveBlockProps) {
 		this.unit = props.unit;
-		this.x = props.x;
 		this.y = props.y;
 	}
 

@@ -1,28 +1,21 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import { Unit } from '../../typing/Unit';
+import { connect } from 'react-redux';
+import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { Settings } from '../../Settings';
-import { RoundedRectangle, RoundedRectangleProps, RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
+import { RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
 import { TextLayout, TextPDF, TextProps, TextSVG } from './generic/Text';
-
-export interface HeaderBlockProps {
-	unit: Unit;
-}
+import { RoundedRectanglePDF, RoundedRectangleProps } from './generic/RoundedRectangle';
 
 export class HeaderBlockLayout {
-	unit: Unit;
-	titleLineCount: number;
-
 	static x: number = Settings.CARD_MARGINS;
 	static y: number = Settings.CARD_MARGINS + pt(0.05, 'mm');
-	static h: number = pt(8.25, 'mm');
-	static hMultiLine = pt(11.25, 'mm');
-	static w: number = Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS);
-	static r: number = Settings.CORNER_RADIUS;
-	static textXMargins = pt(8, 'mm');
+	static width: number = Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS);
+	static radius: number = Settings.CORNER_RADIUS;
+	static textXMargins = pt(10, 'mm');
 	static textX: number = HeaderBlockLayout.x + HeaderBlockLayout.textXMargins;
-	static textW: number = HeaderBlockLayout.w - (2 * HeaderBlockLayout.textXMargins);
+	static textW: number = HeaderBlockLayout.width - (2 * HeaderBlockLayout.textXMargins);
 	static titleLineH: number = pt(4, 'mm');
 	static subTitleH: number = pt(1.5, 'mm');
 	static subTitleSpacing: number = pt(0.7, 'mm');
@@ -33,36 +26,61 @@ export class HeaderBlockLayout {
 	static lineHeight: number = 0.825;
 	static letterSpacing: number = -0.4;
 
-	constructor(props: HeaderBlockProps) {
-		this.unit = props.unit;
+	// Static
+	x: number = Settings.CARD_MARGINS;
+	y: number = Settings.CARD_MARGINS + pt(0.05, 'mm');
+	height: number;
+	width: number = Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS);
+	radius: number = Settings.CORNER_RADIUS;
+	titleLineHeight: number = pt(4, 'mm');
+	xMargin: number = pt(10, 'mm');
+	font: string = 'OpenSans-Bold';
+	titleFontSize: number = 16;
+	align: 'left' | 'center' | 'right' = 'center';
 
-		this.titleLineCount = TextLayout.getLineCount({
-			...HeaderBlockLayout,
-			fontSize: HeaderBlockLayout.titleFontSize,
+	titleLineCount: number;
+	title: string;
+	subTitle: string;
+	subTitleAboveTitle: boolean;
+	accentColor: string;
+
+	constructor(props: HeaderBlockProps) {
+		Object.keys(props).forEach((key) => {
+			this[ key ] = props[ key ];
+		});
+
+		this.updateHeight();
+	}
+
+	updateHeight() {
+		const lineCount = TextLayout.getLineCount({
+			...this,
+			fontSize: this.titleFontSize,
 			x: HeaderBlockLayout.textX,
-			w: HeaderBlockLayout.textW,
+			width: this.width - (2 * this.xMargin),
 			text: this.titleText,
 		});
+		this.titleLineCount = lineCount;
+		this.height = lineCount > 1 ? pt(11.25, 'mm') : pt(8.25, 'mm');
 	}
 
 	get frameProps(): RoundedRectangleProps {
 		return {
-			...HeaderBlockLayout,
-			h: this.isMultiLine ? HeaderBlockLayout.hMultiLine : HeaderBlockLayout.h,
-			fill: this.unit.accentColor,
+			...this,
+			fill: this.accentColor,
 		};
 	}
 
 	get titleText(): string {
-		return this.unit.title.toUpperCase() || 'UNTITLED UNIT';
+		return this.title.toUpperCase() || 'UNTITLED UNIT';
 	}
 
 	get isMultiLine(): boolean {
 		return this.titleLineCount > 1;
 	}
 
-	get titleH(): number {
-		return HeaderBlockLayout.titleLineH * this.titleLineCount;
+	get titleHeight(): number {
+		return this.titleLineHeight * this.titleLineCount;
 	}
 
 	get marginTop(): number {
@@ -70,51 +88,67 @@ export class HeaderBlockLayout {
 	}
 
 	get titleProps(): TextProps {
-		let y: number;
-		if (this.unit.subTitle) {
-			if (this.unit.subTitleAboveTitle) {
+		let y: number = this.y;
+		if (this.subTitle) {
+			if (this.subTitleAboveTitle) {
 				// eslint-disable-next-line max-len
-				y = HeaderBlockLayout.y + this.marginTop + HeaderBlockLayout.subTitleH + HeaderBlockLayout.subTitleSpacing;
+				y += this.marginTop + HeaderBlockLayout.subTitleH + HeaderBlockLayout.subTitleSpacing;
 			} else {
-				y = HeaderBlockLayout.y + this.marginTop;
+				y += this.marginTop;
 			}
 		} else {
-			y = HeaderBlockLayout.y + (HeaderBlockLayout.h - this.titleH) / 2;
+			y += (this.height - this.titleHeight) / 2;
 		}
 		return {
 			...HeaderBlockLayout,
 			x: HeaderBlockLayout.textX,
 			y,
-			w: HeaderBlockLayout.textW,
-			h: this.titleH,
+			width: HeaderBlockLayout.textW,
+			height: this.titleHeight,
 			fontSize: HeaderBlockLayout.titleFontSize,
 			text: this.titleText,
-			color: this.unit.title ? '#FFFFFF' : '#CCCCCC',
+			color: this.title ? '#FFFFFF' : '#CCCCCC',
 			maxLines: 2,
+			lineHeight: this.titleHeight,
 		};
 	}
 	get subTitleProps(): TextProps {
 		let y: number;
-		if (this.unit.subTitleAboveTitle) {
+		if (this.subTitleAboveTitle) {
 			y = HeaderBlockLayout.y + this.marginTop;
 		} else {
-			y = HeaderBlockLayout.y + this.marginTop + this.titleH + HeaderBlockLayout.subTitleSpacing;
+			y = HeaderBlockLayout.y + this.marginTop + this.titleHeight + HeaderBlockLayout.subTitleSpacing;
 		}
 		return {
 			...HeaderBlockLayout,
 			x: HeaderBlockLayout.textX,
-			w: HeaderBlockLayout.textW,
-			h: HeaderBlockLayout.subTitleH,
+			width: HeaderBlockLayout.textW,
+			height: HeaderBlockLayout.subTitleH,
 			y,
 			fontSize: HeaderBlockLayout.subTitleFontSize,
-			font: 'OpenSans-ExtraBold',
-			text: this.unit.subTitle.toUpperCase(),
+			font: 'OpenSans-Bold',
+			text: this.subTitle.toUpperCase(),
 			color: '#FFFFFF',
 			maxLines: 1,
 			letterSpacing: 0,
+			lineHeight: HeaderBlockLayout.subTitleH,
 		};
 	}
 }
+
+export interface HeaderBlockProps {
+	subTitle?: string;
+	title: string;
+	subTitleAboveTitle: boolean;
+	accentColor: string;
+};
+
+const connector = connect((state: RootState) => ({
+	subTitle: state.editor.unitCard.unit.subTitle,
+	title: state.editor.unitCard.unit.title,
+	subTitleAboveTitle: state.editor.unitCard.unit.subTitleAboveTitle,
+	accentColor: state.editor.unitCard.unit.accentColor,
+}), null);
 
 export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockProps) => {
 	const layout = new HeaderBlockLayout(props);
@@ -122,7 +156,7 @@ export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockPro
 		<>
 			<RoundedRectangleSVG {...layout.frameProps} />
 			<TextSVG {...layout.titleProps} />
-			{props.unit.subTitle && (
+			{props.subTitle && (
 				<TextSVG {...layout.subTitleProps} />
 			)}
 		</>
@@ -131,21 +165,24 @@ export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockPro
 
 export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
 	const layout = new HeaderBlockLayout(props);
-	RoundedRectangle.PDF(doc, {
+	RoundedRectanglePDF(doc, {
 		x: Settings.CARD_MARGINS,
 		y: Settings.CARD_MARGINS + pt(0.05, 'mm'),
-		w: pt(100, 'mm'),
-		h: pt(8.25, 'mm'),
-		r: Settings.CORNER_RADIUS,
-		fill: props.unit.accentColor,
+		width: pt(100, 'mm'),
+		height: pt(8.25, 'mm'),
+		radius: Settings.CORNER_RADIUS,
+		fill: props.accentColor,
 	});
-	TextPDF(doc, layout.titleProps);
-	if (props.unit.subTitle) {
-		TextPDF(doc, layout.subTitleProps);
+	TextPDF(doc, {
+		...layout.titleProps,
+		text: layout.titleText,
+	});
+	if (props.subTitle) {
+		TextPDF(doc, {
+			...layout.subTitleProps,
+			text: props.subTitle.toUpperCase(),
+		});
 	}
 };
 
-export class HeaderBlock {
-	static SVG = HeaderBlockSVG;
-	static PDF = HeaderBlockPDF;
-}
+export const ConnectedHeaderBlockSVG = connector(HeaderBlockSVG);

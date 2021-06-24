@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 @font-face {
     font-family: "Open Sans";
     font-weight: 300;
@@ -84,8 +86,8 @@
 }
 
 :root {
-    font-family: 'Open Sans';
-    // font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    // font-family: 'Open Sans';
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
     line-height: 16px;
     --base-color: rgb(7, 7, 7);
@@ -97,4 +99,31 @@
 
 Button {
     line-height: 16px;
+}
+
+h1 {
+    font-size: 32px;
+    line-height: 24px;
+    font-weight: 300;
+    color: rgb(128, 130, 132);
+    letter-spacing: 0.5px;
+}
+h2 {
+    font-size: 16px;
+    line-height: 24px;
+    padding: 4px 0;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgb(128, 130, 132);
+    letter-spacing: 0.5px;
+}
+h3 {
+    font-size: 12px;
+    line-height: 24px;
+    padding: 4px 0;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgb(128, 130, 132);
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid $border-color;
 }

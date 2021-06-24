@@ -1,3 +1,4 @@
+// TODO: Convert to capitals
 export enum MobilityAttributes {
 	tactical = 'Tactical',
 	terrainDash = 'Terrain Dash',

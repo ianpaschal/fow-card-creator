@@ -23,7 +23,10 @@ import { FormItem } from './FormItem';
 
 const connector = connect(
 	(state: RootState) => ({
-		unit: state.editor.unit,
+		unitType: state.editor.unitCard.unit.unitType,
+		passengers: state.editor.unitCard.unit.passengers,
+		isFormation: state.editor.unitCard.unit.isFormation,
+		specialRules: state.editor.unitCard.unit.specialRules,
 		availableSpecialRules: state.editor.availableSpecialRules,
 	}),
 	(dispatch) => bindActionCreators({
@@ -42,7 +45,10 @@ export type ReduxProps = ConnectedProps<typeof connector>;
 export type CharacteristicsEditorProps = ReduxProps;
 
 export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
-	unit,
+	unitType,
+	passengers,
+	isFormation,
+	specialRules,
 	setSaveRating,
 	setArmorRating,
 	setUnitType,
@@ -54,7 +60,7 @@ export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
 	<EditorSection className='characteristics-editor' title="Characteristics">
 		<FormItem label="Type">
 			<Dropdown
-				value={unit.unitType}
+				value={unitType}
 				options={getFormValues(UnitTypes)}
 				onChange={(e) => {
 					if (e.value === 'TANK') {
@@ -75,18 +81,18 @@ export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
 			/>
 		</FormItem>
 		<FormItem label="Is Formation">
-			<Checkbox onChange={(e) => setUnitIsFormation(e.checked)} checked={unit.isFormation} />
+			<Checkbox onChange={(e) => setUnitIsFormation(e.checked)} checked={isFormation} />
 		</FormItem>
-		{['TANK', 'UNARMOURED_TANK'].includes(unit.unitType) && (
+		{['TANK', 'UNARMOURED_TANK'].includes(unitType) && (
 			<>
 				<FormItem label="Is Transport">
 					<Checkbox onChange={(e) => setUnitPassengers(e.checked ? 1 : 0)}
-						checked={unit.passengers > 0}/>
+						checked={passengers > 0}/>
 				</FormItem>
-				{unit.passengers > 0 && (
+				{passengers > 0 && (
 					<FormItem label="Passengers">
 						<InputNumber
-							value={unit.passengers}
+							value={passengers}
 							onValueChange={(e) => setUnitPassengers(e.value)}
 							showButtons
 							min={1}
@@ -99,7 +105,7 @@ export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
 		<FormItem label="Special Rules">
 			<MultiSelect
 				id="special-rules"
-				value={unit.specialRules}
+				value={specialRules}
 				options={availableSpecialRules}
 				display="chip"
 				onChange={(e) => setSpecialRules(e.value)}

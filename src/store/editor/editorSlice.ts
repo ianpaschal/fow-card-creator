@@ -13,29 +13,30 @@ import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { MobilityAttribute } from '../../enums/Mobility';
 import { ArmorAttribute } from '../../enums/ArmorAttributes';
 import { defaultUnit } from './defaultUnit';
-import { Unit } from '../../typing/Unit';
 import { SoftStatModifier } from '../../typing/SoftStatModifier';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
 import { Weapon } from '../../typing/Weapon';
 import { getBaseColor } from '../../utils/getBaseColor';
+import { UnitCard } from '../../typing/UnitCard';
+import { ImageFormat, ImageFormats } from '../../enums/ImageFormats';
+import { computeCardLayout } from '../../utils/computeCardLayout';
 
 export interface EditorState {
-	authorID: string;
-	rating: number;
-	created: Date;
-	isPublic: boolean;
-	unit: Unit;
-	formation?: any;
+	unitCard: UnitCard | null;
 	availableSpecialRules: FormValue[];
 }
 
 export const initialState: EditorState = {
-	authorID: 'Ian',
-	rating: 5,
-	created: new Date(),
-	isPublic: false,
-	unit: defaultUnit,
+	unitCard: {
+		authorID: 'Unknown',
+		created: new Date(),
+		id: null,
+		isPublic: false,
+		layout: computeCardLayout(defaultUnit),
+		ratings: {},
+		unit: defaultUnit,
+	},
 	availableSpecialRules: filterUnitSpecialRules(undefined),
 };
 
@@ -43,63 +44,123 @@ export const editorSlice = createSlice({
 	name: 'editor',
 	initialState,
 	reducers: {
+		// Meta
+		setUnitCard: (state: EditorState, action: PayloadAction<UnitCard>): EditorState => ({
+			...state,
+			unitCard: {
+				...action.payload,
+				layout: action.payload.layout || computeCardLayout(action.payload.unit),
+			},
+			availableSpecialRules: filterUnitSpecialRules(action.payload.unit),
+		}),
+		setHasChanges: (state: EditorState, action: PayloadAction<boolean>): EditorState => ({
+			...state,
+		}),
+		setIsPublic: (state: EditorState, action: PayloadAction<boolean>): EditorState => ({
+			...state,
+			unitCard: {
+				...state.unitCard,
+				isPublic: action.payload,
+			},
+		}),
+
+		// General
 		setEra: (state: EditorState, action: PayloadAction<Era>): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				era: action.payload,
-				accentColor: getBaseColor(state.unit.nationality, action.payload),
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					era: action.payload,
+					accentColor: getBaseColor(state.unitCard.unit.nationality, action.payload),
+					primaryImageFormat: action.payload === 'LW' ? 'LARGE' : 'SMALL',
+				},
 			},
 		}),
 		setNationality: (state: EditorState, action: PayloadAction<Nationality>): EditorState => {
-			const availableSpecialRules = filterUnitSpecialRules({ ...state.unit, nationality: action.payload });
+			const availableSpecialRules = filterUnitSpecialRules({ ...state.unitCard.unit, nationality: action.payload });
 			return {
 				...state,
-				unit: {
-					...state.unit,
-					nationality: action.payload,
-					accentColor: getBaseColor(action.payload, state.unit.era),
-					specialRules: state.unit.specialRules.filter((existingRule) => {
-						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
-					}),
+				unitCard: {
+					...state.unitCard,
+					unit: {
+						...state.unitCard.unit,
+						nationality: action.payload,
+						accentColor: getBaseColor(action.payload, state.unitCard.unit.era),
+						specialRules: state.unitCard.unit.specialRules.filter((existingRule) => {
+							availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
+						}),
+					},
 				},
 				availableSpecialRules,
 			};
 		},
+		setPrimaryImageURL: (state: EditorState, action: PayloadAction<string>): EditorState => ({
+			...state,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					primaryImageURL: action.payload,
+				},
+			},
+		}),
+		setPrimaryImageFormat: (state: EditorState, action: PayloadAction<ImageFormat>): EditorState => ({
+			...state,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					primaryImageFormat: action.payload,
+				},
+			},
+		}),
 		setUnitType: (state: EditorState, action: PayloadAction<UnitType>): EditorState => {
-			const availableSpecialRules = filterUnitSpecialRules({ ...state.unit, unitType: action.payload });
+			const availableSpecialRules = filterUnitSpecialRules({ ...state.unitCard.unit, unitType: action.payload });
 			return {
 				...state,
-				unit: {
-					...state.unit,
-					unitType: action.payload,
-					specialRules: state.unit.specialRules.filter((existingRule) => {
-						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
-					}),
-					passengers: ['TANK', 'UNARMOURED_TANK'].includes(action.payload) ? state.unit.passengers : 0,
+				unitCard: {
+					...state.unitCard,
+					unit: {
+						...state.unitCard.unit,
+						unitType: action.payload,
+						specialRules: state.unitCard.unit.specialRules.filter((existingRule) => {
+							availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
+						}),
+						passengers: ['TANK', 'UNARMOURED_TANK'].includes(action.payload) ? state.unitCard.unit.passengers : 0,
+					},
 				},
 				availableSpecialRules,
 			};
 		},
 		setTitle: (state: EditorState, action: PayloadAction<string>): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				title: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					title: action.payload,
+				},
 			},
 		}),
 		setSubTitle: (state: EditorState, action: PayloadAction<string>): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				subTitle: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					subTitle: action.payload,
+				},
 			},
 		}),
 		setSubTitleAboveTitle: (state: EditorState, action: PayloadAction<boolean>): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				subTitleAboveTitle: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					subTitleAboveTitle: action.payload,
+				},
 			},
 		}),
 		setIsFormation: (
@@ -107,9 +168,12 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{isFormation: boolean}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				isFormation: action.payload.isFormation,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					isFormation: action.payload.isFormation,
+				},
 			},
 		}),
 		setIsComponent: (
@@ -117,24 +181,30 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{isComponent: boolean}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				isComponent: action.payload.isComponent,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					isComponent: action.payload.isComponent,
+				},
 			},
 		}),
 		setPassengers: (
 			state: EditorState,
 			action: PayloadAction<{passengers: number}>
 		): EditorState => {
-			const availableSpecialRules = filterUnitSpecialRules({ ...state.unit, passengers: action.payload.passengers });
+			const availableSpecialRules = filterUnitSpecialRules({ ...state.unitCard.unit, passengers: action.payload.passengers });
 			return {
 				...state,
-				unit: {
-					...state.unit,
-					passengers: action.payload.passengers,
-					specialRules: state.unit.specialRules.filter((existingRule) => {
-						availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
-					}),
+				unitCard: {
+					...state.unitCard,
+					unit: {
+						...state.unitCard.unit,
+						passengers: action.payload.passengers,
+						specialRules: state.unitCard.unit.specialRules.filter((existingRule) => {
+							availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
+						}),
+					},
 				},
 				availableSpecialRules,
 			};
@@ -144,9 +214,12 @@ export const editorSlice = createSlice({
 			action: PayloadAction<UnitSpecialRuleName[]>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				specialRules: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					specialRules: action.payload,
+				},
 			},
 		}),
 		setMotivationBaseRating: (
@@ -154,11 +227,14 @@ export const editorSlice = createSlice({
 			action: PayloadAction<MotivationRating>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				motivation: {
-					...state.unit.motivation,
-					baseRating: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					motivation: {
+						...state.unitCard.unit.motivation,
+						baseRating: action.payload,
+					},
 				},
 			},
 		}),
@@ -167,11 +243,14 @@ export const editorSlice = createSlice({
 			action: PayloadAction<SkillRating>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				skill: {
-					...state.unit.skill,
-					baseRating: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					skill: {
+						...state.unitCard.unit.skill,
+						baseRating: action.payload,
+					},
 				},
 			},
 		}),
@@ -180,70 +259,93 @@ export const editorSlice = createSlice({
 			action: PayloadAction<HitOnRating>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				hitOn: {
-					...state.unit.hitOn,
-					baseRating: action.payload,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					hitOn: {
+						...state.unitCard.unit.hitOn,
+						baseRating: action.payload,
+					},
 				},
 			},
 		}),
 		addModifier: (
 			state: EditorState,
 			action: PayloadAction<{modifierType: string, modifier: SoftStatModifier}>
-		): EditorState => ({
-			...state,
-			unit: {
-				...state.unit,
+		): EditorState => {
+			const updatedUnit = {
+				...state.unitCard.unit,
 				[ action.payload.modifierType ]: {
-					...state.unit[ action.payload.modifierType ],
-					modifiers: [...state.unit[ action.payload.modifierType ].modifiers, action.payload.modifier],
+					...state.unitCard.unit[ action.payload.modifierType ],
+					modifiers: [...state.unitCard.unit[ action.payload.modifierType ].modifiers, action.payload.modifier],
 				},
-			},
-		}),
+			};
+			return {
+				...state,
+				unitCard: {
+					...state.unitCard,
+					unit: updatedUnit,
+					layout: computeCardLayout(updatedUnit),
+				},
+			};
+		},
 		updateModifier: (
 			state: EditorState,
 			action: PayloadAction<{modifierType: string, index: number, modifier: SoftStatModifier}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				[ action.payload.modifierType ]: {
-					...state.unit[ action.payload.modifierType ],
-					modifiers: [
-						...state.unit[ action.payload.modifierType ].modifiers.slice(0, action.payload.index),
-						{
-							...state.unit[ action.payload.modifierType ].modifiers[ action.payload.index ],
-							...action.payload.modifier,
-						},
-						...state.unit[ action.payload.modifierType ].modifiers.slice(action.payload.index + 1),
-					],
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					[ action.payload.modifierType ]: {
+						...state.unitCard.unit[ action.payload.modifierType ],
+						modifiers: [
+							...state.unitCard.unit[ action.payload.modifierType ].modifiers.slice(0, action.payload.index),
+							{
+								...state.unitCard.unit[ action.payload.modifierType ].modifiers[ action.payload.index ],
+								...action.payload.modifier,
+							},
+							...state.unitCard.unit[ action.payload.modifierType ].modifiers.slice(action.payload.index + 1),
+						],
+					},
 				},
 			},
 		}),
 		removeModifier: (
 			state: EditorState,
 			action: PayloadAction<{modifierType: string, index: number}>
-		): EditorState => ({
-			...state,
-			unit: {
-				...state.unit,
+		): EditorState => {
+			const updatedUnit = {
+				...state.unitCard.unit,
 				[ action.payload.modifierType ]: {
-					...state.unit[ action.payload.modifierType ],
-					modifiers: [...state.unit[ action.payload.modifierType ].modifiers.slice(0, action.payload.index), ...state.unit[ action.payload.modifierType ].modifiers.slice(action.payload.index + 1)],
+					...state.unitCard.unit[ action.payload.modifierType ],
+					modifiers: [...state.unitCard.unit[ action.payload.modifierType ].modifiers.slice(0, action.payload.index), ...state.unitCard.unit[ action.payload.modifierType ].modifiers.slice(action.payload.index + 1)],
 				},
-			},
-		}),
+			};
+			return {
+				...state,
+				unitCard: {
+					...state.unitCard,
+					unit: updatedUnit,
+					layout: computeCardLayout(updatedUnit),
+				},
+			};
+		},
 		setMobility: (
 			state: EditorState,
 			action: PayloadAction<{attribute: MobilityAttribute, value: number}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				mobility: {
-					...state.unit.mobility,
-					[ action.payload.attribute ]: action.payload.value,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					mobility: {
+						...state.unitCard.unit.mobility,
+						[ action.payload.attribute ]: action.payload.value,
+					},
 				},
 			},
 		}),
@@ -251,12 +353,15 @@ export const editorSlice = createSlice({
 			state: EditorState,
 			action: PayloadAction<ArmorRating>
 		): EditorState => {
-			const { save, ...unitWithoutSave } = state.unit;
+			const { save, ...unitWithoutSave } = state.unitCard.unit;
 			return {
 				...state,
-				unit: {
-					...unitWithoutSave,
-					armor: action.payload,
+				unitCard: {
+					...state.unitCard,
+					unit: {
+						...unitWithoutSave,
+						armor: action.payload,
+					},
 				},
 			};
 		},
@@ -265,26 +370,32 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{attribute: ArmorAttribute, value: number}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				armor: {
-					...state.unit.armor,
-					[ action.payload.attribute ]: action.payload.value,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					armor: {
+						...state.unitCard.unit.armor,
+						[ action.payload.attribute ]: action.payload.value,
+					},
+					save: null,
 				},
-				save: null,
 			},
 		}),
 		setSaveRating: (
 			state: EditorState,
 			action: PayloadAction<SaveRating>
 		): EditorState => {
-			const { armor, ...unitWithoutArmor } = state.unit;
+			const { armor, ...unitWithoutArmor } = state.unitCard.unit;
 			return {
 				...state,
-				unit: {
-					...unitWithoutArmor,
-					save: action.payload,
-					armor: null,
+				unitCard: {
+					...state.unitCard,
+					unit: {
+						...unitWithoutArmor,
+						save: action.payload,
+						armor: null,
+					},
 				},
 			};
 		},
@@ -293,9 +404,12 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{weapon: Weapon}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				weapons: [...state.unit.weapons, action.payload.weapon],
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					weapons: [...state.unitCard.unit.weapons, action.payload.weapon],
+				},
 			},
 		}),
 		addWeaponBombardment: (
@@ -303,16 +417,19 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{index: number, bombardment: any}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				weapons: [
-					...state.unit.weapons.slice(0, action.payload.index),
-					{
-						...state.unit.weapons[ action.payload.index ],
-						bombardment: action.payload.bombardment,
-					},
-					...state.unit.weapons.slice(action.payload.index + 1),
-				],
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					weapons: [
+						...state.unitCard.unit.weapons.slice(0, action.payload.index),
+						{
+							...state.unitCard.unit.weapons[ action.payload.index ],
+							bombardment: action.payload.bombardment,
+						},
+						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
+					],
+				},
 			},
 		}),
 		updateWeapon: (
@@ -320,19 +437,22 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{index: number, mode: 'direct' | 'bombardment', attribute: string, value: any}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				weapons: [
-					...state.unit.weapons.slice(0, action.payload.index),
-					{
-						...state.unit.weapons[ action.payload.index ],
-						[ action.payload.mode ]: {
-							...state.unit.weapons[ action.payload.index ][ action.payload.mode ],
-							[ action.payload.attribute ]: action.payload.value,
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					weapons: [
+						...state.unitCard.unit.weapons.slice(0, action.payload.index),
+						{
+							...state.unitCard.unit.weapons[ action.payload.index ],
+							[ action.payload.mode ]: {
+								...state.unitCard.unit.weapons[ action.payload.index ][ action.payload.mode ],
+								[ action.payload.attribute ]: action.payload.value,
+							},
 						},
-					},
-					...state.unit.weapons.slice(action.payload.index + 1),
-				],
+						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
+					],
+				},
 			},
 		}),
 		updateWeaponName: (
@@ -340,16 +460,19 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{index: number, name: string}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				weapons: [
-					...state.unit.weapons.slice(0, action.payload.index),
-					{
-						...state.unit.weapons[ action.payload.index ],
-						name: action.payload.name,
-					},
-					...state.unit.weapons.slice(action.payload.index + 1),
-				],
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					weapons: [
+						...state.unitCard.unit.weapons.slice(0, action.payload.index),
+						{
+							...state.unitCard.unit.weapons[ action.payload.index ],
+							name: action.payload.name,
+						},
+						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
+					],
+				},
 			},
 		}),
 		removeWeapon: (
@@ -357,9 +480,12 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{index: number}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				weapons: [...state.unit.weapons.slice(0, action.payload.index), ...state.unit.weapons.slice(action.payload.index + 1)],
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					weapons: [...state.unitCard.unit.weapons.slice(0, action.payload.index), ...state.unitCard.unit.weapons.slice(action.payload.index + 1)],
+				},
 			},
 		}),
 		removeWeaponBombardment: (
@@ -367,16 +493,19 @@ export const editorSlice = createSlice({
 			action: PayloadAction<{index: number}>
 		): EditorState => ({
 			...state,
-			unit: {
-				...state.unit,
-				weapons: [
-					...state.unit.weapons.slice(0, action.payload.index),
-					{
-						...state.unit.weapons[ action.payload.index ],
-						bombardment: undefined,
-					},
-					...state.unit.weapons.slice(action.payload.index + 1),
-				],
+			unitCard: {
+				...state.unitCard,
+				unit: {
+					...state.unitCard.unit,
+					weapons: [
+						...state.unitCard.unit.weapons.slice(0, action.payload.index),
+						{
+							...state.unitCard.unit.weapons[ action.payload.index ],
+							bombardment: undefined,
+						},
+						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
+					],
+				},
 			},
 		}),
 	},

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import classNamesDedupe from 'classnames/dedupe';
 import { Button } from 'primereact/button';
 import { ConnectedGeneralEditor } from '../editor/GeneralEditor';
@@ -10,28 +10,45 @@ import { SelectButton } from 'primereact/selectbutton';
 import './EditView.scss';
 import { ConnectedSoftStatEditor } from '../editor/SoftStatEditor';
 import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../store';
-import { Unit } from '../../typing/Unit';
-import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
-import { UnitCardFront } from '../card/UnitCardFront';
-import { UnitCardBackSVG } from '../card/UnitCardBack';
+import { RootState, store } from '../../store';
+import { UnitCardFrontSVG } from '../card/UnitCardFront';
 import { ConnectedArmorEditor } from '../editor/ArmorEditor';
 import { ConnectedSaveEditor } from '../editor/SaveEditor';
+import { auth, db } from '../../firebase';
+import { Redirect, RouteComponentProps } from 'react-router';
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
+import {
+	setIsPublicActionCreator,
+	setUnitCardActionCreator,
+} from '../../store/editor/editorActionCreators';
+import { defaultUnit } from '../../store/editor/defaultUnit';
+import { UnitCard } from '../../typing/UnitCard';
+import { SplitButton } from 'primereact/splitbutton';
+import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
+import { ConnectedImagesEditor } from '../editor/ImagesSection';
+import { computeCardLayout } from '../../utils/computeCardLayout';
 
 const connector = connect(
 	(state: RootState) => ({
-		unit: state.editor.unit,
-	})
+		armor: !!(state.editor.unitCard.unit.armor),
+		save: !!(state.editor.unitCard.unit.save),
+		currentUserID: state.auth.currentUserID,
+		isPublic: state.editor.unitCard.isPublic,
+	}),
+	(dispatch: Dispatch) => bindActionCreators({
+		setUnitCard: setUnitCardActionCreator,
+		setIsPublic: setIsPublicActionCreator,
+	}, dispatch),
 );
 
 export interface OwnProps {
 	className?: string;
-	onSave: (unit: Unit) => Promise<void>;
 }
 
 export type ReduxProps = ConnectedProps<typeof connector>;
 
-export type EditViewProps = OwnProps & ReduxProps;
+export type EditViewProps = OwnProps & ReduxProps & RouteComponentProps;
 
 export interface EditViewState {
 	view: 'editor' | 'split' | 'preview';
@@ -41,36 +58,111 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 	constructor(props: EditViewProps) {
 		super(props);
 		this.state = {
-			view: window.innerWidth > 959 ? 'split' : 'preview',
+			view: window.innerWidth > 800 ? 'split' : 'preview',
 		};
 		this.downloadPDF = this.downloadPDF.bind(this);
+		this.loadCard = this.loadCard.bind(this);
+		this.saveCard = this.saveCard.bind(this);
+		this.createCard = this.createCard.bind(this);
+	}
+
+	componentDidMount() {
+		const { location } = this.props;
+		const cardID = location.pathname.split('/')[ 2 ];
+		if (cardID && auth.currentUser) {
+			this.loadCard();
+		} else {
+			this.createCard();
+		}
+	}
+
+	componentDidUpdate(prevProps: EditViewProps) {
+		if (this.props.currentUserID !== prevProps.currentUserID) {
+			const cardID = location.pathname.split('/')[ 2 ];
+			if (cardID && auth.currentUser) {
+				this.loadCard();
+			} else {
+				this.createCard();
+			}
+		}
+		if (this.props.location !== prevProps.location) {
+			const cardID = location.pathname.split('/')[ 2 ];
+			if (cardID && auth.currentUser) {
+				this.loadCard();
+			} else {
+				this.createCard();
+			}
+		}
+	}
+
+	async createCard(): Promise<void> {
+		const { currentUserID, history, setUnitCard } = this.props;
+		if (!auth.currentUser) {
+			return;
+		}
+		const ref = db.collection('cards').doc();
+		console.log(ref);
+		setUnitCard({
+			authorID: auth.currentUser.uid,
+			ratings: {},
+			created: new Date(),
+			isPublic: false,
+			unit: defaultUnit,
+			id: ref.id,
+			layout: computeCardLayout(defaultUnit),
+		});
+	  }
+
+	async loadCard(): Promise<void> {
+		const { location, setUnitCard } = this.props;
+		const cardID = location.pathname.split('/')[ 2 ];
+		if (!cardID || !auth.currentUser) {
+			return;
+		}
+		const document = await db.collection('cards').doc(cardID).get();
+		setUnitCard(document.data() as UnitCard);
+	}
+
+	async saveCard(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+		e.preventDefault();
+		const { history, currentUserID } = this.props;
+		if (!auth.currentUser) {
+			return;
+		}
+		const data: UnitCard = {
+			...store.getState().editor.unitCard,
+			authorID: currentUserID,
+		};
+		console.log(data);
+		await db.collection('cards').doc(data.id).set(data);
+		history.push('/mycards');
 	}
 
 	downloadPDF(e: React.MouseEvent) {
 		e.preventDefault();
-		const { unit } = this.props;
-		createUnitCardPDF(unit);
+		createUnitCardPDF();
 	};
 
+	// eslint-disable-next-line complexity
 	render() {
-		const { className, onSave, unit } = this.props;
+		const { className, armor, save, isPublic, setIsPublic } = this.props;
 		const { view } = this.state;
 		return (
-			<form className={classNamesDedupe('edit-view', className)} onSubmit={(e) => {
-				e.preventDefault();
-				onSave(unit);
-			}}>
+			<form className={classNamesDedupe('edit-view', className)} onSubmit={this.saveCard}>
 				<div className="edit-view__toolbar">
 					<div className="edit-view__toolbar-section">
-						<Button label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left"/>
-						{/* <Button label="Duplicate" className="p-button-secondary p-button-outlined" /> */}
+						<Button type="submit" label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left"/>
 					</div>
+					{/* <div className="edit-view__toolbar-section">
+						<Button label="Duplicate" className="p-button-secondary p-button-outlined" />
+					</div> */}
+
 					<div className="edit-view__toolbar-section">
 						<SelectButton
 							value={view}
 							options={[
 								{ label: 'Editor', value: 'editor' },
-								...(window.innerWidth > 959 ? [{ label: 'Split', value: 'split' }] : []),
+								...(window.innerWidth > 800 ? [{ label: 'Split', value: 'split' }] : []),
 								{ label: 'Preview', value: 'preview' },
 							]}
 							onChange={(e) => {
@@ -91,16 +183,16 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 						/>
 					</div>
 				</div>
-
 				<div className="edit-view__main">
 					{(view === 'editor' || view === 'split') && (
 						<div className="edit-view__edit-pane">
 							<ConnectedGeneralEditor/>
+							<ConnectedImagesEditor/>
 							<ConnectedCharacteristicsEditor/>
-							{unit.armor && (
+							{armor && (
 								<ConnectedArmorEditor/>
 							)}
-							{unit.save && (
+							{save && (
 								<ConnectedSaveEditor/>
 							)}
 							<ConnectedSoftStatEditor/>
@@ -110,8 +202,8 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					)}
 					{(view === 'preview' || view === 'split') && (
 						<div className="edit-view__preview-pane">
-							<UnitCardFront.SVG unit={unit} />
-							<UnitCardBackSVG unit={unit} />
+							<UnitCardFrontSVG />
+							{/* <UnitCardBackSVG unit={unit} /> */}
 						</div>
 					)}
 				</div>
@@ -120,4 +212,4 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 	}
 }
 
-export const ConnectedEditView = connector(EditView);
+export const ConnectedEditView = connector(withRouter(EditView));

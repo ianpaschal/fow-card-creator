@@ -19,4 +19,5 @@ export interface Weapon {
 		firePower: DiceRollValue;
 		notes: string[];
 	}
+	optional: boolean;
 }

@@ -29,7 +29,7 @@ import './SoftStatEditorSection.scss';
 
 const connector = connect(
 	(state: RootState) => ({
-		unit: state.editor.unit,
+		unit: state.editor.unitCard.unit,
 	}),
 	(dispatch) => bindActionCreators({
 		setBaseRating: setBaseRatingActionCreator,
@@ -132,7 +132,7 @@ export class SoftStatEditorSection extends React.Component<SoftStatEditorSection
 							icon="pi pi-plus" iconPos="left"
 							onClick={(e) => {
 								e.preventDefault();
-								addModifier(attribute, { attribute: Object.keys(attributesEnum)[ 0 ], number: 4 });
+								addModifier(attribute, { name: '', attribute: Object.keys(attributesEnum)[ 0 ], number: 4 });
 							}}
 						/>
 					</div>

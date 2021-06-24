@@ -43,28 +43,8 @@
             overflow-y: scroll;
             border-right: 1px solid rgb(225, 228, 232);
             min-width: 360px;
-            max-width: 420px;
-    
-            h1 {
-                font-size: 16px;
-                line-height: 24px;
-                padding: 4px 0;
-                text-transform: uppercase;
-                font-weight: 600;
-                color: rgb(128, 130, 132);
-                letter-spacing: 0.5px;
-            }
-            h2 {
-                font-size: 12px;
-                line-height: 24px;
-                padding: 4px 0;
-                text-transform: uppercase;
-                font-weight: 600;
-                color: rgb(128, 130, 132);
-                letter-spacing: 0.5px;
-                border-bottom: 1px solid $border-color;
-            }
-            
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
         }
         .edit-view__preview-pane {
             background-color: rgb(250, 251, 252);

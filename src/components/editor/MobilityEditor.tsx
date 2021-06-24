@@ -11,7 +11,7 @@ import { FormItem } from './FormItem';
 
 const connector = connect(
 	(state: RootState) => ({
-		mobility: state.editor.unit.mobility,
+		mobility: state.editor.unitCard.unit.mobility,
 	}),
 	(dispatch) => bindActionCreators({
 		setMobility: setMobilityActionCreator,

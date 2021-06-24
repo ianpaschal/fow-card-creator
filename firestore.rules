@@ -1,8 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
-    }
-  }
+	match /databases/{database}/documents {
+		match /{document=**} {
+			allow read, delete: if request.auth.uid == resource.data.authorID || resource.data.isPublic;
+			allow update: if request.auth.uid == resource.data.authorID && resource.data.authorID == request.resource.data.authorID;
+			allow create: if request.resource.data.authorID == request.auth.uid;
+		}
+	}
 }
+
