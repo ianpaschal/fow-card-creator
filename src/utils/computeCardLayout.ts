@@ -26,10 +26,22 @@ export function computeCardLayout(unit: Unit): UnitCardLayout {
 		height: SoftStatBlockLayout.calcHeight(unit.skill),
 	};
 	const hitOnBlock: Area = {
-		x: Settings.CARD_MARGINS,
+		x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
 		y: Settings.CARD_MARGINS + headerBlock.height + Settings.BLOCK_MARGIN,
 		width: Settings.STAT_BLOCK_WIDTH,
 		height: SoftStatBlockLayout.calcHeight(unit.hitOn),
+	};
+	const armorBlock: Area = {
+		x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
+		y: hitOnBlock.y + hitOnBlock.height + Settings.BLOCK_MARGIN,
+		width: Settings.STAT_BLOCK_WIDTH,
+		height: Settings.STAT_BLOCK_HEADER_HEIGHT + 5 * Settings.STROKE_WIDTH + 3 * Settings.ARMOR_RATING_TANK_HEIGHT,
+	};
+	const saveBlock: Area = {
+		x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
+		y: hitOnBlock.y + hitOnBlock.height + Settings.BLOCK_MARGIN,
+		width: Settings.STAT_BLOCK_WIDTH,
+		height: Settings.STAT_BLOCK_HEADER_HEIGHT + 3 * Settings.STROKE_WIDTH + Settings.ARMOR_RATING_MISC_HEIGHT,
 	};
 	const mobilityBlock: Area = {
 		x: Settings.CARD_MARGINS,
@@ -50,6 +62,8 @@ export function computeCardLayout(unit: Unit): UnitCardLayout {
 		motivationBlock,
 		skillBlock,
 		hitOnBlock,
+		armorBlock,
+		saveBlock,
 		mobilityBlock,
 		weaponsBlock,
 	};

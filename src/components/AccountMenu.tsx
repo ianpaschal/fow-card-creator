@@ -18,7 +18,6 @@ export class AccountMenu extends React.Component<RouteComponentProps> {
 		const { history } = this.props;
 		auth.signOut().then(() => {
 			history.push('/');
-			console.log('signed out');
 		}).catch((error) => {
 			console.warn(error);
 		});

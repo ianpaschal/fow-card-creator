@@ -22,7 +22,7 @@ export class SignInView extends React.Component<SignInViewProps, {}> {
 		auth.signInWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((_user) => {
 			history.push('/mycards');
 		}).catch((error) => {
-			console.log(error);
+			console.error(error);
 		});
 	}
 

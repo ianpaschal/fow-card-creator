@@ -126,7 +126,6 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 			...store.getState().editor.unitCard,
 			authorID: currentUserID,
 		};
-		console.log(data);
 		await db.collection('cards').doc(data.id).set(data);
 		history.push('/mycards');
 	}

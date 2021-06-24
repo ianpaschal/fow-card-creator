@@ -41,7 +41,7 @@ export const editorSlice = createSlice({
 			...state,
 			unitCard: {
 				...action.payload,
-				layout: action.payload.layout || computeCardLayout(action.payload.unit),
+				layout: computeCardLayout(action.payload.unit),
 			},
 			availableSpecialRules: filterUnitSpecialRules(action.payload.unit),
 		}),
@@ -117,6 +117,10 @@ export const editorSlice = createSlice({
 							availableSpecialRules.find((availableRule) => availableRule.value === existingRule);
 						}),
 						passengers: ['TANK', 'UNARMOURED_TANK'].includes(action.payload) ? state.unitCard.unit.passengers : 0,
+						mobility: {
+							...state.unitCard.unit.mobility,
+							cross: 1,
+						},
 					},
 				},
 				availableSpecialRules,
@@ -350,6 +354,7 @@ export const editorSlice = createSlice({
 					unit: {
 						...unitWithoutSave,
 						armor: action.payload,
+						save: null,
 					},
 				},
 			};

@@ -1,17 +1,11 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { connect } from 'react-redux';
-import { Settings } from '../../Settings';
+import { connect, ConnectedProps } from 'react-redux';
 import { RootState, store } from '../../store';
 import { SoftStat } from '../../typing/SoftStat';
 import { SoftStatBlockPDF, SoftStatBlockProps, SoftStatBlockSVG } from './SoftStatBlock';
 
-export interface HitOnBlockProps {
-	stat: SoftStat;
-	accentColor: string;
-	headerBlockHeight: number;
-	isComponent: boolean;
-}
+export type HitOnBlockProps = ConnectedProps<typeof connector>;
 
 export class HitOnBlockLayout {
 	// Passed
@@ -19,19 +13,16 @@ export class HitOnBlockLayout {
 	accentColor: string;
 	headerBlockHeight: number;
 	isComponent: boolean;
+	x: number;
+	y: number;
 
 	// Static
-	x: number = Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH);
 	attribute: string = 'hitOn';
 
 	constructor(props: HitOnBlockProps) {
 		Object.keys(props).forEach((key) => {
 			this[ key ] = props[ key ];
 		});
-	}
-
-	get y(): number {
-		return Settings.CARD_MARGINS + this.headerBlockHeight + Settings.BLOCK_MARGIN;
 	}
 
 	get softStatBlockProps(): SoftStatBlockProps {
@@ -44,6 +35,8 @@ const connector = connect((state: RootState) => ({
 	accentColor: state.editor.unitCard.unit.accentColor,
 	headerBlockHeight: state.editor.unitCard.layout.headerBlock.height,
 	isComponent: state.editor.unitCard.unit.isComponent,
+	x: state.editor.unitCard.layout.hitOnBlock.x,
+	y: state.editor.unitCard.layout.hitOnBlock.y,
 }), null);
 
 export const HitOnBlockSVG: React.FC<HitOnBlockProps> = (props: HitOnBlockProps) => {
@@ -65,4 +58,6 @@ export const ConnectedHitOnBlockPDF = (doc: jsPDF) => HitOnBlockPDF(doc, {
 	accentColor: store.getState().editor.unitCard.unit.accentColor,
 	headerBlockHeight: store.getState().editor.unitCard.layout.headerBlock.height,
 	isComponent: store.getState().editor.unitCard.unit.isComponent,
+	x: store.getState().editor.unitCard.layout.hitOnBlock.x,
+	y: store.getState().editor.unitCard.layout.hitOnBlock.y,
 });

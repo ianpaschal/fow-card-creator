@@ -25,7 +25,6 @@ export class BrowseView extends React.Component<BrowseViewProps, BrowseViewState
 
 	async loadPublicCards(): Promise<void> {
 		const documents = await db.collection('cards').where('isPublic', '==', true).get();
-		console.log(documents);
 		const cards = [];
 		documents.forEach((doc) => {
 			cards.push({

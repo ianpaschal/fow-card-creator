@@ -39,7 +39,6 @@ export class ImagesEditor extends React.Component<ImagesEditorProps> {
 	onUpload(e: React.ChangeEvent<HTMLInputElement>) {
 		const { cardID, setPrimaryImageURL } = this.props;
 		const file = e.target.files[ 0 ];
-		console.log(cardID, file);
 		const extension = file.name.split('.').pop();
 		const fileURL = `/images/${cardID}/primary.${extension}`;
 		const uploadTask = storage.ref(fileURL).put(file, {

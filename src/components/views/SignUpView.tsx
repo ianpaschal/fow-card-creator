@@ -20,7 +20,7 @@ export class SignUpView extends React.Component<SignUpViewProps, {}> {
 		auth.createUserWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((_user) => {
 			history.push('/');
 		}).catch((error) => {
-			console.log(error);
+			console.error(error);
 		});
 	}
 

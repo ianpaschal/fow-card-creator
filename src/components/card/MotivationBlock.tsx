@@ -29,6 +29,7 @@ export class MotivationBlockLayout {
 	}
 }
 
+// React
 const connector = connect((state: RootState) => ({
 	stat: state.editor.unitCard.unit.motivation,
 	accentColor: state.editor.unitCard.unit.accentColor,
@@ -46,6 +47,7 @@ export const MotivationBlockSVG: React.FC<MotivationBlockProps> = (props: Motiva
 
 export const ConnectedMotivationBlockSVG = connector(MotivationBlockSVG);
 
+// jsPDF
 export const MotivationBlockPDF = (doc: jsPDF, props: MotivationBlockProps) => {
 	const layout = new MotivationBlockLayout(props);
 	SoftStatBlockPDF(doc, layout.softStatBlockProps);

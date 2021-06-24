@@ -2,13 +2,13 @@ import jsPDF from 'jspdf';
 import React from 'react';
 import { Unit } from '../../typing/Unit';
 import { Settings } from '../../Settings';
-// import { ArmorBlockLayout, ArmorBlockPDF, ArmorBlockProps, ArmorBlockSVG } from './ArmorBlock';
-// import { SaveBlockLayout, SaveBlockPDF, SaveBlockProps, SaveBlockSVG } from './SaveBlock';
 import { BackgroundPDF, ConnectedBackgroundSVG } from './Background';
+import { ConnectedArmorBlockPDF, ConnectedArmorBlockSVG } from './ArmorBlock';
 import { ConnectedHitOnBlockPDF, ConnectedHitOnBlockSVG } from './HitOnBlock';
 import { ConnectedMobilityBlockPDF, ConnectedMobilityBlockSVG } from './MobilityBlock';
 import { ConnectedMotivationBlockPDF, ConnectedMotivationBlockSVG } from './MotivationBlock';
 import { ConnectedPrimaryImagePDF, ConnectedPrimaryImageSVG } from './PrimaryImage';
+import { ConnectedSaveBlockPDF, ConnectedSaveBlockSVG } from './SaveBlock';
 import { ConnectedSkillBlockPDF, ConnectedSkillBlockSVG } from './SkillBlock';
 import { ConnectedSpecialRulesListPDF, ConnectedSpecialRulesListSVG } from './SpecialRulesList';
 import { ConnectedWeaponsBlockPDF, ConnectedWeaponsBlockSVG } from './WeaponsBlock';
@@ -33,13 +33,8 @@ export const UnitCardFrontSVG: React.FC = () => {
 			<ConnectedSkillBlockSVG />
 			<ConnectedSpecialRulesListSVG />
 			<ConnectedHitOnBlockSVG />
-
-			{/* {unit.armor && (
-					<ArmorBlockSVG {...layout.saveBlockProps} />
-				)} */}
-			{/* {unit.save && (
-					<SaveBlockSVG {...layout.saveBlockProps} />
-				)} */}
+			<ConnectedArmorBlockSVG />
+			<ConnectedSaveBlockSVG />
 			<ConnectedMobilityBlockSVG />
 			<ConnectedWeaponsBlockSVG />
 		</svg>
@@ -47,7 +42,6 @@ export const UnitCardFrontSVG: React.FC = () => {
 };
 
 export const UnitCardFrontPDF = (doc: jsPDF, unit: Unit, primaryImage: HTMLImageElement): void => {
-
 	BackgroundPDF(doc, unit);
 	ConnectedPrimaryImagePDF(doc, primaryImage);
 	HeaderBlockPDF(doc, unit);
@@ -55,14 +49,8 @@ export const UnitCardFrontPDF = (doc: jsPDF, unit: Unit, primaryImage: HTMLImage
 	ConnectedSkillBlockPDF(doc);
 	ConnectedSpecialRulesListPDF(doc);
 	ConnectedHitOnBlockPDF(doc);
-
-	// SoftStatBlock.PDF(doc, layout.hitOnBlockProps);
-	// if (unit.armor) {
-	// 	ArmorBlockPDF(doc, layout.saveBlockProps);
-	// }
-	// if (unit.save) {
-	// 	SaveBlockPDF(doc, layout.saveBlockProps);
-	// }
+	ConnectedArmorBlockPDF(doc);
+	ConnectedSaveBlockPDF(doc);
 	ConnectedMobilityBlockPDF(doc);
 	ConnectedWeaponsBlockPDF(doc);
 };
