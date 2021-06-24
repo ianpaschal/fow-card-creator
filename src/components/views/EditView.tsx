@@ -26,6 +26,7 @@ import { UnitCard } from '../../typing/UnitCard';
 import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
 import { ConnectedImagesEditor } from '../editor/ImagesSection';
 import { defaultUnitCard } from '../../store/editor/defaultUnitCard';
+import { UnitCardBackSVG } from '../card/UnitCardBack';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -195,7 +196,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					{(view === 'preview' || view === 'split') && (
 						<div className="edit-view__preview-pane">
 							<UnitCardFrontSVG />
-							{/* <UnitCardBackSVG unit={unit} /> */}
+							<UnitCardBackSVG />
 						</div>
 					)}
 				</div>
