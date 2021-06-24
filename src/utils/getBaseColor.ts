@@ -16,7 +16,7 @@ const COLORS = {
 	FI: {
 		EW: '#4a7695', // Rising Sun, Barbarossa (v3)
 		MW: '#4a7695', // Eastern Front (v3)
-		LW: '#00467a', // Bagration: Axis-Allies (v4) (tentative)
+		LW: '#004678', // Bagration: Axis-Allies (v4 Forces Website)
 	},
 
 	// French
@@ -38,9 +38,19 @@ const COLORS = {
 		},
 	},
 
+	// Hungarians
+	HU: {
+		LW: '#27441a', // Bagration: Axis-Allies (v4 Forces Website)
+	},
+
 	// Italians
 	IT: {
 		MW: '#07542b', // Avanti
+	},
+
+	// Romanians
+	RO: {
+		LW: '#79242f', // Bagration: Axis-Allies (v4 Forces Website)
 	},
 
 	// Soviets

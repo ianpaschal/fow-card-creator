@@ -1,49 +1,47 @@
-import jsPDF from 'jspdf';
 import React from 'react';
-import { LabeledRectangle } from '../../drawing/LabeledRectangle';
-import { HitOnRating } from '../../enums/HitOnRatings';
-import { MotivationRating } from '../../enums/MotivationRatings';
-import { SkillRating } from '../../enums/SkillRatings';
+import jsPDF from 'jspdf';
 import { Settings } from '../../Settings';
-import { SoftStatModifier } from '../../typing/SoftStatModifier';
-import { SoftStatBaseRating } from './SoftStatBaseRating';
-import { SoftStatModifierPDF, SoftStatModifierSVG } from './SoftStatModifier';
+import { SoftStat } from '../../typing/SoftStat';
 import { pt } from '../../utils/convertDistance';
-import { RoundedRectangle } from '../../drawing/RoundedRectangle';
-import { Unit } from '../../typing/Unit';
-
-export interface Stat {
-	baseRating: MotivationRating | SkillRating | HitOnRating;
-	modifiers?: SoftStatModifier[];
-}
+import { FramePDF, FrameProps, FrameSVG } from './generic/Frame';
+import { TextPDF, TextProps, TextSVG } from './generic/Text';
+import {
+	SoftStatBaseRatingLayout,
+	SoftStatBaseRatingPDF,
+	SoftStatBaseRatingProps,
+	SoftStatBaseRatingSVG,
+} from './SoftStatBaseRating';
+import { SoftStatModifierPDF, SoftStatModifierProps, SoftStatModifierSVG } from './SoftStatModifier';
 
 export interface SoftStatBlockProps {
+	attribute: string;
+	stat: SoftStat;
 	x: number;
 	y: number;
-	unit: Unit;
-	attribute: 'motivation' | 'skill' | 'hitOn';
+	accentColor: string;
+	isComponent: boolean;
 }
 
-export class SoftStatBlock {
+export class SoftStatBlockLayout {
 	static innerMargin = pt(0.5, 'mm');
-	static innerWidth = Settings.STAT_BLOCK_WIDTH - (2 * SoftStatBlock.innerMargin);
+	static innerWidth = Settings.STAT_BLOCK_WIDTH - (2 * SoftStatBlockLayout.innerMargin);
 	static headerHeight = pt(1.9, 'mm');
 
-	static calcHeight(stat: Stat): number {
+	static calcHeight(stat: SoftStat): number {
 		let height = 0;
-		height += pt(1.9, 'mm');
-		height += Settings.STROKE_WIDTH + Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		stat.modifiers.forEach(() => {
-			height += Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT;
-		});
-		height += pt(0.5, 'mm');
+		height += SoftStatBlockLayout.headerHeight;
+		height += Settings.STROKE_WIDTH;
+		height += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
+		height += (Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT) * stat.modifiers.length;
+		height += Settings.STROKE_WIDTH; // Bottom space
+		height += Settings.STROKE_WIDTH; // Bottom border
 		return height;
 	}
 
 	static calcModifierY(i: number, yStart = 0): number {
 		let y = 0;
 		y += yStart;
-		y += SoftStatBlock.headerHeight;
+		y += SoftStatBlockLayout.headerHeight;
 		y += Settings.STROKE_WIDTH;
 		y += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
 		y += Settings.STROKE_WIDTH;
@@ -51,76 +49,102 @@ export class SoftStatBlock {
 		return y;
 	};
 
-	static PDF = (doc: jsPDF, {
-		x,
-		y,
-		unit,
-		attribute,
-	}: SoftStatBlockProps) => {
-		LabeledRectangle.PDF(doc, {
-			x,
-			y,
-			w: Settings.STAT_BLOCK_WIDTH,
-			h: SoftStatBlock.calcHeight(unit[ attribute ]),
-			r: Settings.CORNER_RADIUS,
-			headerHeight: SoftStatBlock.headerHeight,
-			text: attribute === 'hitOn' ? 'IS HIT ON' : attribute.toUpperCase(),
-			stroke: unit.accentColor,
-			fontSize: Settings.STAT_HEADER_FONT_SIZE,
-			fill: '#FFFFFF',
-		});
+	attribute: string;
+	stat: SoftStat;
+	x: number;
+	y: number;
+	width: number = Settings.STAT_BLOCK_WIDTH;
+	accentColor: string;
+	isComponent: boolean;
 
-		SoftStatBaseRating.PDF(doc, {
-			x: x + SoftStatBlock.innerMargin,
-			y: y + SoftStatBlock.headerHeight + Settings.STROKE_WIDTH,
-			unit,
-			attribute,
-		});
-
-		unit[ attribute ].modifiers.forEach((modifier, i: number) => {
-			SoftStatModifierPDF(doc, {
-				x: x + SoftStatBlock.innerMargin,
-				y: SoftStatBlock.calcModifierY(i, y),
-				modifier,
-			});
+	constructor(props: SoftStatBlockProps) {
+		Object.keys(props).forEach((key) => {
+			this[ key ] = props[ key ];
 		});
 	}
 
-	static SVG: React.FC<SoftStatBlockProps> = ({
-		x,
-		y,
-		unit,
-		attribute,
-	}: SoftStatBlockProps) => {
-		return(
-			<g transform={`translate(${x} ${y})`}>
-				<LabeledRectangle.SVG
-					x={0}
-					y={0}
-					w={Settings.STAT_BLOCK_WIDTH}
-					h={SoftStatBlock.calcHeight(unit[ attribute ])}
-					r={Settings.CORNER_RADIUS}
-					headerHeight={SoftStatBlock.headerHeight}
-					text={attribute === 'hitOn' ? 'IS HIT ON' : attribute.toUpperCase()}
-					stroke={unit.accentColor}
-					fontSize={Settings.STAT_HEADER_FONT_SIZE}
-					fill={'#FFFFFF'}
-				/>
-				<SoftStatBaseRating.SVG
-					x={SoftStatBlock.innerMargin}
-					y={SoftStatBlock.headerHeight + Settings.STROKE_WIDTH}
-					unit={unit}
-					attribute={attribute}
-				/>
-				{unit[ attribute ].modifiers.map((modifier, i) => (
-					<SoftStatModifierSVG
-						key={i}
-						x={SoftStatBlock.innerMargin}
-						y={SoftStatBlock.calcModifierY(i, 0)}
-						modifier={modifier}
-					/>
-				))}
-			</g>
-		);
+	get height(): number {
+		let height = 0;
+		height += SoftStatBlockLayout.headerHeight;
+		height += Settings.STROKE_WIDTH;
+		height += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
+		height += (Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT) * this.stat.modifiers.length;
+		height += Settings.STROKE_WIDTH; // Bottom space
+		height += Settings.STROKE_WIDTH; // Bottom border
+		return height;
+	}
+
+	get frameProps(): FrameProps {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			radius: Settings.CORNER_RADIUS,
+			border: {
+				top: SoftStatBlockLayout.headerHeight,
+			},
+			stroke: this.accentColor,
+		};
+	}
+
+	get headerProps(): TextProps {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: SoftStatBlockLayout.headerHeight,
+			text: this.attribute === 'hitOn' ? 'IS HIT ON' : this.attribute.toUpperCase(),
+			fontSize: Settings.STAT_HEADER_FONT_SIZE,
+			color: '#FFFFFF',
+			font: 'OpenSans-Bold',
+			align: 'center',
+			lineHeight: SoftStatBlockLayout.headerHeight,
+		};
+	}
+
+	get softStatBaseRatingProps(): SoftStatBaseRatingProps {
+		const ratingEnum = SoftStatBaseRatingLayout.getRatingEnum(this.attribute);
+		const numberEnum = SoftStatBaseRatingLayout.getNumberEnum(this.attribute);
+		const baseRating = this.stat.baseRating;
+
+		return {
+			x: this.x + pt(0.5, 'mm'),
+			y: this.y + SoftStatBlockLayout.headerHeight + Settings.STROKE_WIDTH,
+			label: !this.isComponent ? `${ratingEnum[ baseRating ]}`.toUpperCase() : 'AS PER UNIT',
+			value: !this.isComponent && numberEnum[ baseRating ],
+		};
+	}
+
+	getSoftStatModifierProps(i: number): SoftStatModifierProps {
+		return {
+			x: this.x + pt(0.5, 'mm'),
+			y: SoftStatBlockLayout.calcModifierY(i, this.y),
+			modifier: this.stat.modifiers[ i ],
+		};
 	}
 }
+
+export const SoftStatBlockSVG: React.FC<SoftStatBlockProps> = (props: SoftStatBlockProps) => {
+	const layout = new SoftStatBlockLayout(props);
+	return (
+		<>
+			<FrameSVG {...layout.frameProps} />
+			<TextSVG {...layout.headerProps} />
+			<SoftStatBaseRatingSVG {...layout.softStatBaseRatingProps} />
+			{props.stat.modifiers.map((_modifier, i) => (
+				<SoftStatModifierSVG key={i} {...layout.getSoftStatModifierProps(i)} />
+			))}
+		</>
+	);
+};
+
+export const SoftStatBlockPDF = (doc: jsPDF, props: SoftStatBlockProps) => {
+	const layout = new SoftStatBlockLayout(props);
+	FramePDF(doc, layout.frameProps);
+	TextPDF(doc, layout.headerProps);
+	SoftStatBaseRatingPDF(doc, layout.softStatBaseRatingProps);
+	props.stat.modifiers.forEach((_modifier, i) => (
+		SoftStatModifierPDF(doc, layout.getSoftStatModifierProps(i))
+	));
+};

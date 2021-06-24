@@ -7,13 +7,13 @@ import { Unit } from '../../typing/Unit';
 import { getBaseColor } from '../../utils/getBaseColor';
 
 export const defaultUnit: Unit = {
-	nationality: '',
+	nationality: 'US',
 	unitType: 'TANK' as UnitType,
 	isFormation: false,
 	accentColor: getBaseColor(),
 	isComponent: false,
 	passengers: 0,
-	era: '',
+	era: 'EW',
 	title: '',
 	subTitle: '',
 	subTitleAboveTitle: false,
@@ -43,4 +43,8 @@ export const defaultUnit: Unit = {
 		cross: 3 as DiceRollValue,
 	},
 	weapons: [],
+	primaryImageURL: null,
+	frontIconURL: null,
+	sideIconURL: null,
+	primaryImageFormat: 'SMALL',
 };

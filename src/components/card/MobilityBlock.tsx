@@ -1,145 +1,159 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { LabeledRectangle, LabeledRectangleProps } from '../../drawing/LabeledRectangle';
-import { RoundedRectangle, RoundedRectangleProps, RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
-import { MobilityAttribute, MobilityAttributeKeys, MobilityAttributes } from '../../enums/Mobility';
+import { connect, ConnectedProps } from 'react-redux';
 import { Settings } from '../../Settings';
-import { Unit } from '../../typing/Unit';
+import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
-import { TextPDF, TextProps, TextSVG } from './generic/Text';
-
-export interface MobilityBlockProps {
-	unit: Unit;
-	y: number;
-}
+import { formatDistance } from '../../utils/formatDistance';
+import { FrameProps } from './generic/Frame';
+import { TablePDF, TableProps, TableSVG } from './generic/Table';
 
 export class MobilityBlockLayout {
-	unit: Unit;
+	// Passed
+	mobility: {[key: string]: any};
+	accentColor: string;
+	x: number;
 	y: number;
+	width: number;
+	height: number;
 
-	static height: number = pt(6.8, 'mm');
-	static headerHeight: number = pt(2.9, 'mm');
-	static columns: number = 5;
+	// Static:
+	headerHeight: number = pt(2.9, 'mm');
 
 	constructor(props: MobilityBlockProps) {
-		this.unit = props.unit;
-		this.y = props.y;
+		Object.keys(props).forEach((key) => {
+			this[ key ] = props[ key ];
+		});
 	}
 
-	get outerArea(): RoundedRectangleProps {
+	get rowHeight(): number {
+		return this.height - (this.headerHeight + Settings.STROKE_WIDTH);
+	}
+
+	get frameProps(): FrameProps {
 		return {
-			x: Settings.CARD_MARGINS,
+			x: this.x,
 			y: this.y,
-			w: Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS),
-			h: MobilityBlockLayout.height,
-			r: Settings.CORNER_RADIUS,
-		};
-	}
-
-	get innerWidth(): number {
-		return Settings.CARD_WIDTH - (2 * (Settings.CARD_MARGINS + Settings.STROKE_WIDTH));
-	}
-
-	get columnWidth(): number {
-		const strokeSpace = (MobilityBlockLayout.columns - 1) * Settings.STROKE_WIDTH;
-		return (this.innerWidth - strokeSpace) / 5;
-	}
-
-	get innerArea(): RoundedRectangleProps {
-		return {
-			x: Settings.CARD_MARGINS + Settings.STROKE_WIDTH,
-			y: this.y + MobilityBlockLayout.headerHeight,
-			w: this.innerWidth,
-			h: MobilityBlockLayout.height - (MobilityBlockLayout.headerHeight + Settings.STROKE_WIDTH),
-			r: Settings.CORNER_RADIUS - Settings.STROKE_WIDTH,
-		};
-	}
-
-	get frameProps(): LabeledRectangleProps {
-		return {
-			...this.outerArea,
-			headerHeight: MobilityBlockLayout.headerHeight,
-			fontSize: 4.5,
-			r: Settings.CORNER_RADIUS,
-			stroke: this.unit.accentColor,
+			width: this.width,
+			border: { top: this.headerHeight },
+			radius: Settings.CORNER_RADIUS,
+			height: this.height,
+			stroke: this.accentColor,
 			fill: '#FFFFFF',
 		};
 	}
 
-	calcColumnX(i: number): number {
-		return Settings.CARD_MARGINS + Settings.STROKE_WIDTH + (i * (this.columnWidth + Settings.STROKE_WIDTH));
-	}
-
-	getMobilityLabelProps(key: MobilityAttribute, i: number): TextProps {
-		return {
-			x: this.calcColumnX(i),
-			y: this.y,
-			w: this.columnWidth,
-			h: MobilityBlockLayout.headerHeight,
+	get tableColumns(): any {
+		const headerStyle = {
+			align: 'center',
 			color: '#FFFFFF',
 			font: 'OpenSans-Bold',
 			fontSize: 4.5,
-			text: MobilityAttributes[ key ].toUpperCase(),
-			align: 'center',
+			height: this.headerHeight,
 		};
-	}
-
-	getMobilityValueProps(key: MobilityAttribute, i: number): TextProps {
-		const formattedDistance = `${this.unit.mobility[ key ]}”/${this.unit.mobility[ key ] * 2.5}CM`;
-		return {
-			x: this.calcColumnX(i),
-			y: this.y + MobilityBlockLayout.headerHeight,
-			w: this.columnWidth,
-			h: this.innerArea.h,
+		const recordStyle = {
+			align: 'center',
 			color: '#000000',
 			font: 'OpenSans-SemiBold',
-			fontSize: 6.75,
-			text: key === 'cross' ? formatDiceRoll(this.unit.mobility[ key ], true) : formattedDistance,
-			align: 'center',
+			fontSize: 6,
+			height: this.rowHeight,
+		};
+		return [
+			{
+				widthFactor: 0.2,
+				header: (x: number, y: number, width: number) => (
+					[{ ...headerStyle, x, y, width, text: 'TACTICAL' }]
+				),
+				cell: (x: number, y: number, width: number, record) => (
+					[{ ...recordStyle, x, y, width, text: formatDistance(record.tactical) }]
+				),
+			},
+			{
+				widthFactor: 0.2,
+				header: (x: number, y: number, width: number) => (
+					[{ ...headerStyle, x, y, width, text: 'TERRAIN DASH' }]
+				),
+				cell: (x: number, y: number, width: number, record) => (
+					[{ ...recordStyle, x, y, width, text: formatDistance(record.terrainDash) }]
+				),
+			},
+			{
+				widthFactor: 0.2,
+				header: (x: number, y: number, width: number) => (
+					[{ ...headerStyle, x, y, width, text: 'CROSS COUNTRY DASH' }]
+				),
+				cell: (x: number, y: number, width: number, record) => (
+					[{ ...recordStyle, x, y, width, text: formatDistance(record.crossCountryDash) }]
+				),
+			},
+			{
+				widthFactor: 0.2,
+				header: (x: number, y: number, width: number) => (
+					[{ ...headerStyle, x, y, width, text: 'ROAD DASH' }]
+				),
+				cell: (x: number, y: number, width: number, record) => (
+					[{ ...recordStyle, x, y, width, text: formatDistance(record.roadDash) }]
+				),
+			},
+			{
+				widthFactor: 0.2,
+				header: (x: number, y: number, width: number) => (
+					[{ ...headerStyle, x, y, width, text: 'CROSS' }]
+				),
+				cell: (x: number, y: number, width: number, record) => (
+					[{ ...recordStyle, x, y, width, text: formatDiceRoll(record.cross) }]
+				),
+			},
+		];
+	}
+
+	get tableProps(): TableProps {
+		return {
+			...this,
+			columns: this.tableColumns,
+			data: [this.mobility],
+			rowHeight: this.rowHeight,
+			headerHeight: this.headerHeight,
+			radius: Settings.CORNER_RADIUS,
+			stroke: this.accentColor,
+			width: this.width,
+			x: this.x,
+			y: this.y,
 		};
 	}
 }
 
-export const MobilityBlockPDF = (doc: jsPDF, props: MobilityBlockProps) => {
-	const layout = new MobilityBlockLayout(props);
-	LabeledRectangle.PDF(doc, layout.frameProps);
-	MobilityAttributeKeys.forEach((key: MobilityAttribute, i: number) => {
-		TextPDF(doc, layout.getMobilityLabelProps(key, i));
-		TextPDF(doc, layout.getMobilityValueProps(key, i));
-		if (i > 0) {
-			doc.setFillColor(layout.unit.accentColor).rect(
-				layout.getMobilityValueProps(key, i).x - Settings.STROKE_WIDTH,
-				layout.getMobilityValueProps(key, i).y,
-				Settings.STROKE_WIDTH,
-				layout.innerArea.h,
-				'F',
-			);
-		}
-	});
-};
+export type MobilityBlockProps = ConnectedProps<typeof connector>;
+
+// React
+const connector = connect((state: RootState) => ({
+	accentColor: state.editor.unitCard.unit.accentColor,
+	mobility: state.editor.unitCard.unit.mobility,
+	x: state.editor.unitCard.layout.mobilityBlock.x,
+	y: state.editor.unitCard.layout.mobilityBlock.y,
+	width: state.editor.unitCard.layout.mobilityBlock.width,
+	height: state.editor.unitCard.layout.mobilityBlock.height,
+}), null);
 
 export const MobilityBlockSVG: React.FC<MobilityBlockProps> = (props: MobilityBlockProps) => {
 	const layout = new MobilityBlockLayout(props);
-	return (
-		<>
-			<LabeledRectangle.SVG {...layout.frameProps} />
-			{MobilityAttributeKeys.map((key: MobilityAttribute, i: number) => (
-				<React.Fragment key={i}>
-					<TextSVG {...layout.getMobilityLabelProps(key, i)} />
-					<TextSVG {...layout.getMobilityValueProps(key, i)} />
-					{i > 0 && (
-						<rect
-							x={layout.getMobilityValueProps(key, i).x - Settings.STROKE_WIDTH}
-							y={layout.getMobilityValueProps(key, i).y}
-							width={Settings.STROKE_WIDTH}
-							height={layout.innerArea.h}
-
-							fill={layout.unit.accentColor}
-						/>
-					)}
-				</React.Fragment>
-			))}
-		</>
-	);
+	return <TableSVG {...layout.tableProps} />;
 };
+
+export const ConnectedMobilityBlockSVG = connector(MobilityBlockSVG);
+
+// jsPDF
+export const MobilityBlockPDF = (doc: jsPDF, props: MobilityBlockProps) => {
+	const layout = new MobilityBlockLayout(props);
+	TablePDF(doc, layout.tableProps);
+};
+
+export const ConnectedMobilityBlockPDF = (doc: jsPDF) => MobilityBlockPDF(doc, {
+	mobility: store.getState().editor.unitCard.unit.mobility,
+	accentColor: store.getState().editor.unitCard.unit.accentColor,
+	x: store.getState().editor.unitCard.layout.mobilityBlock.x,
+	y: store.getState().editor.unitCard.layout.mobilityBlock.y,
+	width: store.getState().editor.unitCard.layout.mobilityBlock.width,
+	height: store.getState().editor.unitCard.layout.mobilityBlock.height,
+});

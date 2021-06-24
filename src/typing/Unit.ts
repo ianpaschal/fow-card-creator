@@ -10,19 +10,27 @@ import { SoftStatModifier } from './SoftStatModifier';
 import { SkillRating } from '../enums/SkillRatings';
 import { HitOnRating } from '../enums/HitOnRatings';
 import { SaveRating } from './SaveRating';
+import { ImageFormat } from '../enums/ImageFormats';
 
 export interface Unit {
 
 	// General Section
 	era?: Era;
 	nationality?: Nationality;
+
 	// region: string;
 	unitType: UnitType;
 	isFormation: boolean;
 	title: string;
-	accentColor: string;
 	subTitle?: string;
 	subTitleAboveTitle: boolean;
+
+	// Aesthetics
+	accentColor: string;
+	primaryImageURL: string;
+	primaryImageFormat: ImageFormat;
+	frontIconURL: string;
+	sideIconURL: string;
 
 	// Special Properties Section
 	specialRules: UnitSpecialRuleName[];

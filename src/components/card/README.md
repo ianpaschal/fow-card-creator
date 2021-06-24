@@ -55,17 +55,12 @@ export class FooLayout {
 	// No logic should be done in the render functions!
 	// All child-component props should be calculated below!
 
-	// A computed prop for BarLayout, but which will be used by QuxLayout too...
-	get barHeight(): number {
-		return 6 + 6;
-	}
-
 	// Required props for the BarLayout/BarPDF/BarSVG:
 	get barProps(): BarProps {
 		return {
 			...FooLayout,
 			...this,
-			height: this.barHeight,
+			height: 12,
 		};
 	}
 
@@ -74,7 +69,7 @@ export class FooLayout {
 		return {
 			...FooLayout,
 			...this,
-			y: this.barHeight,
+			y: this.barProps.height + 2,
 			height: 24, // A computed prop used only here
 		};
 	}

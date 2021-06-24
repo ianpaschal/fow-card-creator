@@ -23,7 +23,7 @@ import './WeaponsEditor.scss';
 
 const connector = connect(
 	(state: RootState) => ({
-		weapons: state.editor.unit.weapons,
+		weapons: state.editor.unitCard.unit.weapons,
 	}),
 	(dispatch) => bindActionCreators({
 		addWeapon: addWeaponActionCreator,
@@ -60,6 +60,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 					<InputText
 						value={weapon.name}
 						onChange={(e) => updateWeaponName(i, e.currentTarget.value)}
+						placeholder="Name"
 					/>
 				</FormItem>
 				<FormItem label="Can Bombard">
@@ -76,7 +77,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 				</FormItem>
 				{Boolean(weapon.bombardment) && (
 					<>
-						<h2>Bombardment</h2>
+						<h3>Bombardment</h3>
 						<FormItem label="Range">
 							<InputNumber
 								value={weapon.bombardment.range}
@@ -134,7 +135,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 							}}
 						/>
 						*/}
-						<h2>Direct Fire</h2>
+						<h3>Direct Fire</h3>
 					</>
 				)}
 				<FormItem label="Range">

@@ -11,7 +11,7 @@ import { UnitTypes } from '../../enums/UnitTypes';
 
 const connector = connect(
 	(state: RootState) => ({
-		save: state.editor.unit.save,
+		save: state.editor.unitCard.unit.save,
 	}),
 	(dispatch) => bindActionCreators({
 		setSaveRating: setSaveRatingActionCreator,

@@ -1,12 +1,23 @@
 import { jsPDF } from 'jspdf';
-import { Unit } from '../typing/Unit';
-import { convertDistance as c } from './convertDistance';
-import { UnitCardFront } from '../components/card/UnitCardFront';
+import { pt } from './convertDistance';
+import { UnitCardFrontPDF } from '../components/card/UnitCardFront';
 import { UnitCardBackPDF } from '../components/card/UnitCardBack';
 import { addFontsToPDF } from './addFontsToPDF';
+import { store } from '../store';
 
-export function createUnitCardPDF(unit: Unit) {
-	const format = [c(110, 'mm'), c(80, 'mm')];
+const loadPrimaryImage = async (url: string): Promise<HTMLImageElement> => {
+	const image = new Image();
+	image.crossOrigin = 'anonymous';
+	image.src = url;
+	return await image.decode().then(() => {
+		return image;
+	});
+};
+
+export function createUnitCardPDF() {
+	const unit = store.getState().editor.unitCard.unit;
+	const unitID = store.getState().editor.unitCard.id;
+	const format = [pt(110, 'mm'), pt(80, 'mm')];
 	const orientation = 'landscape';
 	const doc = new jsPDF({
 		orientation,
@@ -16,18 +27,10 @@ export function createUnitCardPDF(unit: Unit) {
 	});
 
 	addFontsToPDF(doc);
-
-	// TODO: Remove once everything uses the Text primitive
-	doc.setFont('OpenSans-Bold');
-	doc.setFontSize(10);
-
-	// Construct the card:
-	UnitCardFront.PDF(doc, unit);
-
-	doc.addPage(format, orientation);
-
-	UnitCardBackPDF(doc, unit);
-
-	// Save the card:
-	doc.save(`${unit.title || 'my unit'}.pdf`);
+	loadPrimaryImage(unit.primaryImageURL).then((image) => {
+		UnitCardFrontPDF(doc, unit, image);
+		doc.addPage(format, orientation);
+		UnitCardBackPDF(doc, unit);
+		doc.save(`${unitID}.pdf`);
+	});
 }

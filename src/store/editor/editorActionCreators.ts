@@ -2,17 +2,40 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import { ArmorAttribute } from '../../enums/ArmorAttributes';
 import { Era } from '../../enums/Eras';
-import { HitOnRating } from '../../enums/HitOnRatings';
+import { ImageFormat } from '../../enums/ImageFormats';
 import { MobilityAttribute } from '../../enums/Mobility';
-import { MotivationRating } from '../../enums/MotivationRatings';
 import { Nationality } from '../../enums/Nations';
 import { SkillRating } from '../../enums/SkillRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { UnitType } from '../../enums/UnitTypes';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
+import { isHitOnRating, isMotivationRating, isSkillRating, SoftStatBaseRating } from '../../typing/SoftStat';
+import { UnitCard } from '../../typing/UnitCard';
 import { Weapon } from '../../typing/Weapon';
 import { actions } from './editorSlice';
+
+export const setUnitCardActionCreator = (unitCard: UnitCard) => (dispatch: Dispatch) => {
+	dispatch(actions.setUnitCard(unitCard));
+};
+
+export function setIsPublicActionCreator(isPublic: boolean) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.setIsPublic(isPublic));
+	};
+}
+
+export function setPrimaryImageURLActionCreator(url: string) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.setPrimaryImageURL(url));
+	};
+}
+
+export function setPrimaryImageFormatActionCreator(format: ImageFormat) {
+	return (dispatch: Dispatch) => {
+		dispatch(actions.setPrimaryImageFormat(format));
+	};
+}
 
 export function setNationalityActionCreator(nationality: Nationality) {
 	return (dispatch: Dispatch) => {
@@ -56,15 +79,15 @@ export function setSpecialRulesActionCreator(specialRules: UnitSpecialRuleName[]
 	};
 }
 
-export function setBaseRatingActionCreator(softStat: string, rating: MotivationRating | SkillRating | HitOnRating) {
+export function setBaseRatingActionCreator(softStat: string, rating: SoftStatBaseRating) {
 	return (dispatch: Dispatch) => {
-		if (softStat === 'motivation') {
+		if (isMotivationRating(rating)) {
 			dispatch(actions.setMotivationBaseRating(rating));
 		}
-		if (softStat === 'skill') {
+		if (isSkillRating(rating)) {
 			dispatch(actions.setSkillBaseRating(rating));
 		}
-		if (softStat === 'hitOn') {
+		if (isHitOnRating(rating)) {
 			dispatch(actions.setHitOnBaseRating(rating));
 		}
 	};
