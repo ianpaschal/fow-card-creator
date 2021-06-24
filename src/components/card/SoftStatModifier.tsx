@@ -91,7 +91,7 @@ export class SoftStatModifierLayout {
 			fontSize: Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE,
 			height: this.height,
 			lineHeight: this.height,
-			text: formatDiceRoll(this.modifier.number),
+			text: formatDiceRoll(this.modifier.value, false),
 			width: this.ratingWidth,
 			x: this.x + this.width - this.ratingWidth,
 			y: this.y,

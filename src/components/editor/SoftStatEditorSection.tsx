@@ -111,10 +111,10 @@ export class SoftStatEditorSection extends React.Component<SoftStatEditorSection
 						<FormItem label="Value">
 							<InputNumber
 								id="value"
-								value={modifier.number}
+								value={modifier.value}
 								onValueChange={(e) => {
 									updateModifier(attribute, i, {
-										number: Math.min(Math.max(1, parseInt(e.target.value)), 6),
+										value: Math.min(Math.max(1, parseInt(e.target.value)), 6),
 									});
 								}}
 								showButtons
