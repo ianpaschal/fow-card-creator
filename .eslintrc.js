@@ -44,6 +44,7 @@ module.exports = {
 		'max-lines':                 ['error', { 'max': 250, 'skipBlankLines': true, 'skipComments': true }],
 		'max-statements':            ['error', 30],
 		'no-confusing-arrow':        ['error', { 'allowParens': false }],
+		'no-console':                ['warn', { allow: ['warn', 'error']}],
 		'no-const-assign':           ['error'],
 		'no-dupe-class-members':     ['error'],
 		'no-duplicate-imports':      ['error'],
@@ -51,7 +52,7 @@ module.exports = {
 		'no-multiple-empty-lines':   ['error', { 'max': 1, 'maxEOF': 0, 'maxBOF': 0 }],
 		'no-new-object':             ['error'],
 		'no-undef':                  ['error'],
-		'no-unused-vars':            ['warn', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
+		'no-unused-vars':            ['error', { 'vars': 'local', 'args': 'none', 'ignoreRestSiblings': false }],
 		'no-use-before-define':      ['off'],
 		'no-useless-constructor':    ['error'],
 		'no-var':                    ['error'],
@@ -74,6 +75,8 @@ module.exports = {
 			{ checkAttributes: true, indentLogicalExpressions: true },
 		],
 		'@typescript-eslint/no-use-before-define': ['error'],
+		'@typescript-eslint/no-unused-vars': ['error', { 'vars': 'local', 'args': 'none', 'ignoreRestSiblings': false }],
+		// 'unused-imports/no-unused-imports-ts': ['error'],
 	},
 	/* eslint-enable array-bracket-newline, array-element-newline */
 	overrides: [

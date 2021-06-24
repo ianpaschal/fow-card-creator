@@ -1,9 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
-import { InputNumber } from 'primereact/inputnumber';
 import { RootState } from '../../store';
-import classNamesDedupe from 'classnames/dedupe';
 import { ConnectedSoftStatEditorSection } from './SoftStatEditorSection';
 import { setUnitIsComponentActionCreator } from '../../store/editor/editorActionCreators';
 import { Checkbox } from 'primereact/checkbox';

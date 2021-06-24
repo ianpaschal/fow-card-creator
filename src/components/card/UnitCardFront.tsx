@@ -1,24 +1,20 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { Unit } from '../../typing/Unit';
-import { pt } from '../../utils/convertDistance';
 import { Settings } from '../../Settings';
-import { SoftStatBlockProps } from './SoftStatBlock';
-import { HeaderBlockPDF, ConnectedHeaderBlockSVG, HeaderBlockLayout } from './HeaderBlock';
+// import { ArmorBlockLayout, ArmorBlockPDF, ArmorBlockProps, ArmorBlockSVG } from './ArmorBlock';
+// import { SaveBlockLayout, SaveBlockPDF, SaveBlockProps, SaveBlockSVG } from './SaveBlock';
 import { BackgroundPDF, ConnectedBackgroundSVG } from './Background';
-import { ArmorBlockLayout, ArmorBlockPDF, ArmorBlockProps, ArmorBlockSVG } from './ArmorBlock';
-import { SaveBlockLayout, SaveBlockPDF, SaveBlockProps, SaveBlockSVG } from './SaveBlock';
-import { ConnectedMobilityBlockPDF, ConnectedMobilityBlockSVG, MobilityBlockLayout, MobilityBlockProps, MobilityBlockSVG } from './MobilityBlock';
-import { WeaponsBlockSVG, WeaponsBlockProps, ConnectedWeaponsBlockSVG } from './WeaponsBlock';
-import { ConnectedMotivationBlockPDF, ConnectedMotivationBlockSVG, MotivationBlockPDF } from './MotivationBlock';
+import { ConnectedHitOnBlockPDF, ConnectedHitOnBlockSVG } from './HitOnBlock';
+import { ConnectedMobilityBlockPDF, ConnectedMobilityBlockSVG } from './MobilityBlock';
+import { ConnectedMotivationBlockPDF, ConnectedMotivationBlockSVG } from './MotivationBlock';
+import { ConnectedPrimaryImagePDF, ConnectedPrimaryImageSVG } from './PrimaryImage';
 import { ConnectedSkillBlockPDF, ConnectedSkillBlockSVG } from './SkillBlock';
 import { ConnectedSpecialRulesListPDF, ConnectedSpecialRulesListSVG } from './SpecialRulesList';
-import { ConnectedPrimaryImagePDF, ConnectedPrimaryImageSVG } from './PrimaryImage';
-import { ConnectedHitOnBlockPDF, ConnectedHitOnBlockSVG } from './HitOnBlock';
+import { ConnectedWeaponsBlockPDF, ConnectedWeaponsBlockSVG } from './WeaponsBlock';
+import { HeaderBlockPDF, ConnectedHeaderBlockSVG } from './HeaderBlock';
 
-export interface UnitCardFrontProps {}
-
-export const UnitCardFrontSVG: React.FC<UnitCardFrontProps> = () => {
+export const UnitCardFrontSVG: React.FC = () => {
 	return (
 		<svg
 			id="card-print-front"
@@ -68,5 +64,5 @@ export const UnitCardFrontPDF = (doc: jsPDF, unit: Unit, primaryImage: HTMLImage
 	// 	SaveBlockPDF(doc, layout.saveBlockProps);
 	// }
 	ConnectedMobilityBlockPDF(doc);
-	// ConnectedWeaponsBlockPDF(doc);
+	ConnectedWeaponsBlockPDF(doc);
 };

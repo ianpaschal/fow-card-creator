@@ -15,19 +15,17 @@ import { UnitCardFrontSVG } from '../card/UnitCardFront';
 import { ConnectedArmorEditor } from '../editor/ArmorEditor';
 import { ConnectedSaveEditor } from '../editor/SaveEditor';
 import { auth, db } from '../../firebase';
-import { Redirect, RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import {
 	setIsPublicActionCreator,
 	setUnitCardActionCreator,
 } from '../../store/editor/editorActionCreators';
-import { defaultUnit } from '../../store/editor/defaultUnit';
 import { UnitCard } from '../../typing/UnitCard';
-import { SplitButton } from 'primereact/splitbutton';
 import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
 import { ConnectedImagesEditor } from '../editor/ImagesSection';
-import { computeCardLayout } from '../../utils/computeCardLayout';
+import { defaultUnitCard } from '../../store/editor/defaultUnitCard';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -96,20 +94,15 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 	}
 
 	async createCard(): Promise<void> {
-		const { currentUserID, history, setUnitCard } = this.props;
+		const { setUnitCard } = this.props;
 		if (!auth.currentUser) {
 			return;
 		}
 		const ref = db.collection('cards').doc();
-		console.log(ref);
 		setUnitCard({
+			...defaultUnitCard,
 			authorID: auth.currentUser.uid,
-			ratings: {},
-			created: new Date(),
-			isPublic: false,
-			unit: defaultUnit,
 			id: ref.id,
-			layout: computeCardLayout(defaultUnit),
 		});
 	  }
 
@@ -145,7 +138,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 
 	// eslint-disable-next-line complexity
 	render() {
-		const { className, armor, save, isPublic, setIsPublic } = this.props;
+		const { className, armor, save } = this.props;
 		const { view } = this.state;
 		return (
 			<form className={classNamesDedupe('edit-view', className)} onSubmit={this.saveCard}>

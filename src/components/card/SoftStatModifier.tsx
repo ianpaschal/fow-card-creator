@@ -1,6 +1,5 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { RoundedRectangle } from '../../drawing/RoundedRectangle';
 import { MotivationAttributes } from '../../enums/MotivationRatings';
 import { SkillAttributes } from '../../enums/SkillRatings';
 import { Settings } from '../../Settings';

@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { convertDistance as c } from './convertDistance';
+import { pt } from './convertDistance';
 import { UnitCardFrontPDF } from '../components/card/UnitCardFront';
 import { UnitCardBackPDF } from '../components/card/UnitCardBack';
 import { addFontsToPDF } from './addFontsToPDF';
@@ -16,7 +16,8 @@ const loadPrimaryImage = async (url: string): Promise<HTMLImageElement> => {
 
 export function createUnitCardPDF() {
 	const unit = store.getState().editor.unitCard.unit;
-	const format = [c(110, 'mm'), c(80, 'mm')];
+	const unitID = store.getState().editor.unitCard.id;
+	const format = [pt(110, 'mm'), pt(80, 'mm')];
 	const orientation = 'landscape';
 	const doc = new jsPDF({
 		orientation,
@@ -27,19 +28,9 @@ export function createUnitCardPDF() {
 
 	addFontsToPDF(doc);
 	loadPrimaryImage(unit.primaryImageURL).then((image) => {
-		console.log(image);
-		console.log('Unit card creation started...');
-
-		// Construct the card:
 		UnitCardFrontPDF(doc, unit, image);
-
-		// doc.addPage(format, orientation);
-
-		// UnitCardBackPDF(doc, unit);
-
-		console.log('Unit card creation complete, saving...');
-
-		// Save the card:
-		doc.save(`${unit.title || 'my unit'}.pdf`);
+		doc.addPage(format, orientation);
+		UnitCardBackPDF(doc, unit);
+		doc.save(`${unitID}.pdf`);
 	});
 }

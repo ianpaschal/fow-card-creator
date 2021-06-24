@@ -1,12 +1,11 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import { connect } from 'react-redux';
-import { RootState, store } from '../../store';
+import { RootState } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { Settings } from '../../Settings';
-import { RoundedRectangleSVG } from '../../drawing/RoundedRectangle';
 import { TextLayout, TextPDF, TextProps, TextSVG } from './generic/Text';
-import { RoundedRectanglePDF, RoundedRectangleProps } from './generic/RoundedRectangle';
+import { RoundedRectangleSVG, RoundedRectanglePDF, RoundedRectangleProps } from './generic/RoundedRectangle';
 
 export class HeaderBlockLayout {
 	static x: number = Settings.CARD_MARGINS;

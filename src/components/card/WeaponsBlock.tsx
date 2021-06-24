@@ -1,16 +1,15 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MobilityAttribute, MobilityAttributeKeys, MobilityAttributes } from '../../enums/Mobility';
 import { Settings } from '../../Settings';
-import { RootState } from '../../store';
+import { RootState, store } from '../../store';
 import { Weapon } from '../../typing/Weapon';
 import { pt } from '../../utils/convertDistance';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
 import { formatDistance } from '../../utils/formatDistance';
-import { ColumnDefinition, TableProps, TableSVG } from './generic/Table';
+import { ColumnDefinition, TablePDF, TableProps, TableSVG } from './generic/Table';
 
-// 0.25, 0.14, 0.17, 0.07, 0.07, 0.30
+export type WeaponsBlockProps = ConnectedProps<typeof connector>;
 
 export class WeaponsBlockLayout {
 	// Passed
@@ -178,6 +177,7 @@ export class WeaponsBlockLayout {
 			{
 				widthFactor: 0.3,
 				header: (x, y, width) => ([{ x, y, width, height: this.headerHeight, text: 'NOTES', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' }]),
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				cell: (x, y, width) => ([]),
 			},
 		];
@@ -223,48 +223,38 @@ export class WeaponsBlockLayout {
 	}
 }
 
-// export const WeaponsBlockPDF = (doc: jsPDF, unit: Unit, props: WeaponsBlockProps) => {
-// 	const layout = new WeaponsBlockLayout(props);
-// 	LabeledRectangle.PDF(doc, layout.frameProps);
-// 	MobilityAttributeKeys.forEach((key: MobilityAttribute, i: number) => {
-// 		TextPDF(doc, {
-// 			...layout.getMobilityLabelProps(i),
-// 			text: MobilityAttributes[ key ].toUpperCase(),
-// 		});
-// 		TextPDF(doc, {
-// 			...layout.getMobilityValueProps(i),
-// 			text: key === 'cross' ? formatDiceRoll(unit.mobility[ key ], true) : formatDistance(unit.mobility[ key ]),
-// 		});
-// 		if (i > 0) {
-// 			doc.setFillColor(unit.accentColor).rect(
-// 				layout.getMobilityValueProps(i).x - Settings.STROKE_WIDTH,
-// 				layout.getMobilityValueProps(i).y,
-// 				Settings.STROKE_WIDTH,
-// 				layout.innerArea.h,
-// 				'F',
-// 			);
-// 		}
-// 	});
-// };
-
+// React
 const connector = connect((state: RootState) => ({
 	accentColor: state.editor.unitCard.unit.accentColor,
 	weapons: state.editor.unitCard.unit.weapons,
+	width: state.editor.unitCard.layout.weaponsBlock.width,
 	x: state.editor.unitCard.layout.weaponsBlock.x,
 	y: state.editor.unitCard.layout.weaponsBlock.y,
-	width: state.editor.unitCard.layout.weaponsBlock.width,
 }), null);
-
-export type WeaponsBlockProps = ConnectedProps<typeof connector>;
 
 export const WeaponsBlockSVG: React.FC<WeaponsBlockProps> = (props: WeaponsBlockProps) => {
 	if (props.weapons.length < 1) {
 		return null;
 	}
 	const layout = new WeaponsBlockLayout(props);
-	return (
-		<TableSVG {...layout.tableProps} />
-	);
+	return <TableSVG {...layout.tableProps} />;
 };
 
 export const ConnectedWeaponsBlockSVG = connector(WeaponsBlockSVG);
+
+// jsPDF
+export const WeaponsBlockPDF = (doc: jsPDF, props: WeaponsBlockProps) => {
+	if (props.weapons.length < 1) {
+		return;
+	}
+	const layout = new WeaponsBlockLayout(props);
+	TablePDF(doc, layout.tableProps);
+};
+
+export const ConnectedWeaponsBlockPDF = (doc: jsPDF) => WeaponsBlockPDF(doc, {
+	accentColor: store.getState().editor.unitCard.unit.accentColor,
+	weapons: store.getState().editor.unitCard.unit.weapons,
+	width: store.getState().editor.unitCard.layout.weaponsBlock.width,
+	x: store.getState().editor.unitCard.layout.weaponsBlock.x,
+	y: store.getState().editor.unitCard.layout.weaponsBlock.y,
+});

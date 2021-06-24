@@ -3,7 +3,6 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
 import { InputNumber } from 'primereact/inputnumber';
 import { RootState } from '../../store';
-import classNamesDedupe from 'classnames/dedupe';
 import { MobilityAttribute, MobilityAttributeKeys, MobilityAttributes } from '../../enums/Mobility';
 import { setMobilityActionCreator } from '../../store/editor/editorActionCreators';
 import { EditorSection } from './EditorSection';

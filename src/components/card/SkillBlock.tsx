@@ -1,7 +1,6 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
 import { SoftStat } from '../../typing/SoftStat';
 import { SoftStatBlockPDF, SoftStatBlockProps, SoftStatBlockSVG } from './SoftStatBlock';

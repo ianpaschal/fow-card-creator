@@ -1,4 +1,4 @@
-import { createAction, Dispatch } from '@reduxjs/toolkit';
+import { Dispatch } from '@reduxjs/toolkit';
 import { actions } from './authSlice';
 
 export const setCurrentUserID = (userID: string) => (dispatch: Dispatch) => {

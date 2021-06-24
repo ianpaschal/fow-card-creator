@@ -12,15 +12,15 @@ import { HitOnRating } from '../../enums/HitOnRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { MobilityAttribute } from '../../enums/Mobility';
 import { ArmorAttribute } from '../../enums/ArmorAttributes';
-import { defaultUnit } from './defaultUnit';
 import { SoftStatModifier } from '../../typing/SoftStatModifier';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
 import { Weapon } from '../../typing/Weapon';
 import { getBaseColor } from '../../utils/getBaseColor';
 import { UnitCard } from '../../typing/UnitCard';
-import { ImageFormat, ImageFormats } from '../../enums/ImageFormats';
+import { ImageFormat } from '../../enums/ImageFormats';
 import { computeCardLayout } from '../../utils/computeCardLayout';
+import { defaultUnitCard } from './defaultUnitCard';
 
 export interface EditorState {
 	unitCard: UnitCard | null;
@@ -28,15 +28,7 @@ export interface EditorState {
 }
 
 export const initialState: EditorState = {
-	unitCard: {
-		authorID: 'Unknown',
-		created: new Date(),
-		id: null,
-		isPublic: false,
-		layout: computeCardLayout(defaultUnit),
-		ratings: {},
-		unit: defaultUnit,
-	},
+	unitCard: defaultUnitCard,
 	availableSpecialRules: filterUnitSpecialRules(undefined),
 };
 
@@ -52,9 +44,6 @@ export const editorSlice = createSlice({
 				layout: action.payload.layout || computeCardLayout(action.payload.unit),
 			},
 			availableSpecialRules: filterUnitSpecialRules(action.payload.unit),
-		}),
-		setHasChanges: (state: EditorState, action: PayloadAction<boolean>): EditorState => ({
-			...state,
 		}),
 		setIsPublic: (state: EditorState, action: PayloadAction<boolean>): EditorState => ({
 			...state,
@@ -353,7 +342,7 @@ export const editorSlice = createSlice({
 			state: EditorState,
 			action: PayloadAction<ArmorRating>
 		): EditorState => {
-			const { save, ...unitWithoutSave } = state.unitCard.unit;
+			const { ...unitWithoutSave } = state.unitCard.unit;
 			return {
 				...state,
 				unitCard: {
@@ -386,7 +375,7 @@ export const editorSlice = createSlice({
 			state: EditorState,
 			action: PayloadAction<SaveRating>
 		): EditorState => {
-			const { armor, ...unitWithoutArmor } = state.unitCard.unit;
+			const { ...unitWithoutArmor } = state.unitCard.unit;
 			return {
 				...state,
 				unitCard: {

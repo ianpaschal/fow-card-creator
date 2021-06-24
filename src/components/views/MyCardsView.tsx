@@ -1,6 +1,6 @@
 import React from 'react';
 import { UnitCard } from '../../typing/UnitCard';
-import { auth, db } from '../../firebase';
+import { db } from '../../firebase';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { Card } from 'primereact/card';

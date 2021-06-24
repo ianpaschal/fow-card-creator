@@ -1,14 +1,12 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Era } from '../../enums/Eras';
-import { ImageFormat, ImageFormats } from '../../enums/ImageFormats';
+import { ImageFormat } from '../../enums/ImageFormats';
 import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
 import { Area } from '../../typing/Area';
 import { SoftStat } from '../../typing/SoftStat';
-import { mm, pt } from '../../utils/convertDistance';
-import { SoftStatBlockPDF, SoftStatBlockProps, SoftStatBlockSVG } from './SoftStatBlock';
+import { pt } from '../../utils/convertDistance';
 
 const PRINT_DPI_FACTOR = 4.1666666667;
 
@@ -120,9 +118,6 @@ export class PrimaryImageLayout {
 
 		if (canvasAspectRatio > imageAspectRatio) {
 			// Canvas is wider/shorter than image, so fit width and crop height
-			const cropFactor = ((canvas.width / imageAspectRatio) - canvas.height) / 2;
-			const y = image.height * cropFactor;
-			const height = image.height - (2 * y);
 			return {
 				x: 0,
 				y: (image.height - (image.width / canvasAspectRatio)) / 2,
@@ -131,9 +126,6 @@ export class PrimaryImageLayout {
 			};
 		} else {
 			// Canvas is narrower/taller than image, so fit height and crop width
-			const cropFactor = ((canvas.height * imageAspectRatio) - canvas.width) / 2;
-			const x = image.width * cropFactor;
-			const width = image.width - (2 * x);
 			return {
 				x: (image.width - (image.height * canvasAspectRatio)) / 2,
 				y: 0,

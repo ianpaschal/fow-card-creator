@@ -1,15 +1,13 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MobilityAttribute, MobilityAttributeKeys, MobilityAttributes } from '../../enums/Mobility';
 import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
 import { formatDistance } from '../../utils/formatDistance';
-import { FramePDF, FrameProps, FrameSVG } from './generic/Frame';
+import { FrameProps } from './generic/Frame';
 import { TablePDF, TableProps, TableSVG } from './generic/Table';
-import { TextProps, TextSVG } from './generic/Text';
 
 export class MobilityBlockLayout {
 	// Passed
@@ -21,11 +19,7 @@ export class MobilityBlockLayout {
 	height: number;
 
 	// Static:
-	headerFont: string = 'OpenSans-Bold';
-	headerFontSize: number = 4.5;
 	headerHeight: number = pt(2.9, 'mm');
-	rowFont: string = 'OpenSans-SemiBold';
-	rowFontSize: number = 6;
 
 	constructor(props: MobilityBlockProps) {
 		Object.keys(props).forEach((key) => {
@@ -54,15 +48,15 @@ export class MobilityBlockLayout {
 		const headerStyle = {
 			align: 'center',
 			color: '#FFFFFF',
-			font: this.headerFont,
-			fontSize: this.headerFontSize,
+			font: 'OpenSans-Bold',
+			fontSize: 4.5,
 			height: this.headerHeight,
 		};
 		const recordStyle = {
 			align: 'center',
 			color: '#000000',
-			font: this.rowFont,
-			fontSize: this.rowFontSize,
+			font: 'OpenSans-SemiBold',
+			fontSize: 6,
 			height: this.rowHeight,
 		};
 		return [
@@ -128,22 +122,6 @@ export class MobilityBlockLayout {
 			y: this.y,
 		};
 	}
-
-	computeLabelProps(column, i: number): TextProps {
-		const width = (this.width - (Settings.STROKE_WIDTH * this.tableColumns.length + 1)) * column.width;
-		const x = this.x + Settings.STROKE_WIDTH;
-		return {
-			x,
-			y: this.y,
-			width,
-			height: this.headerHeight,
-			fontSize: 4.5,
-			font: 'OpenSans-Bold',
-			align: 'center',
-			text: column.label,
-		};
-
-	}
 }
 
 export type MobilityBlockProps = ConnectedProps<typeof connector>;
@@ -160,9 +138,7 @@ const connector = connect((state: RootState) => ({
 
 export const MobilityBlockSVG: React.FC<MobilityBlockProps> = (props: MobilityBlockProps) => {
 	const layout = new MobilityBlockLayout(props);
-	return (
-		<TableSVG {...layout.tableProps} />
-	);
+	return <TableSVG {...layout.tableProps} />;
 };
 
 export const ConnectedMobilityBlockSVG = connector(MobilityBlockSVG);

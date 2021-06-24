@@ -1,14 +1,11 @@
 /* eslint-disable max-len */
 import jsPDF from 'jspdf';
 import React from 'react';
-import { RoundedRectangleProps } from '../../../drawing/RoundedRectangle';
 import { Settings } from '../../../Settings';
-import { Unit } from '../../../typing/Unit';
-import { pt } from '../../../utils/convertDistance';
 import { TextPDF, TextProps, TextSVG } from './Text';
 import { FramePDF, FrameProps, FrameSVG } from './Frame';
 import { Area } from '../../../typing/Area';
-import { RectangleProps } from './RoundedRectangle';
+import { RectangleProps, RoundedRectangleProps } from './RoundedRectangle';
 
 export interface TableProps extends Omit<RoundedRectangleProps, 'height'> {
 	columns: ColumnDefinition[];
@@ -123,7 +120,6 @@ export class TableLayout {
 			column.header(x, this.y, width).forEach((props: TextProps | RectangleProps, ii: number) => (
 				this.renderCellPDF(doc, props, ii)
 			));
-			console.log(this);
 			this.data.map((record, ii) => {
 				const y = this.y + this.headerHeight + (ii * this.rowHeight);
 				if (i > 0) {

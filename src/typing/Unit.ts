@@ -10,7 +10,7 @@ import { SoftStatModifier } from './SoftStatModifier';
 import { SkillRating } from '../enums/SkillRatings';
 import { HitOnRating } from '../enums/HitOnRatings';
 import { SaveRating } from './SaveRating';
-import { ImageFormat, ImageFormats } from '../enums/ImageFormats';
+import { ImageFormat } from '../enums/ImageFormats';
 
 export interface Unit {
 

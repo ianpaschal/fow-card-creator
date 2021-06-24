@@ -43,6 +43,8 @@ export function computeCardLayout(unit: Unit): UnitCardLayout {
 		width: fullWidth,
 	};
 
+	// TODO: Warn if too tall!
+
 	return {
 		headerBlock,
 		motivationBlock,

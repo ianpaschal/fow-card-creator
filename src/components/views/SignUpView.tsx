@@ -17,16 +17,9 @@ export class SignUpView extends React.Component<SignUpViewProps, {}> {
 	private async onSubmit(e): Promise<void> {
 		const { history } = this.props;
 		e.preventDefault();
-		auth.createUserWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((userCredential) => {
-			// Signed in
-			const user = userCredential.user;
-			// ...
-			console.log(user.uid);
+		auth.createUserWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((_user) => {
 			history.push('/');
 		}).catch((error) => {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			// ..
 			console.log(error);
 		});
 	}

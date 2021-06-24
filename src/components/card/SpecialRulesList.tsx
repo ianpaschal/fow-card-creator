@@ -2,7 +2,6 @@ import React from 'react';
 import jsPDF from 'jspdf';
 import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
-import { SoftStat } from '../../typing/SoftStat';
 import { pt } from '../../utils/convertDistance';
 import { TextPDF, TextProps, TextSVG } from './generic/Text';
 import { connect, ConnectedProps } from 'react-redux';

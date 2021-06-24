@@ -2,7 +2,6 @@ import React from 'react';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
-import classNamesDedupe from 'classnames/dedupe';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import {

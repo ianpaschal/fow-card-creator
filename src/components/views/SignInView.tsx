@@ -19,16 +19,9 @@ export class SignInView extends React.Component<SignInViewProps, {}> {
 	private async onSubmit(e): Promise<void> {
 		const { history } = this.props;
 		e.preventDefault();
-		auth.signInWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((userCredential) => {
-			// Signed in
-			const user = userCredential.user;
-			// ...
-			console.log(user);
+		auth.signInWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((_user) => {
 			history.push('/mycards');
 		}).catch((error) => {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			// ..
 			console.log(error);
 		});
 	}

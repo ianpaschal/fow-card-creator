@@ -8,8 +8,6 @@ import {
 } from '../../store/editor/editorActionCreators';
 import { EditorSection } from './EditorSection';
 import { FormItem } from './FormItem';
-import { FileUpload, FileUploadProps } from 'primereact/fileupload';
-import firebase from 'firebase';
 import { storage } from '../../firebase';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
@@ -49,15 +47,15 @@ export class ImagesEditor extends React.Component<ImagesEditorProps> {
 		});
 		uploadTask.on('state_changed', (snapShot) => {
 			// takes a snap shot of the process as it is happening
-			console.log(snapShot);
+			// console.log(snapShot);
 		}, (err) => {
 			// catches the errors
-			console.log(err);
+			console.error(err);
 		}, () => {
 			// gets the functions from storage refences the image storage in firebase by the children
 			// gets the download url then sets the image from firebase as the value for the imgUrl key:
 			storage.ref(fileURL).getDownloadURL().then((url) => {
-				console.log(url);
+				// console.log(url);
 				setPrimaryImageURL(url);
 			}).catch((error) => {
 				// A full list of error codes is available at
@@ -91,7 +89,7 @@ export class ImagesEditor extends React.Component<ImagesEditorProps> {
 		storage.ref(fileURL).delete().then(() => {
 			setPrimaryImageURL(null);
 		}).catch((error) => {
-			// Uh-oh, an error occurred!
+			console.error(error);
 		});
 	}
 
