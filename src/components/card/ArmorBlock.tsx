@@ -37,6 +37,7 @@ export class ArmorBlockLayout {
 			border: { top: Settings.STAT_BLOCK_HEADER_HEIGHT },
 			stroke: this.accentColor,
 			fill: '#FFFFFF',
+			fillOpacity: 0.5,
 		};
 	}
 

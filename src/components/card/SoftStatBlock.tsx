@@ -85,6 +85,8 @@ export class SoftStatBlockLayout {
 				top: SoftStatBlockLayout.headerHeight,
 			},
 			stroke: this.accentColor,
+			fill: '#FFFFFF',
+			fillOpacity: 0.5,
 		};
 	}
 

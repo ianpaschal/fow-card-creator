@@ -1,4 +1,4 @@
-import jsPDF from 'jspdf';
+import jsPDF, { GState } from 'jspdf';
 import React from 'react';
 import { Settings } from '../../../Settings';
 import { RoundedRectangleLayout, RoundedRectangleProps } from './RoundedRectangle';
@@ -10,6 +10,7 @@ export interface FrameProps extends RoundedRectangleProps {
 		bottom?: number;
 		left?: number;
 	}
+	fillOpacity?: number;
 }
 
 export class FrameLayout {
@@ -26,6 +27,7 @@ export class FrameLayout {
 	width: number;
 	height: number;
 	radius: number;
+	fillOpacity?: number;
 
 	constructor(props: FrameProps) {
 		Object.keys(props).forEach((key) => {
@@ -73,7 +75,7 @@ export const FrameSVG: React.FC<FrameProps> = (props: FrameProps) => {
 		<>
 			<path d={layout.outerPathSVG + layout.innerPathSVG} fill={layout.stroke} fillRule="evenodd" />
 			{layout.fill && (
-				<path d={layout.innerPathSVG} fill={layout.fill} fillRule="evenodd" />
+				<path d={layout.innerPathSVG} fill={layout.fill} fillRule="evenodd" opacity={layout.fillOpacity || 1} />
 			)}
 		</>
 	);
@@ -83,6 +85,15 @@ export const  FramePDF = (doc: jsPDF, props: FrameProps): void => {
 	const layout = new FrameLayout(props);
 	doc.path([...layout.outerPathPDF, ...layout.innerPathPDF]).setFillColor(layout.stroke).fillEvenOdd();
 	if (layout.fill) {
+		if (layout.fillOpacity) {
+			doc.setGState(new GState({
+				opacity: layout.fillOpacity,
+			}));
+		}
 		doc.path(layout.innerPathPDF).setFillColor(layout.fill).fill();
+		// Reset so subsequent draws are not affected by fillOpacity
+		doc.setGState(new GState({
+			opacity: 1,
+		}));
 	}
 };
