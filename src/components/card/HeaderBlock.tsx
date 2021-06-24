@@ -1,11 +1,15 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { Settings } from '../../Settings';
 import { TextLayout, TextPDF, TextProps, TextSVG } from './generic/Text';
 import { RoundedRectangleSVG, RoundedRectanglePDF, RoundedRectangleProps } from './generic/RoundedRectangle';
+import { NationalInsigniaPDF, NationalInsigniaSVG } from './NationalInsignia';
+import HeaderOverlay from '../../../assets/images/unit-card-header-overlay.png';
+
+export type HeaderBlockProps = ConnectedProps<typeof connector>;
 
 export class HeaderBlockLayout {
 	static x: number = Settings.CARD_MARGINS;
@@ -135,18 +139,13 @@ export class HeaderBlockLayout {
 	}
 }
 
-export interface HeaderBlockProps {
-	subTitle?: string;
-	title: string;
-	subTitleAboveTitle: boolean;
-	accentColor: string;
-};
-
 const connector = connect((state: RootState) => ({
 	subTitle: state.editor.unitCard.unit.subTitle,
 	title: state.editor.unitCard.unit.title,
 	subTitleAboveTitle: state.editor.unitCard.unit.subTitleAboveTitle,
 	accentColor: state.editor.unitCard.unit.accentColor,
+	nationality: state.editor.unitCard.unit.nationality,
+	era: state.editor.unitCard.unit.era,
 }), null);
 
 export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockProps) => {
@@ -154,14 +153,38 @@ export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockPro
 	return (
 		<>
 			<RoundedRectangleSVG {...layout.frameProps} />
+			{props.era === 'LW' && (
+				<image
+					xlinkHref={HeaderOverlay}
+					width={layout.width + pt(2, 'mm')}
+					height={layout.height + pt(2, 'mm')}
+					x={layout.x - pt(1, 'mm')}
+					y={layout.y - pt(1, 'mm')}
+				/>
+			)}
 			<TextSVG {...layout.titleProps} />
 			{props.subTitle && (
 				<TextSVG {...layout.subTitleProps} />
 			)}
+			<NationalInsigniaSVG
+				era={props.era}
+				nationality={props.nationality}
+				x={pt(5.025, 'mm')}
+				y={pt(5.025, 'mm')}
+			/>
+			<NationalInsigniaSVG
+				era={props.era}
+				nationality={props.nationality}
+				x={pt(96.775, 'mm')}
+				y={pt(5.025, 'mm')}
+			/>
 		</>
 	);
 };
 
+export const ConnectedHeaderBlockSVG = connector(HeaderBlockSVG);
+
+// jsPDF
 export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
 	const layout = new HeaderBlockLayout(props);
 	RoundedRectanglePDF(doc, {
@@ -172,6 +195,9 @@ export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
 		radius: Settings.CORNER_RADIUS,
 		fill: props.accentColor,
 	});
+	if (props.era === 'LW') {
+		doc.addImage(HeaderOverlay, 'PNG', layout.x - pt(1, 'mm'), layout.y - pt(1, 'mm'), layout.width + pt(2, 'mm'), layout.height + pt(2, 'mm'));
+	}
 	TextPDF(doc, {
 		...layout.titleProps,
 		text: layout.titleText,
@@ -182,6 +208,14 @@ export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
 			text: props.subTitle.toUpperCase(),
 		});
 	}
+	NationalInsigniaPDF(doc, {
+		...props,
+		x: pt(5.025, 'mm'),
+		y: pt(5.025, 'mm'),
+	});
+	NationalInsigniaPDF(doc, {
+		...props,
+		x: pt(96.775, 'mm'),
+		y: pt(5.025, 'mm'),
+	});
 };
-
-export const ConnectedHeaderBlockSVG = connector(HeaderBlockSVG);
