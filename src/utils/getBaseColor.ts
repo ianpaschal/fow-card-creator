@@ -8,14 +8,14 @@ const COLORS = {
 			africa: '#550015', // Hellfire and Back! (v3)
 			france: '#6a614c', // Blitzkrieg! (v3)
 		},
-		LW: '#531d2d', // Fortress Europe, D-Day
-		MW: '#003e6d', // Armored Fist & Desert Rats
+		LW: '#531d2d', // Fortress Europe, D-Day (v4 Forces Website)
+		MW: '#003e6d', // Armored Fist & Desert Rats (v4 Forces Website)
 	},
 
 	// Finns
 	FI: {
 		EW: '#4a7695', // Rising Sun, Barbarossa (v3)
-		MW: '#4a7695', // Eastern Front (v3)
+		MW: '#004678', // Bagration: Axis-Allies (v4 Forces Website)
 		LW: '#004678', // Bagration: Axis-Allies (v4 Forces Website)
 	},
 
@@ -31,38 +31,38 @@ const COLORS = {
 
 	// Germans
 	GE: {
-		LW: '#3f473c', // Fortress Europe, D-Day & Waffen SS
+		LW: '#3f473c', // Fortress Europe, D-Day & Waffen SS (v4 Forces Website)
 		MW: {
-			africa: '#64513c', // Afrika Korps
-			east: '#414042', // Iron Cross & Ghost Panzers
+			africa: '#64513c', // Afrika Korps (v4 Forces Website)
+			east: '#414042', // Iron Cross & Ghost Panzers (v4 Forces Website)
 		},
 	},
 
 	// Hungarians
 	HU: {
-		LW: '#27441a', // Bagration: Axis-Allies (v4 Forces Website)
+		LW: '#27441a', // Bagration (v4 Forces Website)
 	},
 
 	// Italians
 	IT: {
-		MW: '#07542b', // Avanti
+		MW: '#07542b', // Avanti (v4 Forces Website)
 	},
 
 	// Romanians
 	RO: {
-		LW: '#79242f', // Bagration: Axis-Allies (v4 Forces Website)
+		LW: '#79242f', // Bagration (v4 Forces Website)
 	},
 
 	// Soviets
 	SU: {
-		LW: '#5f4c30', // Fortress Europe & Bagration
-		MW: '#7a0708', // Red Banner & Enemy at the Gates
+		LW: '#5f4c30', // Fortress Europe & Bagration (v4 Forces Website)
+		MW: '#7a0708', // Red Banner & Enemy at the Gates (v4 Forces Website)
 	},
 
 	// Americans
 	US: {
-		LW: '#012846', // Fortress Europe & D-Day
-		MW: '#46402a', // Fighting First
+		LW: '#012846', // Fortress Europe & D-Day (v4 Forces Website)
+		MW: '#46402a', // Fighting First (v4 Forces Website)
 	},
 
 	// Japanese
@@ -73,7 +73,9 @@ const COLORS = {
 	},
 
 	NL: {
-		EW: '#de761c', // Team Yankee Free Nations
+		EW: '#527277', // Custom, based on uniform color
+		MW: '#527277', // Custom, based on uniform color
+		LW: '#527277', // Custom, based on uniform color
 	},
 };
 
