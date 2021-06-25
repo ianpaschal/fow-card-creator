@@ -6,7 +6,8 @@
   "scripts": {
     "build:client": "parcel build ./src/index.html",
     "start": "parcel ./src/index.html --out-dir dist",
-    "lint": "eslint --fix './src/**/*.{ts,tsx}'"
+    "lint": "eslint --fix './src/**/*.{ts,tsx}'",
+    "deploy": "firebase deploy --only hosting"
   },
   "author": "",
   "license": "ISC",
