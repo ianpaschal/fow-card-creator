@@ -51,10 +51,8 @@ export class TextLayout {
 	linePrefix?: string;
 	lineSuffix?: string;
 
-	static getLineCount(props: TextProps & {text: string}) {
-		return getMultiLineText(props.text.split(/\s+/), new TextLayout(props).fontPropsSVG, {
-			overflow: 1.05,
-		}).length;
+	static getLineCount(props: TextProps): number {
+		return new TextLayout(props).lines.length;
 	}
 
 	constructor(props: TextProps) {
