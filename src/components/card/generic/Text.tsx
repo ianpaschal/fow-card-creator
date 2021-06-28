@@ -70,14 +70,6 @@ export class TextLayout {
 		return alignToXMapping[ this.align ];
 	}
 
-	get anchorYPDF(): number {
-		return this.y + (this.height / 2);
-	}
-
-	get anchorYSVG(): number {
-		return this.y + (this.height * 0.575);
-	}
-
 	get fontPropsSVG(): TextSVGProps {
 		const fontParts = this.font.split('-');
 		const fontFamilyMapping = {
@@ -96,14 +88,14 @@ export class TextLayout {
 			fontStyle: fontParts[ 2 ] ? fontParts[ 2 ] : 'normal',
 			textAnchor: alignToAnchorMapping[ this.align ],
 			x: this.anchorX,
-			y: this.baseline,
+			y: this.anchorYSVG,
 			fill: this.color,
 			width: this.width,
 			letterSpacing: this.letterSpacing,
 		};
 	}
 
-	get baseline() {
+	get anchorYSVG() {
 		const renderHeight = this.fontSize * Constants.OPEN_SANS_RENDER_PROPORTION;
 		if (this.verticalAlign === 'top') {
 			return this.y + this.lineHeight - ((this.lineHeight - renderHeight) / 2);
@@ -114,6 +106,28 @@ export class TextLayout {
 		// Center align (default)
 		return (this.y + this.height / 2) + renderHeight / 2;
 	}
+
+	get anchorYPDF() {
+		if (this.verticalAlign === 'top') {
+			return this.y + this.lineHeight / 2;
+		}
+		if (this.verticalAlign === 'bottom') {
+			return this.y + this.height - (this.lineHeight / 2);
+		}
+		// Center align (default)
+		return this.y + (this.height / 2);
+	}
+
+	computeYOffset(i: number, lineCount: number): number {
+		if (this.verticalAlign === 'top') {
+			return i * this.lineHeight;
+		}
+		if (this.verticalAlign === 'bottom') {
+			return (lineCount - i) * this.lineHeight * -1;
+		}
+		// Center align (default)
+		return (-((lineCount - 1) / 2) + i) * this.lineHeight;
+	}
 }
 
 export const TextPDF = (doc: jsPDF, props: TextProps & {text: string}) => {
@@ -121,10 +135,14 @@ export const TextPDF = (doc: jsPDF, props: TextProps & {text: string}) => {
 	doc.setTextColor(props.color);
 	doc.setFont(props.font);
 	doc.setFontSize(props.fontSize);
-	doc.text(props.text, layout.anchorX, layout.anchorYPDF, {
-		align: props.align,
-		baseline: 'middle',
-		charSpace: props.letterSpacing,
+	const lines = doc.splitTextToSize(props.text, layout.width);
+	lines.forEach((line: string[], i: number) => {
+		const dy = layout.computeYOffset(i, lines.length);
+		doc.text(line, layout.anchorX, layout.anchorYPDF + dy, {
+			align: props.align,
+			baseline: 'middle',
+			charSpace: props.letterSpacing,
+		});
 	});
 };
 
@@ -134,7 +152,7 @@ export const TextSVG: React.FC<TextProps> = (props: TextProps) => {
 	return (
 		<text {...layout.fontPropsSVG}>
 			{lines.map((line: string, i: number) => {
-				const dy = `${(-((lines.length - 1) / 2) + i) * layout.lineHeight}`;
+				const dy = layout.computeYOffset(i, lines.length).toString();
 				return (
 					<tspan key={i} dy={dy} {...layout.fontPropsSVG}>
 						{line.split(/([0-9]+|\s)/).map((piece: string, ii: number) => {
