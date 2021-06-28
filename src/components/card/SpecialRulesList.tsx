@@ -25,7 +25,7 @@ export class SpecialRulesListLayout {
 
 	get rulesProps(): TextProps {
 		const x = Settings.CARD_MARGINS + Settings.BLOCK_MARGIN + Settings.STAT_BLOCK_WIDTH;
-
+		const bullet = '\u2022';
 		const rulesList = [];
 		rulesList.push(`${UnitTypes[ this.unitType ]} ${this.isFormation ? 'Formation' : 'Unit'}`.toUpperCase());
 		if (this.passengers > 0) {
@@ -35,19 +35,21 @@ export class SpecialRulesListLayout {
 				'Unit Transport'.toUpperCase(),
 			);
 		}
-		const text = rulesList.concat(this.specialRules.map((ruleName) => UnitSpecialRuleNames[ ruleName ].toUpperCase())).join(' ');
 		return {
 			x,
 			y: Settings.CARD_MARGINS + this.headerBlockHeight + Settings.BLOCK_MARGIN,
 			width: Settings.CARD_WIDTH - 2 * x,
 			height: pt(20, 'mm'),
-			text,
+			text: rulesList.concat(this.specialRules.map((ruleName) => UnitSpecialRuleNames[ ruleName ].toUpperCase())),
 			fontSize: 5.7,
 			color: '#000000',
 			font: 'OpenSans-Bold',
 			align: 'center',
 			verticalAlign: 'top',
 			lineHeight: pt(2, 'mm'),
+			linePrefix: bullet,
+			lineSuffix: bullet,
+			separator: bullet,
 		};
 	}
 }

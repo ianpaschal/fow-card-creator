@@ -14,7 +14,10 @@ export interface TextProps extends Area {
 	letterSpacing?: number;
 	maxLines?: number;
 	verticalAlign?: 'top' | 'center' | 'bottom';
-	text: string;
+	text: string | string[];
+	separator?: string;
+	linePrefix?: string;
+	lineSuffix?: string;
 }
 
 export interface TextSVGProps {
@@ -44,9 +47,14 @@ export class TextLayout {
 	letterSpacing: number;
 	maxLines: number;
 	verticalAlign: 'top' | 'center' | 'bottom' = 'center';
+	separator?: string;
+	linePrefix?: string;
+	lineSuffix?: string;
 
 	static getLineCount(props: TextProps & {text: string}) {
-		return getSVGMultiLineText(props.text.split(/\s+/), new TextLayout(props).fontPropsSVG, 1.05).length;
+		return getSVGMultiLineText(props.text.split(/\s+/), new TextLayout(props).fontPropsSVG, {
+			overflow: 1.05,
+		}).length;
 	}
 
 	constructor(props: TextProps) {
@@ -58,6 +66,17 @@ export class TextLayout {
 			if (!props.letterSpacing) {
 				this.letterSpacing = 0;
 			}
+		});
+	}
+
+	get lines(): string[] {
+		const tokens = Array.isArray(this.text) ? this.text : this.text.split(/\s+/);
+		return getSVGMultiLineText(tokens, this.fontPropsSVG, {
+			overflow: 1.05,
+			maxLines: this.maxLines,
+			separator: this.separator,
+			linePrefix: this.linePrefix,
+			lineSuffix: this.lineSuffix,
 		});
 	}
 
@@ -130,14 +149,13 @@ export class TextLayout {
 	}
 }
 
-export const TextPDF = (doc: jsPDF, props: TextProps & {text: string}) => {
+export const TextPDF = (doc: jsPDF, props: TextProps) => {
 	const layout = new TextLayout(props);
 	doc.setTextColor(props.color);
 	doc.setFont(props.font);
 	doc.setFontSize(props.fontSize);
-	const lines = doc.splitTextToSize(props.text, layout.width);
-	lines.forEach((line: string[], i: number) => {
-		const dy = layout.computeYOffset(i, lines.length);
+	layout.lines.forEach((line: string, i: number) => {
+		const dy = layout.computeYOffset(i, layout.lines.length);
 		doc.text(line, layout.anchorX, layout.anchorYPDF + dy, {
 			align: props.align,
 			baseline: 'middle',
@@ -148,11 +166,10 @@ export const TextPDF = (doc: jsPDF, props: TextProps & {text: string}) => {
 
 export const TextSVG: React.FC<TextProps> = (props: TextProps) => {
 	const layout = new TextLayout(props);
-	const lines = getSVGMultiLineText(props.text.split(/\s+/), layout.fontPropsSVG, 1.05, layout.maxLines);
 	return (
 		<text {...layout.fontPropsSVG}>
-			{lines.map((line: string, i: number) => {
-				const dy = layout.computeYOffset(i, lines.length).toString();
+			{layout.lines.map((line: string, i: number) => {
+				const dy = layout.computeYOffset(i, layout.lines.length).toString();
 				return (
 					<tspan key={i} dy={dy} {...layout.fontPropsSVG}>
 						{line.split(/([0-9]+|\s)/).map((piece: string, ii: number) => {
