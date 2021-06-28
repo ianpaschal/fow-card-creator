@@ -21,15 +21,8 @@ function calculateWidths(tokens: string[], style: TextSVGProps, customCharacters
 		return dummyText.getComputedTextLength();
 	};
 
-	const tokensWithWidth = tokens.map((token: string) => {
-		return {
-			token,
-			width: getWidth(token),
-		};
-	});
-
 	const widths = {
-		tokens: tokensWithWidth,
+		tokens: tokens.map((token: string) => getWidth(token)),
 		space: getWidth(SPACE_CHAR),
 		separator: customCharacters.separator ? getWidth(customCharacters.separator) : 0,
 		linePrefix: customCharacters.linePrefix ? getWidth(customCharacters.linePrefix) : 0,
@@ -53,24 +46,24 @@ export const getMultiLineText = (tokens: string[], style: TextSVGProps, options?
 
 	const maxWidth = style.width * (options.overflow || 1);
 
-	// eslint-disable-next-line complexity
-	const tokenLines = widths.tokens.reduce((lines, { token, width }, i) => {
+	const tokenLines = widths.tokens.reduce((lines, tokenWidth, i) => {
+		const token = tokens[ i ];
 		const startNewLine = () => lines.push({
 			tokens: [...(options.linePrefix ? [options.linePrefix] : []), token],
-			totalWidth: (options.linePrefix ? widths.linePrefix + widths.space : 0) + width,
+			totalWidth: (options.linePrefix ? widths.linePrefix + widths.space : 0) + tokenWidth,
 		});
 		const currentLine = lines[ lines.length - 1 ];
 		if (!currentLine) {
 			startNewLine();
 		} else {
-			const nextWidth = (options.separator ? widths.separator + 2 * widths.space : widths.space) + width;
+			const nextWidth = (options.separator ? widths.separator + 2 * widths.space : widths.space) + tokenWidth;
 			if (currentLine.totalWidth + nextWidth <= maxWidth) {
 				// Add the next token if it (and its separator) will fit on the current line:
 				if (options.separator) {
 					currentLine.tokens.push(options.separator);
 				}
 				currentLine.tokens.push(token);
-				currentLine.totalWidth += width + nextWidth;
+				currentLine.totalWidth += nextWidth;
 			} else {
 				if (options.lineSuffix) {
 					currentLine.tokens.push(options.lineSuffix);
