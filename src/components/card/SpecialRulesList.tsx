@@ -15,6 +15,7 @@ export class SpecialRulesListLayout {
 	specialRules: UnitSpecialRuleName[];
 	unitType: UnitType;
 	isFormation: boolean;
+	passengers: number;
 
 	constructor(props: SpecialRulesListProps) {
 		Object.keys(props).forEach((key) => {
@@ -25,8 +26,16 @@ export class SpecialRulesListLayout {
 	get rulesProps(): TextProps {
 		const x = Settings.CARD_MARGINS + Settings.BLOCK_MARGIN + Settings.STAT_BLOCK_WIDTH;
 
-		let text = `${UnitTypes[ this.unitType ]} ${this.isFormation ? 'Formation' : 'Unit'} `.toUpperCase();
-		text += this.specialRules.map((ruleName) => UnitSpecialRuleNames[ ruleName ].toUpperCase()).join(' ');
+		const rulesList = [];
+		rulesList.push(`${UnitTypes[ this.unitType ]} ${this.isFormation ? 'Formation' : 'Unit'}`.toUpperCase());
+		if (this.passengers > 0) {
+			rulesList.push(
+				'Transport Attachment'.toUpperCase(),
+				`Passengers ${this.passengers}`.toUpperCase(),
+				'Unit Transport'.toUpperCase(),
+			);
+		}
+		const text = rulesList.concat(this.specialRules.map((ruleName) => UnitSpecialRuleNames[ ruleName ].toUpperCase())).join(' ');
 		return {
 			x,
 			y: Settings.CARD_MARGINS + this.headerBlockHeight + Settings.BLOCK_MARGIN,
@@ -48,6 +57,7 @@ const mapStateToProps = (state: RootState) => ({
 	isFormation: state.editor.unitCard.unit.isFormation,
 	specialRules: state.editor.unitCard.unit.specialRules,
 	headerBlockHeight: state.editor.unitCard.layout.headerBlock.height,
+	passengers: state.editor.unitCard.unit.passengers,
 });
 
 const connector = connect(mapStateToProps, null);
