@@ -3,7 +3,7 @@ import React from 'react';
 import { Constants } from '../../../Constants';
 import { FontWeights } from '../../../enums/FontNames';
 import { Area } from '../../../typing/Area';
-import { getSVGMultiLineText } from '../../../utils/getSVGMultiLineText';
+import { getMultiLineText } from '../../../utils/getMultiLineText';
 
 export interface TextProps extends Area {
 	color?: string;
@@ -52,7 +52,7 @@ export class TextLayout {
 	lineSuffix?: string;
 
 	static getLineCount(props: TextProps & {text: string}) {
-		return getSVGMultiLineText(props.text.split(/\s+/), new TextLayout(props).fontPropsSVG, {
+		return getMultiLineText(props.text.split(/\s+/), new TextLayout(props).fontPropsSVG, {
 			overflow: 1.05,
 		}).length;
 	}
@@ -71,7 +71,7 @@ export class TextLayout {
 
 	get lines(): string[] {
 		const tokens = Array.isArray(this.text) ? this.text : this.text.split(/\s+/);
-		return getSVGMultiLineText(tokens, this.fontPropsSVG, {
+		return getMultiLineText(tokens, this.fontPropsSVG, {
 			overflow: 1.05,
 			maxLines: this.maxLines,
 			separator: this.separator,

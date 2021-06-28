@@ -3,13 +3,13 @@ import { TextSVGProps } from '../components/card/generic/Text';
 export const SPACE_CHAR = '\u00A0';
 export const ELLIPSIS_CHAR = '\u2026';
 
-export interface MultiLineSVGTextCustomCharacters {
+export interface MultiLineTextCustomCharacters {
 	separator?: string;
 	linePrefix?: string;
 	lineSuffix?: string;
 }
 
-function calculateWidths(tokens: string[], style: TextSVGProps, customCharacters: MultiLineSVGTextCustomCharacters) {
+function calculateWidths(tokens: string[], style: TextSVGProps, customCharacters: MultiLineTextCustomCharacters) {
 	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	const dummyText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 	Object.assign(dummyText.style, style);
@@ -41,16 +41,12 @@ function calculateWidths(tokens: string[], style: TextSVGProps, customCharacters
 	return widths;
 }
 
-export interface wrapSVGTextStyle {
-	width: number;
-}
-
-export interface MultiLineSVGTextOptions extends MultiLineSVGTextCustomCharacters {
+export interface MultiLineTextOptions extends MultiLineTextCustomCharacters {
 	overflow?: number;
 	maxLines?: number;
 }
 
-export const getSVGMultiLineText = (tokens: string[], style: TextSVGProps, options?: MultiLineSVGTextOptions) => {
+export const getMultiLineText = (tokens: string[], style: TextSVGProps, options?: MultiLineTextOptions) => {
 	const widths = calculateWidths(tokens, style, {
 		...options,
 	});
