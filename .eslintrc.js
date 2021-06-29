@@ -54,7 +54,7 @@ module.exports = {
 		'no-undef':                  ['error'],
 		'no-unused-vars':            ['error', { 'vars': 'local', 'args': 'none', 'ignoreRestSiblings': false }],
 		'no-use-before-define':      ['off'],
-		'no-useless-constructor':    ['error'],
+		'no-useless-constructor':    ['off'],
 		'no-var':                    ['error'],
 		'object-curly-spacing':      ['error', 'always', { 'arraysInObjects': false }],
 		'one-var':                   ['error', 'never'],
@@ -76,6 +76,7 @@ module.exports = {
 		],
 		'@typescript-eslint/no-use-before-define': ['error'],
 		'@typescript-eslint/no-unused-vars': ['error', { 'vars': 'local', 'args': 'none', 'ignoreRestSiblings': false }],
+		'@typescript-eslint/no-useless-constructor': ['error'],
 		// 'unused-imports/no-unused-imports-ts': ['error'],
 	},
 	/* eslint-enable array-bracket-newline, array-element-newline */

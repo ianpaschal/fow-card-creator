@@ -6,64 +6,46 @@ import { Settings } from '../../Settings';
 import { pt } from '../../utils/convertDistance';
 import { TextPDF, TextProps, TextSVG } from './generic/Text';
 import { FramePDF, FrameProps, FrameSVG } from './generic/Frame';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { RootState, store } from '../../store';
 import { SoftStatBlockLayout } from './SoftStatBlock';
-import { ArmorRating } from '../../typing/ArmorRating';
-
-export type ArmorBlockProps = ConnectedProps<typeof connector>;
 
 export class ArmorBlockLayout {
-	armor: ArmorRating;
-	accentColor: string;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
 
-	constructor(props: ArmorBlockProps) {
-		Object.keys(props).forEach((key) => {
-			this[ key ] = props[ key ];
-		});
-	}
+	constructor(readonly props: ArmorBlockProps) {}
 
 	get frameProps(): FrameProps {
 		return {
-			x: this.x,
-			y: this.y,
-			width: this.width,
-			height: this.height,
-			radius: Settings.CORNER_RADIUS,
+			...this.props,
 			border: { top: Settings.STAT_BLOCK_HEADER_HEIGHT },
-			stroke: this.accentColor,
 			fill: '#FFFFFF',
 			fillOpacity: 0.5,
+			radius: Settings.CORNER_RADIUS,
+			stroke: this.props.accentColor,
 		};
 	}
 
 	get headerProps(): TextProps {
 		return {
-			x: this.x,
-			y: this.y,
-			width: this.width,
-			height: SoftStatBlockLayout.headerHeight,
-			text: 'ARMOUR',
-			fontSize: Settings.STAT_HEADER_FONT_SIZE,
+			...this.props,
+			align: 'center',
 			color: '#FFFFFF',
 			font: 'OpenSans-Bold',
-			align: 'center',
+			fontSize: Settings.STAT_HEADER_FONT_SIZE,
+			height: SoftStatBlockLayout.headerHeight,
+			text: 'ARMOUR',
 		};
 	}
 
 	computeRatingNameArea(i: number): RoundedRectangleProps {
 		const offsetPerRating = Settings.STROKE_WIDTH + Settings.ARMOR_RATING_TANK_HEIGHT;
 		return {
-			x: this.x + Settings.STAT_BLOCK_INNER_MARGIN,
-			y: this.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (i * offsetPerRating),
-			width: pt(17, 'mm'),
+			fill: this.props.accentColor,
 			height: Settings.ARMOR_RATING_TANK_HEIGHT,
 			radius: Settings.CORNER_RADIUS - Settings.STAT_BLOCK_INNER_MARGIN,
-			fill: this.accentColor,
+			width: pt(17, 'mm'),
+			x: this.props.x + Settings.STAT_BLOCK_INNER_MARGIN,
+			y: this.props.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (i * offsetPerRating),
 		};
 	}
 
@@ -75,46 +57,47 @@ export class ArmorBlockLayout {
 			top: 'TOP',
 		};
 		return {
-			x: this.x + pt(1, 'mm'),
-			y: this.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (i * offsetPerRating),
-			width: pt(10, 'mm'),
-			height: Settings.ARMOR_RATING_TANK_HEIGHT,
+			align: 'left',
 			color: '#FFFFFF',
 			font: 'OpenSans-SemiBold',
 			fontSize: 7,
-			text: keyToLabelMappings[ key ],
-			align: 'left',
+			height: Settings.ARMOR_RATING_TANK_HEIGHT,
 			lineHeight: pt(2, 'mm'),
+			text: keyToLabelMappings[ key ],
+			width: pt(10, 'mm'),
+			x: this.props.x + pt(1, 'mm'),
+			y: this.props.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (i * offsetPerRating),
 		};
 	}
 
 	getRatingValueProps(key: string, i: number): TextProps {
 		const offsetPerRating = Settings.STROKE_WIDTH + Settings.ARMOR_RATING_TANK_HEIGHT;
 		return {
-			x: this.x + pt(18.5, 'mm'),
-			y: this.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (i * offsetPerRating),
-			width: pt(3, 'mm'),
-			height: Settings.ARMOR_RATING_TANK_HEIGHT,
+			align: 'center',
 			color: '#000000',
 			font: 'OpenSans-Bold',
 			fontSize: 12,
-			text: this.armor[ key ].toString(),
-			align: 'center',
+			height: Settings.ARMOR_RATING_TANK_HEIGHT,
+			text: this.props.armor[ key ].toString(),
+			width: pt(3, 'mm'),
+			x: this.props.x + pt(18.5, 'mm'),
+			y: this.props.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (i * offsetPerRating),
 		};
 	}
 }
 
-// React
-const connector = connect((state: RootState) => ({
-	armor: state.editor.unitCard.unit.armor,
+const mapStateToProps = (state: RootState) => ({
 	accentColor: state.editor.unitCard.unit.accentColor,
-	isComponent: state.editor.unitCard.unit.isComponent,
+	armor: state.editor.unitCard.unit.armor,
+	height: state.editor.unitCard.layout.armorBlock.height,
+	width: state.editor.unitCard.layout.armorBlock.width,
 	x: state.editor.unitCard.layout.armorBlock.x,
 	y: state.editor.unitCard.layout.armorBlock.y,
-	width: state.editor.unitCard.layout.armorBlock.width,
-	height: state.editor.unitCard.layout.armorBlock.height,
-}), null);
+});
 
+export type ArmorBlockProps = ReturnType<typeof mapStateToProps>;
+
+// React
 export const ArmorBlockSVG: React.FC<ArmorBlockProps> = (props: ArmorBlockProps) => {
 	if (!props.armor) {
 		return null;
@@ -135,7 +118,7 @@ export const ArmorBlockSVG: React.FC<ArmorBlockProps> = (props: ArmorBlockProps)
 	);
 };
 
-export const ConnectedArmorBlockSVG = connector(ArmorBlockSVG);
+export const ConnectedArmorBlockSVG = connect(mapStateToProps, null)(ArmorBlockSVG);
 
 // jsPDF
 export const ArmorBlockPDF = (doc: jsPDF, props: ArmorBlockProps) => {
@@ -152,12 +135,6 @@ export const ArmorBlockPDF = (doc: jsPDF, props: ArmorBlockProps) => {
 	});
 };
 
-export const ConnectedArmorBlockPDF = (doc: jsPDF) => ArmorBlockPDF(doc, {
-	armor: store.getState().editor.unitCard.unit.armor,
-	accentColor: store.getState().editor.unitCard.unit.accentColor,
-	isComponent: store.getState().editor.unitCard.unit.isComponent,
-	x: store.getState().editor.unitCard.layout.armorBlock.x,
-	y: store.getState().editor.unitCard.layout.armorBlock.y,
-	width: store.getState().editor.unitCard.layout.armorBlock.width,
-	height: store.getState().editor.unitCard.layout.armorBlock.height,
-});
+export const ConnectedArmorBlockPDF = (doc: jsPDF) => (
+	ArmorBlockPDF(doc, mapStateToProps(store.getState()))
+);
