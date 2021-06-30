@@ -11,15 +11,20 @@ import {
 	SoftStatBaseRatingProps,
 	SoftStatBaseRatingSVG,
 } from './SoftStatBaseRating';
-import { SoftStatModifierPDF, SoftStatModifierProps, SoftStatModifierSVG } from './SoftStatModifier';
+import {
+	SoftStatModifierPDF,
+	SoftStatModifierProps,
+	SoftStatModifierSVG,
+} from './SoftStatModifier';
 
+// Generic
 export interface SoftStatBlockProps {
+	accentColor: string;
 	attribute: string;
+	isComponent: boolean;
 	stat: SoftStat;
 	x: number;
 	y: number;
-	accentColor: string;
-	isComponent: boolean;
 }
 
 export class SoftStatBlockLayout {
@@ -38,37 +43,15 @@ export class SoftStatBlockLayout {
 		return height;
 	}
 
-	static calcModifierY(i: number, yStart = 0): number {
-		let y = 0;
-		y += yStart;
-		y += SoftStatBlockLayout.headerHeight;
-		y += Settings.STROKE_WIDTH;
-		y += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		y += Settings.STROKE_WIDTH;
-		y += i * (Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT + Settings.STROKE_WIDTH);
-		return y;
-	};
-
-	attribute: string;
-	stat: SoftStat;
-	x: number;
-	y: number;
-	width: number = Settings.STAT_BLOCK_WIDTH;
-	accentColor: string;
-	isComponent: boolean;
-
-	constructor(props: SoftStatBlockProps) {
-		Object.keys(props).forEach((key) => {
-			this[ key ] = props[ key ];
-		});
-	}
+	constructor(readonly props: SoftStatBlockProps) {}
 
 	get height(): number {
 		let height = 0;
 		height += SoftStatBlockLayout.headerHeight;
 		height += Settings.STROKE_WIDTH;
 		height += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		height += (Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT) * this.stat.modifiers.length;
+		// eslint-disable-next-line max-len
+		height += (Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT) * this.props.stat.modifiers.length;
 		height += Settings.STROKE_WIDTH; // Bottom space
 		height += Settings.STROKE_WIDTH; // Bottom border
 		return height;
@@ -76,15 +59,15 @@ export class SoftStatBlockLayout {
 
 	get frameProps(): FrameProps {
 		return {
-			x: this.x,
-			y: this.y,
-			width: this.width,
+			x: this.props.x,
+			y: this.props.y,
+			width: Settings.STAT_BLOCK_WIDTH,
 			height: this.height,
 			radius: Settings.CORNER_RADIUS,
 			border: {
 				top: SoftStatBlockLayout.headerHeight,
 			},
-			stroke: this.accentColor,
+			stroke: this.props.accentColor,
 			fill: '#FFFFFF',
 			fillOpacity: 0.5,
 		};
@@ -92,11 +75,11 @@ export class SoftStatBlockLayout {
 
 	get headerProps(): TextProps {
 		return {
-			x: this.x,
-			y: this.y,
-			width: this.width,
+			x: this.props.x,
+			y: this.props.y,
+			width: Settings.STAT_BLOCK_WIDTH,
 			height: SoftStatBlockLayout.headerHeight,
-			text: this.attribute === 'hitOn' ? 'IS HIT ON' : this.attribute.toUpperCase(),
+			text: this.props.attribute === 'hitOn' ? 'IS HIT ON' : this.props.attribute.toUpperCase(),
 			fontSize: Settings.STAT_HEADER_FONT_SIZE,
 			color: '#FFFFFF',
 			font: 'OpenSans-Bold',
@@ -106,27 +89,34 @@ export class SoftStatBlockLayout {
 	}
 
 	get softStatBaseRatingProps(): SoftStatBaseRatingProps {
-		const ratingEnum = SoftStatBaseRatingLayout.getRatingEnum(this.attribute);
-		const numberEnum = SoftStatBaseRatingLayout.getNumberEnum(this.attribute);
-		const baseRating = this.stat.baseRating;
+		const ratingEnum = SoftStatBaseRatingLayout.getRatingEnum(this.props.attribute);
+		const numberEnum = SoftStatBaseRatingLayout.getNumberEnum(this.props.attribute);
+		const baseRating = this.props.stat.baseRating;
 
 		return {
-			x: this.x + pt(0.5, 'mm'),
-			y: this.y + SoftStatBlockLayout.headerHeight + Settings.STROKE_WIDTH,
-			label: !this.isComponent ? `${ratingEnum[ baseRating ]}`.toUpperCase() : 'AS PER UNIT',
-			value: !this.isComponent && numberEnum[ baseRating ],
+			x: this.props.x + pt(0.5, 'mm'),
+			y: this.props.y + SoftStatBlockLayout.headerHeight + Settings.STROKE_WIDTH,
+			label: !this.props.isComponent ? `${ratingEnum[ baseRating ]}`.toUpperCase() : 'AS PER UNIT',
+			value: !this.props.isComponent && numberEnum[ baseRating ],
 		};
 	}
 
 	getSoftStatModifierProps(i: number): SoftStatModifierProps {
+		let y = this.props.y;
+		y += SoftStatBlockLayout.headerHeight;
+		y += Settings.STROKE_WIDTH;
+		y += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
+		y += Settings.STROKE_WIDTH;
+		y += i * (Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT + Settings.STROKE_WIDTH);
 		return {
-			x: this.x + pt(0.5, 'mm'),
-			y: SoftStatBlockLayout.calcModifierY(i, this.y),
-			modifier: this.stat.modifiers[ i ],
+			x: this.props.x + pt(0.5, 'mm'),
+			y,
+			modifier: this.props.stat.modifiers[ i ],
 		};
 	}
 }
 
+// React
 export const SoftStatBlockSVG: React.FC<SoftStatBlockProps> = (props: SoftStatBlockProps) => {
 	const layout = new SoftStatBlockLayout(props);
 	return (
@@ -141,6 +131,7 @@ export const SoftStatBlockSVG: React.FC<SoftStatBlockProps> = (props: SoftStatBl
 	);
 };
 
+// jsPDF
 export const SoftStatBlockPDF = (doc: jsPDF, props: SoftStatBlockProps) => {
 	const layout = new SoftStatBlockLayout(props);
 	FramePDF(doc, layout.frameProps);

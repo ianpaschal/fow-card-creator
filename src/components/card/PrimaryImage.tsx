@@ -1,44 +1,40 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { ImageFormat } from '../../enums/ImageFormats';
+import { connect } from 'react-redux';
 import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
 import { Area } from '../../typing/Area';
-import { SoftStat } from '../../typing/SoftStat';
 import { pt } from '../../utils/convertDistance';
 
 const PRINT_DPI_FACTOR = 4.1666666667;
 
-export type PrimaryImageProps = ConnectedProps<typeof connector>;
+// Generic
+const mapStateToProps = (state: RootState) => ({
+	era: state.editor.unitCard.unit.motivation,
+	headerBlockHeight: state.editor.unitCard.layout.headerBlock.height,
+	primaryImageFormat: state.editor.unitCard.unit.primaryImageFormat,
+	primaryImageURL: state.editor.unitCard.unit.primaryImageURL,
+	url: state.editor.unitCard.unit.accentColor,
+});
+
+export type PrimaryImageProps = ReturnType<typeof mapStateToProps>;
 
 export class PrimaryImageLayout {
-	// Passed
-	era: SoftStat;
-	url: string;
-	headerBlockHeight: number;
-	primaryImageURL: string;
-	primaryImageFormat: ImageFormat;
-
-	constructor(props: PrimaryImageProps) {
-		Object.keys(props).forEach((key) => {
-			this[ key ] = props[ key ];
-		});
-	}
+	constructor(readonly props: PrimaryImageProps) {}
 
 	// Computed
 	get x(): number {
-		if (this.primaryImageFormat === 'LARGE') {
+		if (this.props.primaryImageFormat === 'LARGE') {
 			return pt(4, 'mm');
 		}
 		return Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH;
 	}
 
 	get y(): number {
-		if (this.primaryImageFormat === 'LARGE') {
-			return Settings.CARD_MARGINS + this.headerBlockHeight - pt(2.5, 'mm');
+		if (this.props.primaryImageFormat === 'LARGE') {
+			return Settings.CARD_MARGINS + this.props.headerBlockHeight - pt(2.5, 'mm');
 		}
-		return Settings.CARD_MARGINS + this.headerBlockHeight;
+		return Settings.CARD_MARGINS + this.props.headerBlockHeight;
 	}
 
 	get width(): number {
@@ -136,14 +132,7 @@ export class PrimaryImageLayout {
 	}
 }
 
-const connector = connect((state: RootState) => ({
-	era: state.editor.unitCard.unit.motivation,
-	url: state.editor.unitCard.unit.accentColor,
-	headerBlockHeight: state.editor.unitCard.layout.headerBlock.height,
-	primaryImageURL: state.editor.unitCard.unit.primaryImageURL,
-	primaryImageFormat: state.editor.unitCard.unit.primaryImageFormat,
-}), null);
-
+// React
 export class PrimaryImageSVG extends React.Component<PrimaryImageProps> {
 	render() {
 		const layout = new PrimaryImageLayout(this.props);
@@ -167,7 +156,7 @@ export class PrimaryImageSVG extends React.Component<PrimaryImageProps> {
 				<image
 					x={layout.x}
 					y={layout.y}
-					href={layout.primaryImageURL}
+					href={layout.props.primaryImageURL}
 					width={layout.width}
 					height={layout.height}
 					mask="url(#mask)"
@@ -178,17 +167,14 @@ export class PrimaryImageSVG extends React.Component<PrimaryImageProps> {
 	}
 };
 
-export const ConnectedPrimaryImageSVG = connector(PrimaryImageSVG);
+export const ConnectedPrimaryImageSVG = connect(mapStateToProps, null)(PrimaryImageSVG);
 
+// jsPDF
 export const PrimaryImagePDF = (doc: jsPDF, props: PrimaryImageProps, image: HTMLImageElement) => {
 	const layout = new PrimaryImageLayout(props);
 	doc.addImage(layout.maskPrimaryImage(image), 'PNG', layout.x, layout.y, layout.width, layout.height);
 };
 
-export const ConnectedPrimaryImagePDF = (doc: jsPDF, image: HTMLImageElement) => PrimaryImagePDF(doc, {
-	era: store.getState().editor.unitCard.unit.motivation,
-	url: store.getState().editor.unitCard.unit.accentColor,
-	headerBlockHeight: store.getState().editor.unitCard.layout.headerBlock.height,
-	primaryImageURL: store.getState().editor.unitCard.unit.primaryImageURL,
-	primaryImageFormat: store.getState().editor.unitCard.unit.primaryImageFormat,
-}, image);
+export const ConnectedPrimaryImagePDF = (doc: jsPDF, image: HTMLImageElement) => (
+	PrimaryImagePDF(doc, mapStateToProps(store.getState()), image)
+);

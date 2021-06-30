@@ -1,5 +1,7 @@
 import React from 'react';
 import jsPDF from 'jspdf';
+import { connect } from 'react-redux';
+import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { Nationality } from '../../enums/Nations';
 
@@ -20,10 +22,8 @@ import FlagPL from '../../../assets/images/flags/flag-pl.png';
 import FlagRO from '../../../assets/images/flags/flag-ro.png';
 import FlagSU from '../../../assets/images/flags/flag-su.png';
 import FlagUS from '../../../assets/images/flags/flag-us.png';
-import { Unit } from '../../typing/Unit';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../store';
 
+// Generic
 const flags: Record<Nationality, string> = {
 	'BE': FlagBE,
 	'BR': FlagBR,
@@ -42,17 +42,14 @@ const flags: Record<Nationality, string> = {
 	'US': FlagUS,
 };
 
-// Position props passed from parent
-export interface PositionProps {}
-
-// Unit props from Redux
-const connector = connect((state: RootState) => ({
-	nationality: state.editor.unitCard.unit.nationality,
+const mapStateToProps = (state: RootState) => ({
 	era: state.editor.unitCard.unit.era,
-}), null);
+	nationality: state.editor.unitCard.unit.nationality,
+});
 
-export type BackgroundProps = PositionProps & ConnectedProps<typeof connector>;
+export type BackgroundProps = ReturnType<typeof mapStateToProps>;
 
+// React
 export const BackgroundSVG: React.FC<BackgroundProps> = (props: BackgroundProps) => {
 	return (
 		<>
@@ -76,11 +73,14 @@ export const BackgroundSVG: React.FC<BackgroundProps> = (props: BackgroundProps)
 	);
 };
 
-export const ConnectedBackgroundSVG = connector(BackgroundSVG);
+export const ConnectedBackgroundSVG = connect(mapStateToProps, null)(BackgroundSVG);
 
-export const BackgroundPDF = (doc: jsPDF, unit: Unit) => {
-	if (unit.nationality && flags[ unit.nationality ]) {
-		doc.addImage(flags[ unit.nationality ], 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
+// jsPDF
+export const BackgroundPDF = (doc: jsPDF, props) => {
+	if (props.nationality && flags[ props.nationality ]) {
+		doc.addImage(flags[ props.nationality ], 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
 	}
-	doc.addImage(unit.era === 'LW' ? LWBackgroundPNG : MWBackgroundPNG, 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
+	doc.addImage(props.era === 'LW' ? LWBackgroundPNG : MWBackgroundPNG, 'PNG', pt(-3, 'mm'), pt(-3, 'mm'), pt(116, 'mm'), pt(86, 'mm'));
 };
+
+export const ConnectedBackgroundPDF = (doc: jsPDF) => BackgroundPDF(doc, mapStateToProps(store.getState()));

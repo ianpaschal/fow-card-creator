@@ -1,16 +1,31 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../store';
+import { connect } from 'react-redux';
+import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { Settings } from '../../Settings';
 import { TextLayout, TextPDF, TextProps, TextSVG } from './generic/Text';
-import { RoundedRectangleSVG, RoundedRectanglePDF, RoundedRectangleProps } from './generic/RoundedRectangle';
+import {
+	RoundedRectanglePDF,
+	RoundedRectangleProps,
+	RoundedRectangleSVG,
+} from './generic/RoundedRectangle';
 import { NationalInsigniaPDF, NationalInsigniaSVG } from './NationalInsignia';
 import HeaderOverlay from '../../../assets/images/unit-card-header-overlay.png';
 
-export type HeaderBlockProps = ConnectedProps<typeof connector>;
+// Generic
+const mapStateToProps = (state: RootState) => ({
+	subTitle: state.editor.unitCard.unit.subTitle,
+	title: state.editor.unitCard.unit.title,
+	subTitleAboveTitle: state.editor.unitCard.unit.subTitleAboveTitle,
+	accentColor: state.editor.unitCard.unit.accentColor,
+	nationality: state.editor.unitCard.unit.nationality,
+	era: state.editor.unitCard.unit.era,
+});
 
+export type HeaderBlockProps = ReturnType<typeof mapStateToProps>;
+
+// TODO: Refactor constructor and props
 export class HeaderBlockLayout {
 	static x: number = Settings.CARD_MARGINS;
 	static y: number = Settings.CARD_MARGINS + pt(0.05, 'mm');
@@ -139,15 +154,7 @@ export class HeaderBlockLayout {
 	}
 }
 
-const connector = connect((state: RootState) => ({
-	subTitle: state.editor.unitCard.unit.subTitle,
-	title: state.editor.unitCard.unit.title,
-	subTitleAboveTitle: state.editor.unitCard.unit.subTitleAboveTitle,
-	accentColor: state.editor.unitCard.unit.accentColor,
-	nationality: state.editor.unitCard.unit.nationality,
-	era: state.editor.unitCard.unit.era,
-}), null);
-
+// React
 export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockProps) => {
 	const layout = new HeaderBlockLayout(props);
 	return (
@@ -182,7 +189,7 @@ export const HeaderBlockSVG: React.FC<HeaderBlockProps> = (props: HeaderBlockPro
 	);
 };
 
-export const ConnectedHeaderBlockSVG = connector(HeaderBlockSVG);
+export const ConnectedHeaderBlockSVG = connect(mapStateToProps, null)(HeaderBlockSVG);
 
 // jsPDF
 export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
@@ -219,3 +226,5 @@ export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
 		y: pt(5.025, 'mm'),
 	});
 };
+
+export const ConnectedHeaderBlockPDF = (doc: jsPDF) => HeaderBlockPDF(doc, mapStateToProps(store.getState()));

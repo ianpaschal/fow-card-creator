@@ -6,7 +6,11 @@ import { Settings } from '../../Settings';
 import { SoftStatModifier } from '../../typing/SoftStatModifier';
 import { pt } from '../../utils/convertDistance';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
-import { RoundedRectanglePDF, RoundedRectangleProps, RoundedRectangleSVG } from './generic/RoundedRectangle';
+import {
+	RoundedRectanglePDF,
+	RoundedRectangleProps,
+	RoundedRectangleSVG,
+} from './generic/RoundedRectangle';
 import { TextPDF, TextProps, TextSVG } from './generic/Text';
 
 export interface SoftStatModifierProps {
@@ -16,37 +20,28 @@ export interface SoftStatModifierProps {
 }
 
 export class SoftStatModifierLayout {
-	// Passed:
-	modifier: SoftStatModifier;
-	x: number;
-	y: number;
+	static width: number = Settings.STAT_BLOCK_WIDTH - pt(1, 'mm');
+	static height: number = Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT;
+	static radius: number = pt(0.5, 'mm');
+	static ratingWidth: number = pt(4, 'mm');
+	static color: string = '#000000';
 
-	// Static:
-	width: number = Settings.STAT_BLOCK_WIDTH - pt(1, 'mm');
-	height: number = Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT;
-	radius: number = pt(0.5, 'mm');
-	ratingWidth: number = pt(4, 'mm');
-	color: string = '#000000';
-
-	constructor(props: SoftStatModifierProps) {
-		Object.keys(props).forEach((key) => {
-			this[ key ] = props[ key ];
-		});
-	}
+	constructor(readonly props: SoftStatModifierProps) {}
 
 	get attributeName(): string {
-		if (Object.keys(MotivationAttributes).includes(this.modifier.attribute)) {
-			return MotivationAttributes[ this.modifier.attribute ];
+		if (Object.keys(MotivationAttributes).includes(this.props.modifier.attribute)) {
+			return MotivationAttributes[ this.props.modifier.attribute ];
 		}
-		if (Object.keys(SkillAttributes).includes(this.modifier.attribute)) {
-			return SkillAttributes[ this.modifier.attribute ];
+		if (Object.keys(SkillAttributes).includes(this.props.modifier.attribute)) {
+			return SkillAttributes[ this.props.modifier.attribute ];
 		}
 		return 'Unknown Attribute';
 	}
 
 	get baseProps(): RoundedRectangleProps {
 		return {
-			...this,
+			...this.props,
+			...SoftStatModifierLayout,
 			fill: Settings.SOFT_STAT_SECONDARY_RATING_BACKGROUND_COLOR,
 		};
 	}
@@ -54,47 +49,47 @@ export class SoftStatModifierLayout {
 	get nameProps(): TextProps {
 		return {
 			align: 'center',
-			color: this.color,
+			color: SoftStatModifierLayout.color,
 			font: 'PTSans-Regular-Italic',
 			fontSize: Settings.SOFT_STAT_SECONDARY_RATING_NAME_FONT_SIZE,
 			height: pt(2.4, 'mm'),
 			lineHeight: pt(2.4, 'mm'),
 			maxLines: 1,
-			text: this.modifier.name || 'No-Name',
-			width: this.width - (this.ratingWidth + pt(2, 'mm')),
-			x: this.x + pt(1, 'mm'),
-			y: this.y,
+			text: this.props.modifier.name || 'No-Name',
+			width: SoftStatModifierLayout.width - (SoftStatModifierLayout.ratingWidth + pt(2, 'mm')),
+			x: this.props.x + pt(1, 'mm'),
+			y: this.props.y,
 		};
 	}
 
 	get attributeProps(): TextProps {
 		return {
 			align: 'center',
-			color: this.color,
+			color: SoftStatModifierLayout.color,
 			font: 'PTSans-Bold-Italic',
 			fontSize: Settings.SOFT_STAT_SECONDARY_RATING_ATTRIBUTE_FONT_SIZE,
 			height: pt(1, 'mm'),
 			lineHeight: pt(1, 'mm'),
 			maxLines: 1,
 			text: this.attributeName,
-			width: this.width - (this.ratingWidth + pt(2, 'mm')),
-			x: this.x + pt(1, 'mm'),
-			y: this.y + pt(2.5, 'mm'),
+			width: SoftStatModifierLayout.width - (SoftStatModifierLayout.ratingWidth + pt(2, 'mm')),
+			x: this.props.x + pt(1, 'mm'),
+			y: this.props.y + pt(2.5, 'mm'),
 		};
 	}
 
 	get ratingProps(): TextProps {
 		return {
 			align: 'center',
-			color: this.color,
+			color: SoftStatModifierLayout.color,
 			font: 'OpenSans-Bold',
 			fontSize: Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE,
-			height: this.height,
-			lineHeight: this.height,
-			text: formatDiceRoll(this.modifier.value, false),
-			width: this.ratingWidth,
-			x: this.x + this.width - this.ratingWidth,
-			y: this.y,
+			height: SoftStatModifierLayout.height,
+			lineHeight: SoftStatModifierLayout.height,
+			text: formatDiceRoll(this.props.modifier.value, false),
+			width: SoftStatModifierLayout.ratingWidth,
+			x: this.props.x + SoftStatModifierLayout.width - SoftStatModifierLayout.ratingWidth,
+			y: this.props.y,
 		};
 	}
 }

@@ -1,6 +1,10 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { RoundedRectanglePDF, RoundedRectangleProps, RoundedRectangleSVG } from './generic/RoundedRectangle';
+import {
+	RoundedRectanglePDF,
+	RoundedRectangleProps,
+	RoundedRectangleSVG,
+} from './generic/RoundedRectangle';
 import { ArmorAttributeKeys } from '../../enums/ArmorAttributes';
 import { Settings } from '../../Settings';
 import { pt } from '../../utils/convertDistance';
@@ -10,8 +14,19 @@ import { connect } from 'react-redux';
 import { RootState, store } from '../../store';
 import { SoftStatBlockLayout } from './SoftStatBlock';
 
-export class ArmorBlockLayout {
+// Generic
+const mapStateToProps = (state: RootState) => ({
+	accentColor: state.editor.unitCard.unit.accentColor,
+	armor: state.editor.unitCard.unit.armor,
+	height: state.editor.unitCard.layout.armorBlock.height,
+	width: state.editor.unitCard.layout.armorBlock.width,
+	x: state.editor.unitCard.layout.armorBlock.x,
+	y: state.editor.unitCard.layout.armorBlock.y,
+});
 
+export type ArmorBlockProps = ReturnType<typeof mapStateToProps>;
+
+export class ArmorBlockLayout {
 	constructor(readonly props: ArmorBlockProps) {}
 
 	get frameProps(): FrameProps {
@@ -86,17 +101,6 @@ export class ArmorBlockLayout {
 	}
 }
 
-const mapStateToProps = (state: RootState) => ({
-	accentColor: state.editor.unitCard.unit.accentColor,
-	armor: state.editor.unitCard.unit.armor,
-	height: state.editor.unitCard.layout.armorBlock.height,
-	width: state.editor.unitCard.layout.armorBlock.width,
-	x: state.editor.unitCard.layout.armorBlock.x,
-	y: state.editor.unitCard.layout.armorBlock.y,
-});
-
-export type ArmorBlockProps = ReturnType<typeof mapStateToProps>;
-
 // React
 export const ArmorBlockSVG: React.FC<ArmorBlockProps> = (props: ArmorBlockProps) => {
 	if (!props.armor) {
@@ -135,6 +139,4 @@ export const ArmorBlockPDF = (doc: jsPDF, props: ArmorBlockProps) => {
 	});
 };
 
-export const ConnectedArmorBlockPDF = (doc: jsPDF) => (
-	ArmorBlockPDF(doc, mapStateToProps(store.getState()))
-);
+export const ConnectedArmorBlockPDF = (doc: jsPDF) => ArmorBlockPDF(doc, mapStateToProps(store.getState()));

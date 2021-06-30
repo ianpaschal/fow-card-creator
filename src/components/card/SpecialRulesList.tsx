@@ -4,43 +4,43 @@ import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { TextPDF, TextProps, TextSVG } from './generic/Text';
-import { connect, ConnectedProps } from 'react-redux';
-import { UnitSpecialRuleName, UnitSpecialRuleNames } from '../../enums/UnitSpecialRuleNames';
-import { UnitType, UnitTypes } from '../../enums/UnitTypes';
+import { connect } from 'react-redux';
+import { UnitSpecialRuleNames } from '../../enums/UnitSpecialRuleNames';
+import { UnitTypes } from '../../enums/UnitTypes';
 
-export type SpecialRulesListProps = ConnectedProps<typeof connector>;
+// Generic
+const mapStateToProps = (state: RootState) => ({
+	headerBlockHeight: state.editor.unitCard.layout.headerBlock.height,
+	isFormation: state.editor.unitCard.unit.isFormation,
+	passengers: state.editor.unitCard.unit.passengers,
+	specialRules: state.editor.unitCard.unit.specialRules,
+	unitType: state.editor.unitCard.unit.unitType,
+});
+
+export type SpecialRulesListProps = ReturnType<typeof mapStateToProps>;
 
 export class SpecialRulesListLayout {
-	headerBlockHeight: number;
-	specialRules: UnitSpecialRuleName[];
-	unitType: UnitType;
-	isFormation: boolean;
-	passengers: number;
-
-	constructor(props: SpecialRulesListProps) {
-		Object.keys(props).forEach((key) => {
-			this[ key ] = props[ key ];
-		});
-	}
+	constructor(readonly props: SpecialRulesListProps) {}
 
 	get rulesProps(): TextProps {
 		const x = Settings.CARD_MARGINS + Settings.BLOCK_MARGIN + Settings.STAT_BLOCK_WIDTH;
 		const bullet = '\u2022';
 		const rulesList = [];
-		rulesList.push(`${UnitTypes[ this.unitType ]} ${this.isFormation ? 'Formation' : 'Unit'}`.toUpperCase());
-		if (this.passengers > 0) {
+		rulesList.push(`${UnitTypes[ this.props.unitType ]} ${this.props.isFormation ? 'Formation' : 'Unit'}`.toUpperCase());
+		if (this.props.passengers > 0) {
 			rulesList.push(
 				'Transport Attachment'.toUpperCase(),
-				`Passengers ${this.passengers}`.toUpperCase(),
+				`Passengers ${this.props.passengers}`.toUpperCase(),
 				'Unit Transport'.toUpperCase(),
 			);
 		}
 		return {
 			x,
-			y: Settings.CARD_MARGINS + this.headerBlockHeight + Settings.BLOCK_MARGIN,
+			y: Settings.CARD_MARGINS + this.props.headerBlockHeight + Settings.BLOCK_MARGIN,
 			width: Settings.CARD_WIDTH - 2 * x,
 			height: pt(20, 'mm'),
-			text: rulesList.concat(this.specialRules.map((ruleName) => UnitSpecialRuleNames[ ruleName ].toUpperCase())),
+			// eslint-disable-next-line max-len
+			text: rulesList.concat(this.props.specialRules.map((ruleName) => UnitSpecialRuleNames[ ruleName ].toUpperCase())),
 			fontSize: 5.7,
 			color: '#000000',
 			font: 'OpenSans-Bold',
@@ -54,16 +54,7 @@ export class SpecialRulesListLayout {
 	}
 }
 
-const mapStateToProps = (state: RootState) => ({
-	unitType: state.editor.unitCard.unit.unitType,
-	isFormation: state.editor.unitCard.unit.isFormation,
-	specialRules: state.editor.unitCard.unit.specialRules,
-	headerBlockHeight: state.editor.unitCard.layout.headerBlock.height,
-	passengers: state.editor.unitCard.unit.passengers,
-});
-
-const connector = connect(mapStateToProps, null);
-
+// React
 export const SpecialRulesListSVG: React.FC<SpecialRulesListProps> = (props: SpecialRulesListProps) => {
 	const layout = new SpecialRulesListLayout(props);
 	return (
@@ -71,8 +62,9 @@ export const SpecialRulesListSVG: React.FC<SpecialRulesListProps> = (props: Spec
 	);
 };
 
-export const ConnectedSpecialRulesListSVG = connector(SpecialRulesListSVG);
+export const ConnectedSpecialRulesListSVG = connect(mapStateToProps, null)(SpecialRulesListSVG);
 
+// jsPDF
 export const SpecialRulesListPDF = (doc: jsPDF, props: SpecialRulesListProps) => {
 	const layout = new SpecialRulesListLayout(props);
 	TextPDF(doc, layout.rulesProps);

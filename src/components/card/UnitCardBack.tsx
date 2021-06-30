@@ -2,8 +2,8 @@ import jsPDF from 'jspdf';
 import React from 'react';
 import { Unit } from '../../typing/Unit';
 import { Settings } from '../../Settings';
-import { ConnectedHeaderBlockSVG, HeaderBlockPDF } from './HeaderBlock';
-import { BackgroundPDF, ConnectedBackgroundSVG } from './Background';
+import { ConnectedBackgroundSVG, ConnectedBackgroundPDF } from './Background';
+import { ConnectedHeaderBlockSVG, ConnectedHeaderBlockPDF } from './HeaderBlock';
 
 export const UnitCardBackSVG: React.FC = () => {
 	return (
@@ -24,6 +24,6 @@ export const UnitCardBackSVG: React.FC = () => {
 };
 
 export const UnitCardBackPDF = (doc: jsPDF, unit: Unit): void => {
-	BackgroundPDF(doc, unit);
-	HeaderBlockPDF(doc, unit);
+	ConnectedBackgroundPDF(doc);
+	ConnectedHeaderBlockPDF(doc);
 };

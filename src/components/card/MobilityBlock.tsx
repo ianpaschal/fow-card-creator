@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
@@ -9,37 +9,40 @@ import { formatDistance } from '../../utils/formatDistance';
 import { FrameProps } from './generic/Frame';
 import { TablePDF, TableProps, TableSVG } from './generic/Table';
 
+// Generic
+const mapStateToProps = (state: RootState) => ({
+	accentColor: state.editor.unitCard.unit.accentColor,
+	height: state.editor.unitCard.layout.mobilityBlock.height,
+	mobility: state.editor.unitCard.unit.mobility,
+	width: state.editor.unitCard.layout.mobilityBlock.width,
+	x: state.editor.unitCard.layout.mobilityBlock.x,
+	y: state.editor.unitCard.layout.mobilityBlock.y,
+});
+
+export type MobilityBlockProps = ReturnType<typeof mapStateToProps>;
+
 export class MobilityBlockLayout {
-	// Passed
-	mobility: {[key: string]: any};
-	accentColor: string;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
+	static headerHeight: number = pt(2.9, 'mm');
 
-	// Static:
-	headerHeight: number = pt(2.9, 'mm');
-
-	constructor(props: MobilityBlockProps) {
+	constructor(readonly props: MobilityBlockProps) {
 		Object.keys(props).forEach((key) => {
 			this[ key ] = props[ key ];
 		});
 	}
 
 	get rowHeight(): number {
-		return this.height - (this.headerHeight + Settings.STROKE_WIDTH);
+		return this.props.height - (MobilityBlockLayout.headerHeight + Settings.STROKE_WIDTH);
 	}
 
 	get frameProps(): FrameProps {
 		return {
-			x: this.x,
-			y: this.y,
-			width: this.width,
-			border: { top: this.headerHeight },
+			x: this.props.x,
+			y: this.props.y,
+			width: this.props.width,
+			border: { top: MobilityBlockLayout.headerHeight },
 			radius: Settings.CORNER_RADIUS,
-			height: this.height,
-			stroke: this.accentColor,
+			height: this.props.height,
+			stroke: this.props.accentColor,
 			fill: '#FFFFFF',
 		};
 	}
@@ -50,7 +53,7 @@ export class MobilityBlockLayout {
 			color: '#FFFFFF',
 			font: 'OpenSans-Bold',
 			fontSize: 4.5,
-			height: this.headerHeight,
+			height: MobilityBlockLayout.headerHeight,
 		};
 		const recordStyle = {
 			align: 'center',
@@ -112,36 +115,25 @@ export class MobilityBlockLayout {
 		return {
 			...this,
 			columns: this.tableColumns,
-			data: [this.mobility],
+			data: [this.props.mobility],
 			rowHeight: this.rowHeight,
-			headerHeight: this.headerHeight,
+			headerHeight: MobilityBlockLayout.headerHeight,
 			radius: Settings.CORNER_RADIUS,
-			stroke: this.accentColor,
-			width: this.width,
-			x: this.x,
-			y: this.y,
+			stroke: this.props.accentColor,
+			width: this.props.width,
+			x: this.props.x,
+			y: this.props.y,
 		};
 	}
 }
 
-export type MobilityBlockProps = ConnectedProps<typeof connector>;
-
 // React
-const connector = connect((state: RootState) => ({
-	accentColor: state.editor.unitCard.unit.accentColor,
-	mobility: state.editor.unitCard.unit.mobility,
-	x: state.editor.unitCard.layout.mobilityBlock.x,
-	y: state.editor.unitCard.layout.mobilityBlock.y,
-	width: state.editor.unitCard.layout.mobilityBlock.width,
-	height: state.editor.unitCard.layout.mobilityBlock.height,
-}), null);
-
 export const MobilityBlockSVG: React.FC<MobilityBlockProps> = (props: MobilityBlockProps) => {
 	const layout = new MobilityBlockLayout(props);
 	return <TableSVG {...layout.tableProps} />;
 };
 
-export const ConnectedMobilityBlockSVG = connector(MobilityBlockSVG);
+export const ConnectedMobilityBlockSVG = connect(mapStateToProps, null)(MobilityBlockSVG);
 
 // jsPDF
 export const MobilityBlockPDF = (doc: jsPDF, props: MobilityBlockProps) => {
@@ -149,11 +141,4 @@ export const MobilityBlockPDF = (doc: jsPDF, props: MobilityBlockProps) => {
 	TablePDF(doc, layout.tableProps);
 };
 
-export const ConnectedMobilityBlockPDF = (doc: jsPDF) => MobilityBlockPDF(doc, {
-	mobility: store.getState().editor.unitCard.unit.mobility,
-	accentColor: store.getState().editor.unitCard.unit.accentColor,
-	x: store.getState().editor.unitCard.layout.mobilityBlock.x,
-	y: store.getState().editor.unitCard.layout.mobilityBlock.y,
-	width: store.getState().editor.unitCard.layout.mobilityBlock.width,
-	height: store.getState().editor.unitCard.layout.mobilityBlock.height,
-});
+export const ConnectedMobilityBlockPDF = (doc: jsPDF) => MobilityBlockPDF(doc, mapStateToProps(store.getState()));

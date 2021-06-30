@@ -2,8 +2,9 @@ import jsPDF from 'jspdf';
 import React from 'react';
 import { Unit } from '../../typing/Unit';
 import { Settings } from '../../Settings';
-import { BackgroundPDF, ConnectedBackgroundSVG } from './Background';
 import { ConnectedArmorBlockPDF, ConnectedArmorBlockSVG } from './ArmorBlock';
+import { ConnectedBackgroundPDF, ConnectedBackgroundSVG } from './Background';
+import { ConnectedHeaderBlockPDF, ConnectedHeaderBlockSVG } from './HeaderBlock';
 import { ConnectedHitOnBlockPDF, ConnectedHitOnBlockSVG } from './HitOnBlock';
 import { ConnectedMobilityBlockPDF, ConnectedMobilityBlockSVG } from './MobilityBlock';
 import { ConnectedMotivationBlockPDF, ConnectedMotivationBlockSVG } from './MotivationBlock';
@@ -12,7 +13,6 @@ import { ConnectedSaveBlockPDF, ConnectedSaveBlockSVG } from './SaveBlock';
 import { ConnectedSkillBlockPDF, ConnectedSkillBlockSVG } from './SkillBlock';
 import { ConnectedSpecialRulesListPDF, ConnectedSpecialRulesListSVG } from './SpecialRulesList';
 import { ConnectedWeaponsBlockPDF, ConnectedWeaponsBlockSVG } from './WeaponsBlock';
-import { HeaderBlockPDF, ConnectedHeaderBlockSVG } from './HeaderBlock';
 
 export const UnitCardFrontSVG: React.FC = () => {
 	return (
@@ -42,9 +42,9 @@ export const UnitCardFrontSVG: React.FC = () => {
 };
 
 export const UnitCardFrontPDF = (doc: jsPDF, unit: Unit, primaryImage: HTMLImageElement): void => {
-	BackgroundPDF(doc, unit);
+	ConnectedBackgroundPDF(doc);
 	ConnectedPrimaryImagePDF(doc, primaryImage);
-	HeaderBlockPDF(doc, unit);
+	ConnectedHeaderBlockPDF(doc);
 	ConnectedMotivationBlockPDF(doc);
 	ConnectedSkillBlockPDF(doc);
 	ConnectedSpecialRulesListPDF(doc);
