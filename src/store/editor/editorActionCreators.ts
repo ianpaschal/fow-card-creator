@@ -12,7 +12,7 @@ import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
 import { isHitOnRating, isMotivationRating, isSkillRating, SoftStatBaseRating } from '../../typing/SoftStat';
 import { UnitCard } from '../../typing/UnitCard';
-import { Weapon } from '../../typing/Weapon';
+import { Weapon, WeaponFiringData, WeaponFiringMode } from '../../typing/Weapon';
 import { actions } from './editorSlice';
 
 export const setUnitCardActionCreator = (unitCard: UnitCard) => (dispatch: Dispatch) => {
@@ -145,11 +145,6 @@ export function addWeaponActionCreator(weapon: Weapon) {
 		dispatch(actions.addWeapon({ weapon }));
 	};
 }
-export function addWeaponBombardmentActionCreator(index: number, bombardment: any) {
-	return (dispatch: Dispatch) => {
-		dispatch(actions.addWeaponBombardment({ index, bombardment }));
-	};
-}
 
 export function updateWeaponNameActionCreator(index: number, name: string) {
 	return (dispatch: Dispatch) => {
@@ -157,21 +152,15 @@ export function updateWeaponNameActionCreator(index: number, name: string) {
 	};
 }
 
-export function updateWeaponActionCreator(index: number, mode: 'direct' | 'bombardment', attribute: string, value: any) {
+export function updateWeaponActionCreator(index: number, mode: WeaponFiringMode, data: WeaponFiringData) {
 	return (dispatch: Dispatch) => {
-		dispatch(actions.updateWeapon({ index, mode, attribute, value }));
+		dispatch(actions.updateWeapon({ index, mode, data }));
 	};
 }
 
 export function removeWeaponActionCreator(index: number) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.removeWeapon({ index }));
-	};
-}
-
-export function removeWeaponBombardmentActionCreator(index: number) {
-	return (dispatch: Dispatch) => {
-		dispatch(actions.removeWeaponBombardment({ index }));
 	};
 }
 

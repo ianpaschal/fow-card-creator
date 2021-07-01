@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Settings } from '../../Settings';
 import { RootState, store } from '../../store';
+import { Weapon } from '../../typing/Weapon';
 import { pt } from '../../utils/convertDistance';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
 import { formatDistance } from '../../utils/formatDistance';
@@ -181,23 +182,26 @@ export class WeaponsBlockLayout {
 
 	get tableData(): any {
 		const data = [];
-		this.props.weapons.forEach((weapon) => {
+		// eslint-disable-next-line complexity
+		this.props.weapons.forEach((weapon: Weapon) => {
+			const name = weapon.name.length > 0 ? weapon.name : 'No-Name';
 			if (weapon.bombardment) {
 				data.push({
-					name: weapon.name.length > 0 ? weapon.name : 'No-Name',
+					name,
 					...weapon.bombardment,
 					rof: weapon.bombardment.template,
-
 				});
+			}
+			if (weapon.direct) {
 				data.push({
-					name: 'Or Direct Fire',
+					name: weapon.bombardment ? 'or Direct Fire' : name,
 					...weapon.direct,
 				});
-			} else {
+			}
+			if (weapon.secondary) {
 				data.push({
-					name: weapon.name.length > 0 ? weapon.name : 'No-Name',
-					...weapon.direct,
-					optional: false,
+					...weapon.secondary,
+					name: `or firing ${weapon.secondary?.name.length > 0 ? weapon.secondary.name : 'No-Name'}`,
 				});
 			}
 		});

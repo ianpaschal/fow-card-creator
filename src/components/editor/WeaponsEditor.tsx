@@ -5,21 +5,19 @@ import { RootState } from '../../store';
 import { EditorSubSection } from './EditorSubSection';
 import {
 	addWeaponActionCreator,
-	addWeaponBombardmentActionCreator,
 	removeWeaponActionCreator,
-	removeWeaponBombardmentActionCreator,
 	updateWeaponActionCreator,
 	updateWeaponNameActionCreator,
 } from '../../store/editor/editorActionCreators';
-import { defaultBombardment, defaultWeapon } from '../../store/editor/defaultWeapon';
+import { defaultBombardment, defaultDirectFire, defaultWeapon } from '../../store/editor/defaultWeapon';
 import { InputText } from 'primereact/inputtext';
 import { Checkbox } from 'primereact/checkbox';
-import { RadioButton } from 'primereact/radiobutton';
-import { InputNumber } from 'primereact/inputnumber';
 import { Button } from 'primereact/button';
 import { EditorSection } from './EditorSection';
 import { FormItem } from './FormItem';
 import './WeaponsEditor.scss';
+import { ConnectedWeaponDirectEditor } from './WeaponDirectEditor';
+import { ConnectedWeaponBombardmentEditor } from './WeaponBombardmentEditor';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -29,8 +27,6 @@ const connector = connect(
 		addWeapon: addWeaponActionCreator,
 		updateWeapon: updateWeaponActionCreator,
 		removeWeapon: removeWeaponActionCreator,
-		addWeaponBombardment: addWeaponBombardmentActionCreator,
-		removeWeaponBombardment: removeWeaponBombardmentActionCreator,
 		updateWeaponName: updateWeaponNameActionCreator,
 	}, dispatch),
 );
@@ -49,8 +45,6 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 	addWeapon,
 	updateWeapon,
 	removeWeapon,
-	addWeaponBombardment,
-	removeWeaponBombardment,
 	updateWeaponName,
 }: WeaponsEditorProps) => (
 	<EditorSection className='weapons-editor' title="Weapons">
@@ -63,140 +57,42 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 						placeholder="Name"
 					/>
 				</FormItem>
+
+				<h3>Bombardment</h3>
 				<FormItem label="Can Bombard">
 					<Checkbox
 						checked={Boolean(weapon.bombardment)}
-						onChange={(e) => {
-							if (e.checked) {
-								addWeaponBombardment(i, defaultBombardment);
-							} else {
-								removeWeaponBombardment(i);
-							}
-						}}
+						onChange={(e) => updateWeapon(i, 'bombardment', e.checked ? defaultBombardment : null)}
 					/>
 				</FormItem>
 				{Boolean(weapon.bombardment) && (
-					<>
-						<h3>Bombardment</h3>
-						<FormItem label="Range">
-							<InputNumber
-								value={weapon.bombardment.range}
-								onChange={(e) => updateWeapon(i, 'bombardment', 'range', e.value)}
-								showButtons
-								step={2}
-								min={0}
-								max={96}
-							/>
-						</FormItem>
-						<FormItem label="Template">
-							<RadioButton
-								value="artillery"
-								name="bombardment-type"
-								onChange={(e) => updateWeapon(i, 'bombardment', 'template', e.value)}
-								checked={weapon.bombardment.template === 'artillery'}
-							/>
-							<label htmlFor="bombardment-type-artillery">Artillery</label>
-							<RadioButton
-								value="salvo"
-								name="bombardment-type"
-								onChange={(e) => updateWeapon(i, 'bombardment', 'template', e.value)}
-								checked={weapon.bombardment.template === 'salvo'}
-							/>
-							<label htmlFor="bombardment-type-salvo">Salvo</label>
-						</FormItem>
-						<FormItem label="Anti-Tank">
-							<InputNumber
-								value={weapon.bombardment.antiTank}
-								onValueChange={(e) => updateWeapon(i, 'bombardment', 'antiTank', e.value)}
-								showButtons
-								min={1}
-							/>
-						</FormItem>
-						<FormItem label="Firepower">
-							<InputNumber
-								value={weapon.bombardment.firePower}
-								onValueChange={(e) => updateWeapon(i, 'bombardment', 'firePower', e.value)}
-								showButtons
-								min={1}
-								max={6}
-							/>
-						</FormItem>
-						{/*
-						<label htmlFor="bombardment-special-rules">Special Rules</label>
-						<Select
-							options={availableSpecialRules}
-							isMulti
-							components={animatedComponents}
-							onChange={(selection: {
-								value: UnitSpecialRuleName,
-								label: string
-							}[]) => {
-								setSpecialRules(selection.map((s) => s.value));
-							}}
-						/>
-						*/}
-						<h3>Direct Fire</h3>
-					</>
+					<ConnectedWeaponBombardmentEditor i={i} weapon={weapon} />
 				)}
-				<FormItem label="Range">
-					<InputNumber
-						id="direct-range"
-						name="direct-range"
-						value={weapon.direct.range}
-						onChange={(e) => updateWeapon(i, 'direct', 'range', e.value)}
-						showButtons
-						step={2}
-						min={0}
-						max={96}
+
+				<h3>Direct Fire</h3>
+				<FormItem label="Can Direct Fire">
+					<Checkbox
+						checked={Boolean(weapon.direct)}
+						onChange={(e) => updateWeapon(i, 'direct', e.checked ? defaultDirectFire : null)}
 					/>
 				</FormItem>
-				<FormItem label="Halted ROF">
-					<InputNumber
-						value={weapon.direct.rof.halted}
-						onChange={(e) => updateWeapon(i, 'direct', 'rof', { ...weapon.direct.rof, halted: e.value })}
-						showButtons
-						min={1}
+				{Boolean(weapon.direct) && (
+					<ConnectedWeaponDirectEditor i={i} mode="direct" weapon={weapon} />
+				)}
+
+				<h3>Secondary Fire</h3>
+				<FormItem label="Secondary Firing Mode">
+					<Checkbox
+						checked={Boolean(weapon.secondary)}
+						onChange={(e) => updateWeapon(i, 'secondary', e.checked ? {
+							...defaultDirectFire,
+							name: '',
+						} : null)}
 					/>
 				</FormItem>
-				<FormItem label="Moving ROF">
-					<InputNumber
-						value={weapon.direct.rof.moving}
-						onChange={(e) => updateWeapon(i, 'direct', 'rof', { ...weapon.direct.rof, moving: e.value })}
-						showButtons
-						min={1}
-					/>
-				</FormItem>
-				<FormItem label="Anti-Tank">
-					<InputNumber
-						value={weapon.direct.antiTank}
-						onValueChange={(e) => updateWeapon(i, 'direct', 'antiTank', e.value)}
-						showButtons
-						min={1}
-					/>
-				</FormItem>
-				<FormItem label="Firepower">
-					<InputNumber
-						value={weapon.direct.firePower}
-						onValueChange={(e) => updateWeapon(i, 'direct', 'firePower', e.value)}
-						showButtons
-						min={1}
-						max={6}
-					/>
-				</FormItem>
-				{/*
-				<label htmlFor="direct-special-rules">Special Rules</label>
-				<Select
-					options={availableSpecialRules}
-					isMulti
-					components={animatedComponents}
-					onChange={(selection: {
-						value: UnitSpecialRuleName,
-						label: string
-					}[]) => {
-						setSpecialRules(selection.map((s) => s.value));
-					}}
-				/>
-				*/}
+				{Boolean(weapon.secondary) && (
+					<ConnectedWeaponDirectEditor i={i} mode="secondary" weapon={weapon} />
+				)}
 			</EditorSubSection>
 		))}
 		<div className="weapons-editor__add-button">

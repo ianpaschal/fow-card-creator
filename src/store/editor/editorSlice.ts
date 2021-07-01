@@ -15,7 +15,7 @@ import { ArmorAttribute } from '../../enums/ArmorAttributes';
 import { SoftStatModifier } from '../../typing/SoftStatModifier';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
-import { Weapon } from '../../typing/Weapon';
+import { Weapon, WeaponFiringData, WeaponFiringMode } from '../../typing/Weapon';
 import { getBaseColor } from '../../utils/getBaseColor';
 import { UnitCard } from '../../typing/UnitCard';
 import { ImageFormat } from '../../enums/ImageFormats';
@@ -406,29 +406,9 @@ export const editorSlice = createSlice({
 				},
 			},
 		}),
-		addWeaponBombardment: (
-			state: EditorState,
-			action: PayloadAction<{index: number, bombardment: any}>
-		): EditorState => ({
-			...state,
-			unitCard: {
-				...state.unitCard,
-				unit: {
-					...state.unitCard.unit,
-					weapons: [
-						...state.unitCard.unit.weapons.slice(0, action.payload.index),
-						{
-							...state.unitCard.unit.weapons[ action.payload.index ],
-							bombardment: action.payload.bombardment,
-						},
-						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
-					],
-				},
-			},
-		}),
 		updateWeapon: (
 			state: EditorState,
-			action: PayloadAction<{index: number, mode: 'direct' | 'bombardment', attribute: string, value: any}>
+			action: PayloadAction<{index: number, mode: WeaponFiringMode, data: WeaponFiringData}>
 		): EditorState => ({
 			...state,
 			unitCard: {
@@ -439,10 +419,7 @@ export const editorSlice = createSlice({
 						...state.unitCard.unit.weapons.slice(0, action.payload.index),
 						{
 							...state.unitCard.unit.weapons[ action.payload.index ],
-							[ action.payload.mode ]: {
-								...state.unitCard.unit.weapons[ action.payload.index ][ action.payload.mode ],
-								[ action.payload.attribute ]: action.payload.value,
-							},
+							[ action.payload.mode ]: action.payload.data,
 						},
 						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
 					],
@@ -479,26 +456,6 @@ export const editorSlice = createSlice({
 				unit: {
 					...state.unitCard.unit,
 					weapons: [...state.unitCard.unit.weapons.slice(0, action.payload.index), ...state.unitCard.unit.weapons.slice(action.payload.index + 1)],
-				},
-			},
-		}),
-		removeWeaponBombardment: (
-			state: EditorState,
-			action: PayloadAction<{index: number}>
-		): EditorState => ({
-			...state,
-			unitCard: {
-				...state.unitCard,
-				unit: {
-					...state.unitCard.unit,
-					weapons: [
-						...state.unitCard.unit.weapons.slice(0, action.payload.index),
-						{
-							...state.unitCard.unit.weapons[ action.payload.index ],
-							bombardment: undefined,
-						},
-						...state.unitCard.unit.weapons.slice(action.payload.index + 1),
-					],
 				},
 			},
 		}),
