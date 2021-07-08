@@ -3,9 +3,8 @@ import { UnitCard } from '../../typing/UnitCard';
 import { db } from '../../firebase';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
-import { Card } from 'primereact/card';
 import './MyCardsView.scss';
-import { Link } from 'react-router-dom';
+import { UnitCardTile } from '../UnitCardTile/UnitCardTile';
 
 export interface MyCardsViewState {
 	cards: UnitCard[];
@@ -61,13 +60,7 @@ export class MyCardsView extends React.Component<MyCardsViewProps, MyCardsViewSt
 				<h1>My Cards</h1>
 				<div className="my-cards-view__cards">
 					{cards.map((card, i) => (
-						<Link key={i} to={`/edit/${card.id}`}>
-							<Card style={{
-								backgroundColor: card.unit.accentColor,
-							}}>
-								{card?.unit?.title || 'Untitled'}
-							</Card>
-						</Link>
+						<UnitCardTile key={i} card={card}/>
 					))}
 				</div>
 			</div>

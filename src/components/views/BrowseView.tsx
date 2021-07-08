@@ -1,9 +1,8 @@
 import React from 'react';
 import { UnitCard } from '../../typing/UnitCard';
 import { db } from '../../firebase';
-import { Card } from 'primereact/card';
 import './BrowseView.scss';
-import { Link } from 'react-router-dom';
+import { UnitCardTile } from '../UnitCardTile/UnitCardTile';
 
 export interface BrowseViewProps {
 }
@@ -42,13 +41,7 @@ export class BrowseView extends React.Component<BrowseViewProps, BrowseViewState
 				<h1>Browse</h1>
 				<div className="browse-view__cards">
 					{cards.map((card, i) => (
-						<Link key={i} to={`/card/${card.id}`}>
-							<Card style={{
-								backgroundColor: card.unit.accentColor,
-							}}>
-								{card?.unit?.title || 'Untitled'}
-							</Card>
-						</Link>
+						<UnitCardTile key={i} card={card} useFooter/>
 					))}
 				</div>
 			</div>
