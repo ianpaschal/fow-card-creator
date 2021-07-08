@@ -14,6 +14,7 @@ import { setUnitCardActionCreator } from '../../store/editor/editorActionCreator
 import { UnitCard } from '../../typing/UnitCard';
 import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
 import { UnitCardBackSVG } from '../card/UnitCardBack';
+import { DownloadCardButton } from '../DownloadCardButton/DownloadCardButton';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -88,12 +89,7 @@ export class CardView extends React.Component<CardViewProps> {
 						</div>
 					)}
 					<div className="card-view__toolbar-section">
-						<Button
-							label="Export PDF"
-							icon="pi pi-download"
-							iconPos="right"
-							onClick={this.downloadPDF}
-						/>
+						<DownloadCardButton />
 					</div>
 				</div>
 				<div className="card-view__main">

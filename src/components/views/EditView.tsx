@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import classNamesDedupe from 'classnames/dedupe';
 import { Button } from 'primereact/button';
@@ -27,6 +26,7 @@ import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
 import { ConnectedImagesEditor } from '../editor/ImagesSection';
 import { defaultUnitCard } from '../../store/editor/defaultUnitCard';
 import { UnitCardBackSVG } from '../card/UnitCardBack';
+import { DownloadCardButton } from '../DownloadCardButton/DownloadCardButton';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -51,6 +51,7 @@ export type EditViewProps = OwnProps & ReduxProps & RouteComponentProps;
 
 export interface EditViewState {
 	view: 'editor' | 'split' | 'preview';
+	isPDFGenerating: boolean;
 }
 
 export class EditView extends React.Component<EditViewProps, EditViewState> {
@@ -58,6 +59,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		super(props);
 		this.state = {
 			view: window.innerWidth > 800 ? 'split' : 'preview',
+			isPDFGenerating: false,
 		};
 		this.downloadPDF = this.downloadPDF.bind(this);
 		this.loadCard = this.loadCard.bind(this);
@@ -133,7 +135,15 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 
 	downloadPDF(e: React.MouseEvent) {
 		e.preventDefault();
-		createUnitCardPDF();
+		this.setState({
+			isPDFGenerating: true,
+		}, () => {
+			createUnitCardPDF(() => {
+				this.setState({
+					isPDFGenerating: false,
+				});
+			});
+		});
 	};
 
 	// eslint-disable-next-line complexity
@@ -142,6 +152,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		const { view } = this.state;
 		return (
 			<form className={classNamesDedupe('edit-view', className)} onSubmit={this.saveCard}>
+
 				<div className="edit-view__toolbar">
 					<div className="edit-view__toolbar-section">
 						<Button type="submit" label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left"/>
@@ -167,13 +178,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 						></SelectButton>
 					</div>
 					<div className="edit-view__toolbar-section">
-						<Button
-							label="Export PDF"
-							icon="pi pi-download"
-							iconPos="right"
-							tooltipOptions={{ position: 'bottom' }}
-							onClick={this.downloadPDF}
-						/>
+						<DownloadCardButton />
 					</div>
 				</div>
 				<div className="edit-view__main">

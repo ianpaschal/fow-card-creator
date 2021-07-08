@@ -14,7 +14,7 @@ const loadPrimaryImage = async (url: string): Promise<HTMLImageElement> => {
 	});
 };
 
-export function createUnitCardPDF() {
+export function createUnitCardPDF(onComplete?: () => void) {
 	const unit = store.getState().editor.unitCard.unit;
 	const unitID = store.getState().editor.unitCard.id;
 	const format = [pt(110, 'mm'), pt(80, 'mm')];
@@ -31,6 +31,9 @@ export function createUnitCardPDF() {
 		UnitCardFrontPDF(doc, unit, image);
 		doc.addPage(format, orientation);
 		UnitCardBackPDF(doc, unit);
+		if (onComplete) {
+			onComplete();
+		}
 		doc.save(`${unitID}.pdf`);
 	});
 }
