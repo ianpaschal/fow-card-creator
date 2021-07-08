@@ -60,7 +60,7 @@ export class MyCardsView extends React.Component<MyCardsViewProps, MyCardsViewSt
 				<h1>My Cards</h1>
 				<div className="my-cards-view__cards">
 					{cards.map((card, i) => (
-						<UnitCardTile key={i} card={card}/>
+						<UnitCardTile key={i} card={card} linkURL={`/edit/${card.id}`} />
 					))}
 				</div>
 			</div>

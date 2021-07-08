@@ -41,7 +41,7 @@ export class BrowseView extends React.Component<BrowseViewProps, BrowseViewState
 				<h1>Browse</h1>
 				<div className="browse-view__cards">
 					{cards.map((card, i) => (
-						<UnitCardTile key={i} card={card} useFooter/>
+						<UnitCardTile key={i} card={card} useFooter linkURL={`/card/${card.id}`} />
 					))}
 				</div>
 			</div>

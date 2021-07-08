@@ -8,15 +8,17 @@ import './UnitCardTile.scss';
 export interface UnitCardTileProps {
 	card: UnitCard;
 	useFooter?: boolean;
+	linkURL: string;
 }
 
 export const UnitCardTile: React.FC<UnitCardTileProps> = ({
 	card,
 	useFooter = false,
+	linkURL,
 }: UnitCardTileProps) => {
 	const rating = computeCardRating(card.ratings);
 	return (
-		<Link className="unit-card-tile" to={`/edit/${card.id}`}>
+		<Link className="unit-card-tile" to={linkURL}>
 			<div className="unit-card-tile__image-section" style={{
 				backgroundColor: card.unit.accentColor,
 			}}>
