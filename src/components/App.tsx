@@ -10,6 +10,7 @@ import { ConnectedEditView }from './views/EditView';
 import { ConnectedMyCardsView } from './views/MyCardsView';
 import { RoutedSignInView } from './views/SignInView';
 import { RoutedSignUpView } from './views/SignUpView';
+import { ConnectedCardView } from './views/CardView';
 
 import './App.scss';
 
@@ -51,9 +52,9 @@ export const App: React.FC<AppProps> = ({
 					<Route path="/create">
 						<ConnectedEditView />
 					</Route>
-					{/* <Route exact path="/card/:id">
-						<RoutedSignInView />
-					</Route> */}
+					<Route exact path="/card/:id">
+						<ConnectedCardView />
+					</Route>
 					<Route path="/signin" exact>
 						<RoutedSignInView />
 					</Route>
