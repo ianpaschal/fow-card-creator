@@ -61,7 +61,7 @@ export const WeaponDirectEditor: React.FC<WeaponDirectEditorProps> = ({
 					},
 				})}
 				showButtons
-				min={1}
+				min={0}
 			/>
 		</FormItem>
 		<FormItem label="Moving ROF">
@@ -75,7 +75,7 @@ export const WeaponDirectEditor: React.FC<WeaponDirectEditorProps> = ({
 					},
 				})}
 				showButtons
-				min={1}
+				min={0}
 			/>
 		</FormItem>
 		<FormItem label="Anti-Tank">
