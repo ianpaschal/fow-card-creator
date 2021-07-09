@@ -1,29 +1,30 @@
 .star-rating {
-    display: flex;
-    flex-direction: row;
-    color: grey;
+	display: flex;
+	flex-direction: row;
+	color: grey;
 
-    &__half-star {
-        width: 8px;
-        height: 16px;
-        overflow: hidden;
-        position: relative;
-    }
+	&__half-star {
+		width: 8px;
+		height: 16px;
+		overflow: hidden;
+		position: relative;
+	}
 
-    i {
-        width: 16px;
-        height: 16px;
-        display: block;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+	i {
+		width: 16px;
+		height: 16px;
+		display: block;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-    &__half-right {
-        margin-right: 1px;
-        i {
-            position: absolute;
-            left: -8px;
-        }
-    }
+	&__half-right {
+		margin-right: 1px;
+
+		i {
+			position: absolute;
+			left: -8px;
+		}
+	}
 }

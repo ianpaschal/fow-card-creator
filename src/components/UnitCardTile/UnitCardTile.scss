@@ -3,61 +3,65 @@
 @import '../../style/variables.scss';
 
 .unit-card-tile {
-    text-decoration: none;
-    box-shadow: 0 1px 4px 0 rgba(black, 0.2);
-    outline: 2px solid transparent;
-    transition: box-shadow 150ms ease-in-out;
-    border-radius: 4px;
-    overflow: hidden;
+	text-decoration: none;
+	box-shadow: 0 1px 4px 0 rgba(black, 0.2);
+	outline: 2px solid transparent;
+	transition: box-shadow 150ms ease-in-out;
+	border-radius: 4px;
+	overflow: hidden;
 
-    &:hover {
-        box-shadow: 0 1px 4px 0 rgba(black, 0.5);
-    }
+	&:hover {
+		box-shadow: 0 1px 4px 0 rgba(black, 0.5);
+	}
 
-    &:focus::after {
-        outline-color: red;
-    }
+	&:focus::after {
+		outline-color: red;
+	}
 
-    &__image-section {
-        max-width: 100%;
-        padding-bottom: 72.7272%;
-        resize: horizontal;
-        position: relative;
-    }
+	&__image-section {
+		max-width: 100%;
+		padding-bottom: 72.7272%;
+		resize: horizontal;
+		position: relative;
+	}
 
-    &__image-wrapper {
-        position: absolute;
-        top: 0; bottom: 0; left: 0; right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+	&__image-wrapper {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
 
-        img {
-            flex-shrink: 0;
-            min-width: 100%;
-            min-height: 100%
-        }
-    }
+		img {
+			flex-shrink: 0;
+			min-width: 100%;
+			min-height: 100%;
+		}
+	}
 
-    &__header-section {
-        color: white;
-        background-color: black;
-        padding: 16px;
-        height: 80px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+	&__header-section {
+		color: white;
+		background-color: black;
+		padding: 16px;
+		height: 80px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 
-        h2, h3 {
-            color: white;
-        }
-    }
+		h2,
+		h3 {
+			color: white;
+		}
+	}
 
-    &__footer-section {
-        color: rgb(7, 7, 7);
-        background-color: white;
-        padding: 16px;
-        height: 48px;
-    }
+	&__footer-section {
+		color: rgb(7, 7, 7);
+		background-color: white;
+		padding: 16px;
+		height: 48px;
+	}
 }

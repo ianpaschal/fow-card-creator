@@ -3,71 +3,74 @@
 @import '../../style/variables.scss';
 
 .edit-view {
-    width: 100vw;
-    height: calc(100vh - 64px);
-    overflow: hidden;
-    position: absolute;
+	width: 100vw;
+	height: calc(100vh - 64px);
+	overflow: hidden;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
 
-    display: flex;
-    flex-direction: column;
+	h2 {
+		padding: 4px 0;
+	}
 
-    h2 {
-        padding: 4px 0;
-    }
+	h3 {
+		padding: 4px 0;
+		border-bottom: 1px solid $border-color;
+	}
 
-    h3 {
-        padding: 4px 0;
-        border-bottom: 1px solid $border-color;
-    }
+	.edit-view__toolbar {
+		background-color: white;
+		height: 65px;
+		display: flex;
+		flex-direction: row;
+		padding: 16px 32px;
+		border-bottom: 1px solid rgb(225, 228, 232);
+		z-index: 5;
 
-    .edit-view__toolbar {
-        background-color: white;
-        height: 65px;
-        display: flex;
-        flex-direction: row;
-        padding: 16px 32px;
-        border-bottom: 1px solid rgb(225, 228, 232);
-        z-index: 5;
+		.edit-view__toolbar-section {
+			margin-left: 1rem;
+		}
 
-        .edit-view__toolbar-section {
-            margin-left: 1rem;
-        }
+		.edit-view__toolbar-section:first-of-type {
+			margin-left: 0;
+		}
 
-        .edit-view__toolbar-section:first-of-type {
-            margin-left: 0;
-        }
-        
-        .edit-view__toolbar-section:last-of-type {
-            margin-left: auto;
-        }
-    }
-    .edit-view__main {
-        display: flex;
-        flex-direction: row;
-        flex: 1 auto;
-        overflow: hidden;
+		.edit-view__toolbar-section:last-of-type {
+			margin-left: auto;
+		}
+	}
 
-        .edit-view__edit-pane {
-            flex: 1 50%;
-            overflow-y: scroll;
-            min-width: 360px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-        }
-        .edit-view__preview-pane {
-            background-color: rgb(250, 251, 252);
-            overflow-y: scroll;
-            flex: 1 50%;
-            padding: 8px;
+	.edit-view__main {
+		display: flex;
+		flex-direction: row;
+		flex: 1 auto;
+		overflow: hidden;
 
-            svg {
-                width: 100%;
-                height: auto;
-                border-radius: 8px;
-            }
-        }
-    }
-    .form-item, .editor-sub-section {
-        margin: 16px 0;
-    }
+		.edit-view__edit-pane {
+			flex: 1 50%;
+			overflow-y: scroll;
+			min-width: 360px;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+		}
+
+		.edit-view__preview-pane {
+			background-color: rgb(250, 251, 252);
+			overflow-y: scroll;
+			flex: 1 50%;
+			padding: 8px;
+
+			svg {
+				width: 100%;
+				height: auto;
+				border-radius: 8px;
+			}
+		}
+	}
+
+	.form-item,
+	.editor-sub-section {
+		margin: 16px 0;
+	}
 }

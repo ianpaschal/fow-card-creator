@@ -1,28 +1,27 @@
 .download-card-button {
+	.p-dialog {
+		border-radius: 4px;
+		overflow: hidden;
+		width: 256px;
+		height: 256px;
 
-    .p-dialog {
-        border-radius: 4px;
-        overflow: hidden;
-        width: 256px;
-        height: 256px;
+		.p-dialog-header {
+			display: none;
+		}
 
-        .p-dialog-header {
-            display: none;
-        }
-    
-        .p-dialog-content {
-            padding: 32px !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-    
-            .pi {
-                font-size: 64px;
-                padding: 32px;
-            }
-        }
-    }
+		.p-dialog-content {
+			padding: 32px !important;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			text-align: center;
+
+			.pi {
+				font-size: 64px;
+				padding: 32px;
+			}
+		}
+	}
 }

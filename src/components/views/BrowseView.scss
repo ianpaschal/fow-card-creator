@@ -1,20 +1,24 @@
 .browse-view {
-    padding: 0 16px;
-    h1 {
-        display: block;
-        padding: 16px;
-        padding-top: 48px;
-    }
-    &__cards {
-        padding: 16px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        grid-gap: 16px;
-        a {
-            text-decoration: none;
-        }
-        .p-card {
-            color: white;
-        }
-    }
+	padding: 0 16px;
+
+	h1 {
+		display: block;
+		padding: 16px;
+		padding-top: 48px;
+	}
+
+	&__cards {
+		padding: 16px;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		grid-gap: 16px;
+
+		a {
+			text-decoration: none;
+		}
+
+		.p-card {
+			color: white;
+		}
+	}
 }
