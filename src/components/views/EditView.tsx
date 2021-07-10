@@ -1,5 +1,4 @@
 import React from 'react';
-import classNamesDedupe from 'classnames/dedupe';
 import { Button } from 'primereact/button';
 import { ConnectedGeneralEditor } from '../editor/GeneralEditor';
 import { ConnectedMobilityEditor } from '../editor/MobilityEditor';
@@ -148,10 +147,10 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 
 	// eslint-disable-next-line complexity
 	render() {
-		const { className, armor, save } = this.props;
+		const { armor, save } = this.props;
 		const { view } = this.state;
 		return (
-			<form className={classNamesDedupe('edit-view', className)} onSubmit={this.saveCard}>
+			<form className="edit-view" onSubmit={this.saveCard}>
 
 				<div className="edit-view__toolbar">
 					<div className="edit-view__toolbar-section">
