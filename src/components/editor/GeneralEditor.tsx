@@ -57,7 +57,7 @@ export const GeneralEditor: React.FC<GeneralEditorProps> = ({
 	isPublic,
 	setIsPublic,
 }: GeneralEditorProps) => (
-	<EditorSection className='general-editor' title="General">
+	<EditorSection className="general-editor" title="General">
 		<FormItem label="Visibility">
 			<RadioButton
 				value="public"

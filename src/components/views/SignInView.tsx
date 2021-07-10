@@ -32,7 +32,7 @@ export class SignInView extends React.Component<SignInViewProps, {}> {
 				<h1>Sign In</h1>
 				<form onSubmit={this.onSubmit}>
 					<InputText placeholder="email" />
-					<Password feedback={false}/>
+					<Password feedback={false} />
 
 					<Button type={'submit'}>Sign In</Button>
 				</form>

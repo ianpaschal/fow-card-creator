@@ -56,7 +56,7 @@ export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
 	setUnitIsFormation,
 	setUnitPassengers,
 }: CharacteristicsEditorProps) => (
-	<EditorSection className='characteristics-editor' title="Characteristics">
+	<EditorSection className="characteristics-editor" title="Characteristics">
 		<FormItem label="Type">
 			<Dropdown
 				value={unitType}
@@ -86,7 +86,7 @@ export const CharacteristicsEditor: React.FC<CharacteristicsEditorProps> = ({
 			<>
 				<FormItem label="Is Transport">
 					<Checkbox onChange={(e) => setUnitPassengers(e.checked ? 1 : 0)}
-						checked={passengers > 0}/>
+						checked={passengers > 0} />
 				</FormItem>
 				{passengers > 0 && (
 					<FormItem label="Passengers">

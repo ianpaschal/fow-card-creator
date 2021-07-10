@@ -17,9 +17,9 @@ export const EditorSubSection: React.FC<EditorSubSectionProps> = ({
 	onRemove,
 }: EditorSubSectionProps) => (
 	<div className={classNamesDedupe('editor-sub-section', extraClassName)}>
-		<div className='editor-sub-section__delete-button'>
+		<div className="editor-sub-section__delete-button">
 			<Button
-				className='p-button-icon-only p-button-danger p-button-text'
+				className="p-button-icon-only p-button-danger p-button-text"
 				icon="pi pi-trash"
 				onClick={(e) => {
 					e.preventDefault();
@@ -27,7 +27,7 @@ export const EditorSubSection: React.FC<EditorSubSectionProps> = ({
 				}}
 			/>
 		</div>
-		<div className='editor-sub-section__children'>
+		<div className="editor-sub-section__children">
 			{children}
 		</div>
 	</div>

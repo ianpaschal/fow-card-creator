@@ -25,7 +25,7 @@ export const SoftStatEditor: React.FC<SoftStatEditorProps> = ({
 	isComponent,
 	setUnitIsComponent,
 }: SoftStatEditorProps) => (
-	<EditorSection className='soft-stat-editor' title="Soft Stats">
+	<EditorSection className="soft-stat-editor" title="Soft Stats">
 		<FormItem label="Is Component">
 			<Checkbox
 				onChange={(e) => setUnitIsComponent(e.checked)}
@@ -34,9 +34,9 @@ export const SoftStatEditor: React.FC<SoftStatEditorProps> = ({
 		</FormItem>
 		{!isComponent && (
 			<>
-				<ConnectedSoftStatEditorSection attribute="motivation"/>
-				<ConnectedSoftStatEditorSection attribute="skill"/>
-				<ConnectedSoftStatEditorSection attribute="hitOn"/>
+				<ConnectedSoftStatEditorSection attribute="motivation" />
+				<ConnectedSoftStatEditorSection attribute="skill" />
+				<ConnectedSoftStatEditorSection attribute="hitOn" />
 			</>
 		)}
 	</EditorSection>

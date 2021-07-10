@@ -16,8 +16,8 @@ export const EditorSection: React.FC<EditorSectionProps> = ({
 	children,
 }: EditorSectionProps) => (
 	<div className={classNamesDedupe('editor-section', extraClassName)}>
-		<h2 className='editor-section__title'>{title}</h2>
-		<div className='editor-section__children'>
+		<h2 className="editor-section__title">{title}</h2>
+		<div className="editor-section__children">
 			{children}
 		</div>
 	</div>

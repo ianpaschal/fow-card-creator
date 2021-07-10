@@ -35,11 +35,8 @@ module.exports = {
 		'computed-property-spacing': ['error', 'always'],
 		'dot-notation':              ['error'],
 		'eol-last':                  ['error', 'always'],
-		'indent':                    [
-			'error',
-			'tab',
-			{ 'SwitchCase': 1 },
-		],
+		'indent':                    ['error', 'tab', { 'SwitchCase': 1 }],
+		'jsx-quotes':                ['error', 'prefer-double'],
 		'max-len':                   ['error', { 'code': 120, 'comments': 120, 'tabWidth': 4, 'ignoreTrailingComments': true, 'ignoreUrls': true, 'ignoreTemplateLiterals': true, 'ignoreRegExpLiterals': true, 'ignoreStrings': true }],
 		'max-lines':                 ['error', { 'max': 250, 'skipBlankLines': true, 'skipComments': true }],
 		'max-statements':            ['error', 30],
@@ -69,15 +66,15 @@ module.exports = {
 		'space-infix-ops':           ['error'],
 		'spaced-comment':            ['error', 'always'],
 		'template-curly-spacing':    ['error', 'never'],
-		'react/jsx-indent':          [
-			'error',
-			'tab',
-			{ checkAttributes: true, indentLogicalExpressions: true },
-		],
-		'@typescript-eslint/no-use-before-define': ['error'],
-		'@typescript-eslint/no-unused-vars': ['error', { 'vars': 'local', 'args': 'none', 'ignoreRestSiblings': false }],
+
+		// React
+		'react/jsx-indent':          ['error', 'tab', { checkAttributes: true, indentLogicalExpressions: true }],
+		'react/jsx-tag-spacing':     ['error'],
+
+		// Typescript
+		'@typescript-eslint/no-use-before-define':   ['error'],
+		'@typescript-eslint/no-unused-vars':         ['error', { 'vars': 'local', 'args': 'none', 'ignoreRestSiblings': false }],
 		'@typescript-eslint/no-useless-constructor': ['error'],
-		// 'unused-imports/no-unused-imports-ts': ['error'],
 	},
 	/* eslint-enable array-bracket-newline, array-element-newline */
 	overrides: [

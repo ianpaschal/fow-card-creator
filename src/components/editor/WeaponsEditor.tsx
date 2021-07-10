@@ -47,7 +47,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 	removeWeapon,
 	updateWeaponName,
 }: WeaponsEditorProps) => (
-	<EditorSection className='weapons-editor' title="Weapons">
+	<EditorSection className="weapons-editor" title="Weapons">
 		{weapons.map((weapon, i) => (
 			<EditorSubSection key={i} onRemove={() => removeWeapon(i)}>
 				<FormItem label="Name">

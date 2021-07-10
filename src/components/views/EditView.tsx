@@ -155,7 +155,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 
 				<div className="edit-view__toolbar">
 					<div className="edit-view__toolbar-section">
-						<Button type="submit" label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left"/>
+						<Button type="submit" label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left" />
 					</div>
 					{/* <div className="edit-view__toolbar-section">
 						<Button label="Duplicate" className="p-button-secondary p-button-outlined" />
@@ -184,18 +184,18 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 				<div className="edit-view__main">
 					{(view === 'editor' || view === 'split') && (
 						<div className="edit-view__edit-pane">
-							<ConnectedGeneralEditor/>
-							<ConnectedImagesEditor/>
-							<ConnectedCharacteristicsEditor/>
+							<ConnectedGeneralEditor />
+							<ConnectedImagesEditor />
+							<ConnectedCharacteristicsEditor />
 							{armor && (
-								<ConnectedArmorEditor/>
+								<ConnectedArmorEditor />
 							)}
 							{save && (
-								<ConnectedSaveEditor/>
+								<ConnectedSaveEditor />
 							)}
-							<ConnectedSoftStatEditor/>
-							<ConnectedMobilityEditor/>
-							<ConnectedWeaponsEditor/>
+							<ConnectedSoftStatEditor />
+							<ConnectedMobilityEditor />
+							<ConnectedWeaponsEditor />
 						</div>
 					)}
 					{(view === 'preview' || view === 'split') && (

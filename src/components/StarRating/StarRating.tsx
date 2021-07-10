@@ -18,7 +18,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
 					'star-rating__half-star',
 					i % 2 == 0 ? 'star-rating__half-left' : 'star-rating__half-right'
 				)}>
-					<i className={classNames('pi', rating > i ? 'pi-star' : 'pi-star-o')}/>
+					<i className={classNames('pi', rating > i ? 'pi-star' : 'pi-star-o')} />
 				</div>
 			);
 		}

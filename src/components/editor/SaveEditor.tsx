@@ -26,7 +26,7 @@ export const SaveEditor: React.FC<SaveEditorProps> = ({
 	save,
 	setSaveRating,
 }: SaveEditorProps) => (
-	<EditorSection className='armor-editor' title="Save">
+	<EditorSection className="armor-editor" title="Save">
 		<FormItem label={`${UnitTypes[ save.type ]} Save`}>
 			<InputNumber
 				value={save.value}

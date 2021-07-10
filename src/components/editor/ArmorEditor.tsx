@@ -25,7 +25,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
 	armor,
 	setArmorRating,
 }: ArmorEditorProps) => (
-	<EditorSection className='armor-editor' title="Armor">
+	<EditorSection className="armor-editor" title="Armor">
 		{ArmorFieldKeys.map((key: ArmorField, i: number) => (
 			<FormItem key={i} label={ArmorFields[ key ]}>
 				<InputNumber

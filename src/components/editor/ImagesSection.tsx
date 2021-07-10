@@ -95,10 +95,10 @@ export class ImagesEditor extends React.Component<ImagesEditorProps> {
 	render() {
 		const { primaryImageURL, primaryImageFormat, setPrimaryImageFormat } = this.props;
 		return (
-			<EditorSection className='images-editor' title="Images">
+			<EditorSection className="images-editor" title="Images">
 				<FormItem label="Primary Image">
 					{!primaryImageURL ? (
-						<input type="file" id="myFile" name="filename" onChange={this.onUpload}/>
+						<input type="file" id="myFile" name="filename" onChange={this.onUpload} />
 					) : (
 						<Button
 							className="p-button-danger"

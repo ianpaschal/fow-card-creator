@@ -109,7 +109,7 @@ export const SoftStatModifierSVG: React.FC<SoftStatModifierProps> = (props: Soft
 	const layout = new SoftStatModifierLayout(props);
 	return (
 		<>
-			<RoundedRectangleSVG {...layout.baseProps}/>
+			<RoundedRectangleSVG {...layout.baseProps} />
 			<TextSVG {...layout.nameProps} />
 			<TextSVG {...layout.attributeProps} />
 			<TextSVG {...layout.ratingProps} />

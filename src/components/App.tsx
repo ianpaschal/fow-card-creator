@@ -36,7 +36,7 @@ export const App: React.FC<AppProps> = ({
 					<Link to={SiteSettings.ROUTE_CREATE}>Create</Link>
 				</>
 			)}
-			<RoutedAccountMenu/>
+			<RoutedAccountMenu />
 		</div>
 		<div className="app__main">
 			<div className="app__page">

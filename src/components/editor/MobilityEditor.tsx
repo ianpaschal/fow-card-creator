@@ -25,7 +25,7 @@ export const MobilityEditor: React.FC<MobilityEditorProps> = ({
 	mobility,
 	setMobility,
 }: MobilityEditorProps) => (
-	<EditorSection className='mobility-editor' title="Mobility">
+	<EditorSection className="mobility-editor" title="Mobility">
 		{MobilityFieldKeys.map((key: MobilityField, i: number) => (
 			<FormItem key={i} label={MobilityFields[ key ]}>
 				<InputNumber

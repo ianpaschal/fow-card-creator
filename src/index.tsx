@@ -13,7 +13,7 @@ import './style/index.scss';
 ReactDOM.render(
 	<Provider store={store}>
 		<Router>
-			<ConnectedApp/>
+			<ConnectedApp />
 		</Router>
 	</Provider>,
 	document.getElementById('root')

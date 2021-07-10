@@ -14,7 +14,7 @@ export const DownloadCardButton: React.FC = () => {
 		});
 	};
 	return (
-		<div className='download-card-button'>
+		<div className="download-card-button">
 			<Button
 				label="Export PDF"
 				icon="pi pi-download"

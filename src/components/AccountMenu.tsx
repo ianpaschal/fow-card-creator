@@ -42,7 +42,7 @@ export class AccountMenu extends React.Component<RouteComponentProps> {
 		return (
 			<>
 				<Menu model={items} popup ref={this.menuRef} />
-				<Button icon="pi pi-user" onClick={(event) => this.menuRef.current.toggle(event)}/>
+				<Button icon="pi pi-user" onClick={(event) => this.menuRef.current.toggle(event)} />
 			</>
 		);
 	}

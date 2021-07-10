@@ -16,8 +16,8 @@ export const FormItem: React.FC<FormItemProps> = ({
 	children,
 }: FormItemProps) => (
 	<div className={classNamesDedupe('form-item', extraClassName)}>
-		<label className='form-item__label'>{label}</label>
-		<div className='form-item__children'>
+		<label className="form-item__label">{label}</label>
+		<div className="form-item__children">
 			{children}
 		</div>
 	</div>
