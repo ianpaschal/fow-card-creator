@@ -15,6 +15,7 @@ export enum FontNames {
 	PT_SANS_BOLD_ITALIC = 'PTSans-Bold-Italic',
 }
 
+// The case here must match the case in the weight above so that fontName.split('-') can be used as a selector.
 export enum FontWeights {
 	Light = 300,
 	Regular = 400,

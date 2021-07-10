@@ -3,7 +3,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect, ConnectedProps } from 'react-redux';
 import { InputNumber } from 'primereact/inputnumber';
 import { RootState } from '../../store';
-import { MobilityAttribute, MobilityAttributeKeys, MobilityAttributes } from '../../enums/Mobility';
+import { MobilityField, MobilityFieldKeys, MobilityFields } from '../../enums/MobilityFields';
 import { setMobilityActionCreator } from '../../store/editor/editorActionCreators';
 import { EditorSection } from './EditorSection';
 import { FormItem } from './FormItem';
@@ -26,18 +26,18 @@ export const MobilityEditor: React.FC<MobilityEditorProps> = ({
 	setMobility,
 }: MobilityEditorProps) => (
 	<EditorSection className='mobility-editor' title="Mobility">
-		{MobilityAttributeKeys.map((attribute: MobilityAttribute, i: number) => (
-			<FormItem key={i} label={MobilityAttributes[ attribute ]}>
+		{MobilityFieldKeys.map((key: MobilityField, i: number) => (
+			<FormItem key={i} label={MobilityFields[ key ]}>
 				<InputNumber
-					value={mobility[ attribute ]}
+					value={mobility[ key ]}
 					onValueChange={(e) => {
 						const value = parseInt(e.target.value);
-						setMobility(attribute, attribute === 'cross' ? Math.min(Math.max(1, value), 6) : value);
+						setMobility(key, key === 'cross' ? Math.min(Math.max(1, value), 6) : value);
 					}}
 					showButtons
-					min={attribute === 'cross' ? 1 : 0}
-					max={attribute === 'cross' ? 6 : 72}
-					step={attribute === 'cross' ? undefined : 2}
+					min={key === 'cross' ? 1 : 0}
+					max={key === 'cross' ? 6 : 72}
+					step={key === 'cross' ? undefined : 2}
 				/>
 			</FormItem>
 		))}

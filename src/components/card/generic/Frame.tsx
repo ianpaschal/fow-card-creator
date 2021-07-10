@@ -1,6 +1,6 @@
 import jsPDF, { GState } from 'jspdf';
 import React from 'react';
-import { Settings } from '../../../Settings';
+import { CardSettings } from '../../../CardSettings';
 import { RoundedRectangleLayout, RoundedRectangleProps } from './RoundedRectangle';
 
 export interface FrameProps extends RoundedRectangleProps {
@@ -33,7 +33,7 @@ export class FrameLayout {
 		Object.keys(props).forEach((key) => {
 			if (key === 'border') {
 				Object.keys(this.border).forEach((side) => {
-					this.border[ side ] = props.border[ side ] || Settings.STROKE_WIDTH;
+					this.border[ side ] = props.border[ side ] || CardSettings.STROKE_WIDTH;
 				});
 			} else {
 				this[ key ] = props[ key ];
@@ -51,7 +51,7 @@ export class FrameLayout {
 			y: this.y + this.border.top,
 			width: this.width - (this.border.left + this.border.right),
 			height: this.height - (this.border.top + this.border.bottom),
-			radius: this.radius - Settings.STROKE_WIDTH,
+			radius: this.radius - CardSettings.STROKE_WIDTH,
 		});
 	}
 	get outerPathPDF(): any[] {
@@ -64,7 +64,7 @@ export class FrameLayout {
 			y: this.y + this.border.top,
 			width: this.width - (this.border.left + this.border.right),
 			height: this.height - (this.border.top + this.border.bottom),
-			radius: this.radius - Settings.STROKE_WIDTH,
+			radius: this.radius - CardSettings.STROKE_WIDTH,
 		});
 	}
 }

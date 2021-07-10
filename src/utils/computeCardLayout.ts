@@ -1,57 +1,60 @@
 import { Area } from '../typing/Area';
 import { pt } from './convertDistance';
-import { Settings } from '../Settings';
+import { CardSettings } from '../CardSettings';
 import { Unit } from '../typing/Unit';
 import { UnitCardLayout } from '../typing/UnitCardLayout';
 import { SoftStatBlockLayout } from '../components/card/SoftStatBlock';
+import { ArmorBlockLayout } from '../components/card/ArmorBlock';
+import { SaveBlockLayout } from '../components/card/SaveBlock';
 
 export function computeCardLayout(unit: Unit): UnitCardLayout {
-	const fullWidth = Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS);
+	const fullWidth = CardSettings.WIDTH - (2 * CardSettings.MARGIN_OUTER);
 	const headerBlock: Area = {
-		x: Settings.CARD_MARGINS,
-		y: Settings.CARD_MARGINS,
+		x: CardSettings.MARGIN_OUTER,
+		y: CardSettings.MARGIN_OUTER,
 		width: fullWidth,
 		height: pt(8.25, 'mm'),
 	};
 	const motivationBlock: Area = {
-		x: Settings.CARD_MARGINS,
-		y: Settings.CARD_MARGINS + headerBlock.height + Settings.BLOCK_MARGIN,
-		width: Settings.STAT_BLOCK_WIDTH,
+		x: CardSettings.MARGIN_OUTER,
+		y: CardSettings.MARGIN_OUTER + headerBlock.height + CardSettings.MARGIN_INNER,
+		width: SoftStatBlockLayout.width,
 		height: SoftStatBlockLayout.calcHeight(unit.motivation),
 	};
 	const skillBlock: Area = {
-		x: Settings.CARD_MARGINS,
-		y: motivationBlock.y + motivationBlock.height + Settings.BLOCK_MARGIN,
-		width: Settings.STAT_BLOCK_WIDTH,
+		x: CardSettings.MARGIN_OUTER,
+		y: motivationBlock.y + motivationBlock.height + CardSettings.MARGIN_INNER,
+		width: SoftStatBlockLayout.width,
 		height: SoftStatBlockLayout.calcHeight(unit.skill),
 	};
 	const hitOnBlock: Area = {
-		x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
-		y: Settings.CARD_MARGINS + headerBlock.height + Settings.BLOCK_MARGIN,
-		width: Settings.STAT_BLOCK_WIDTH,
+		x: CardSettings.WIDTH - (CardSettings.MARGIN_OUTER + SoftStatBlockLayout.width),
+		y: CardSettings.MARGIN_OUTER + headerBlock.height + CardSettings.MARGIN_INNER,
+		width: SoftStatBlockLayout.width,
 		height: SoftStatBlockLayout.calcHeight(unit.hitOn),
 	};
 	const armorBlock: Area = {
-		x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
-		y: hitOnBlock.y + hitOnBlock.height + Settings.BLOCK_MARGIN,
-		width: Settings.STAT_BLOCK_WIDTH,
-		height: Settings.STAT_BLOCK_HEADER_HEIGHT + 5 * Settings.STROKE_WIDTH + 3 * Settings.ARMOR_RATING_TANK_HEIGHT,
+		x: CardSettings.WIDTH - (CardSettings.MARGIN_OUTER + SoftStatBlockLayout.width),
+		y: hitOnBlock.y + hitOnBlock.height + CardSettings.MARGIN_INNER,
+		width: SoftStatBlockLayout.width,
+		// eslint-disable-next-line max-len
+		height: SoftStatBlockLayout.headerHeight + 5 * CardSettings.STROKE_WIDTH + 3 * ArmorBlockLayout.ratingHeight,
 	};
 	const saveBlock: Area = {
-		x: Settings.CARD_WIDTH - (Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH),
-		y: hitOnBlock.y + hitOnBlock.height + Settings.BLOCK_MARGIN,
-		width: Settings.STAT_BLOCK_WIDTH,
-		height: Settings.STAT_BLOCK_HEADER_HEIGHT + 3 * Settings.STROKE_WIDTH + Settings.ARMOR_RATING_MISC_HEIGHT,
+		x: CardSettings.WIDTH - (CardSettings.MARGIN_OUTER + SoftStatBlockLayout.width),
+		y: hitOnBlock.y + hitOnBlock.height + CardSettings.MARGIN_INNER,
+		width: SoftStatBlockLayout.width,
+		height: SoftStatBlockLayout.headerHeight + 3 * CardSettings.STROKE_WIDTH + SaveBlockLayout.ratingHeight,
 	};
 	const mobilityBlock: Area = {
-		x: Settings.CARD_MARGINS,
-		y: Math.max(skillBlock.y + skillBlock.height + Settings.BLOCK_MARGIN, pt(43.5, 'mm')),
+		x: CardSettings.MARGIN_OUTER,
+		y: Math.max(skillBlock.y + skillBlock.height + CardSettings.MARGIN_INNER, pt(43.5, 'mm')),
 		width: fullWidth,
 		height: pt(6.8, 'mm'),
 	};
 	const weaponsBlock: Omit<Area, 'height'> = {
-		x: Settings.CARD_MARGINS,
-		y: mobilityBlock.y + mobilityBlock.height + Settings.BLOCK_MARGIN,
+		x: CardSettings.MARGIN_OUTER,
+		y: mobilityBlock.y + mobilityBlock.height + CardSettings.MARGIN_INNER,
 		width: fullWidth,
 	};
 

@@ -1,10 +1,11 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Settings } from '../../Settings';
+import { CardSettings } from '../../CardSettings';
 import { RootState, store } from '../../store';
 import { Area } from '../../typing/Area';
 import { pt } from '../../utils/convertDistance';
+import { SoftStatBlockLayout } from './SoftStatBlock';
 
 const PRINT_DPI_FACTOR = 4.1666666667;
 
@@ -27,18 +28,18 @@ export class PrimaryImageLayout {
 		if (this.props.primaryImageFormat === 'LARGE') {
 			return pt(4, 'mm');
 		}
-		return Settings.CARD_MARGINS + Settings.STAT_BLOCK_WIDTH;
+		return CardSettings.MARGIN_OUTER + SoftStatBlockLayout.width;
 	}
 
 	get y(): number {
 		if (this.props.primaryImageFormat === 'LARGE') {
-			return Settings.CARD_MARGINS + this.props.headerBlockHeight - pt(2.5, 'mm');
+			return CardSettings.MARGIN_OUTER + this.props.headerBlockHeight - pt(2.5, 'mm');
 		}
-		return Settings.CARD_MARGINS + this.props.headerBlockHeight;
+		return CardSettings.MARGIN_OUTER + this.props.headerBlockHeight;
 	}
 
 	get width(): number {
-		return Settings.CARD_WIDTH - 2 * this.x;
+		return CardSettings.WIDTH - 2 * this.x;
 	}
 
 	get height(): number {
@@ -57,15 +58,15 @@ export class PrimaryImageLayout {
 		const blur = 5 * PRINT_DPI_FACTOR;
 		context.beginPath();
 		context.rect(0, 0, mask.width, mask.height);
-		context.fillStyle = '#000000';
+		context.fillStyle = CardSettings.COLOR_BLACK;
 		context.fill();
-		context.shadowColor = '#FFFFFF';
+		context.shadowColor = CardSettings.COLOR_WHITE;
 		context.shadowOffsetX = -mask.width;
 		context.shadowOffsetY = 0;
 		context.shadowBlur = blur;
 		context.beginPath();
 		context.rect(mask.width + blur, blur, mask.width - (2 * blur), mask.height - (2 * blur));
-		context.fillStyle = '#FFFFFF';
+		context.fillStyle = CardSettings.COLOR_WHITE;
 		context.fill();
 
 		// const gradient = context.createLinearGradient(0, 0, 0, mask.height / 3);

@@ -1,7 +1,7 @@
 # Card Components
 
-Card Components use an abstract layout class to create prop objects which can be passed to both jsPDF render functions (for PDF) and React functional components (for SVG).
-This almost completely removes the need to write/modify components twice (once for PDF, once for SVG), except at the lowest levels where the compnents interact with the jsPDF and SVG APIs.
+Card Components use a layout class to create prop objects which can be passed to both jsPDF render functions (for PDF) and React functional components (for SVG).
+This almost completely removes the need to write/modify components twice (once for PDF, once for SVG), except at the lowest levels where the components interact with the jsPDF and SVG APIs.
 These components can be found in the `./generic` folder.
 
 ```tsx
@@ -41,7 +41,7 @@ export class FooLayout {
 
 	// Static props which never change:
 	static width: number = 42;
-	static radius: number = Settings.CORNER_RADIUS;
+	static radius: number = CardSettings.CORNER_RADIUS;
 
 	// Dynamic props to be assigned values by constructor:
 	y: number;

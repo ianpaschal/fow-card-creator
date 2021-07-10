@@ -1,15 +1,17 @@
 import jsPDF from 'jspdf';
 import React from 'react';
+import { CardSettings } from '../../../CardSettings';
 import { Constants } from '../../../Constants';
 import { FontWeights } from '../../../enums/FontNames';
 import { Area } from '../../../typing/Area';
+import { TextAlignment } from '../../../typing/TextAlignment';
 import { getMultiLineText } from '../../../utils/getMultiLineText';
 
 export interface TextProps extends Area {
 	color?: string;
 	font: string;
 	fontSize: number;
-	align?: 'left' | 'center' | 'right';
+	align?: TextAlignment;
 	lineHeight?: number; // pt
 	letterSpacing?: number;
 	maxLines?: number;
@@ -39,7 +41,7 @@ export class TextLayout {
 	y: number;
 	width: number;
 	height: number;
-	color: string = '#000000';
+	color: string = CardSettings.COLOR_BLACK;
 	font: string;
 	fontSize: number;
 	align: string;

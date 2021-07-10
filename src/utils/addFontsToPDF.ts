@@ -17,29 +17,29 @@ import PTSansRegularItalic from '../../assets/fonts/PTSans-RegularItalic';
 
 interface FontDefinition {
 	name: string;
-	data: string;
+	path: string;
 }
 
 export function addFontsToPDF(doc: jsPDF) {
 	const fonts: FontDefinition[] = [
-		{ name: FontNames.OPEN_SANS_BOLD_ITALIC, data: OpenSansBoldItalic },
-		{ name: FontNames.OPEN_SANS_BOLD, data: OpenSansBold },
-		{ name: FontNames.OPEN_SANS_EXTRA_BOLD_ITALIC, data: OpenSansExtraBoldItalic },
-		{ name: FontNames.OPEN_SANS_EXTRA_BOLD, data: OpenSansExtraBold },
-		{ name: FontNames.OPEN_SANS_LIGHT_ITALIC, data: OpenSansLightItalic },
-		{ name: FontNames.OPEN_SANS_LIGHT, data: OpenSansLight },
-		{ name: FontNames.OPEN_SANS_REGULAR_ITALIC, data: OpenSansRegularItalic },
-		{ name: FontNames.OPEN_SANS_REGULAR, data: OpenSansRegular },
-		{ name: FontNames.OPEN_SANS_SEMI_BOLD_ITALIC, data: OpenSansSemiBoldItalic },
-		{ name: FontNames.OPEN_SANS_SEMI_BOLD, data: OpenSansSemiBold },
-		{ name: FontNames.PT_SANS_BOLD_ITALIC, data: PTSansBoldItalic },
-		{ name: FontNames.PT_SANS_BOLD, data: PTSansBold },
-		{ name: FontNames.PT_SANS_REGULAR_ITALIC, data: PTSansRegularItalic },
-		{ name: FontNames.PT_SANS_REGULAR, data: PTSansRegular },
+		{ name: FontNames.OPEN_SANS_BOLD_ITALIC, path: OpenSansBoldItalic },
+		{ name: FontNames.OPEN_SANS_BOLD, path: OpenSansBold },
+		{ name: FontNames.OPEN_SANS_EXTRA_BOLD_ITALIC, path: OpenSansExtraBoldItalic },
+		{ name: FontNames.OPEN_SANS_EXTRA_BOLD, path: OpenSansExtraBold },
+		{ name: FontNames.OPEN_SANS_LIGHT_ITALIC, path: OpenSansLightItalic },
+		{ name: FontNames.OPEN_SANS_LIGHT, path: OpenSansLight },
+		{ name: FontNames.OPEN_SANS_REGULAR_ITALIC, path: OpenSansRegularItalic },
+		{ name: FontNames.OPEN_SANS_REGULAR, path: OpenSansRegular },
+		{ name: FontNames.OPEN_SANS_SEMI_BOLD_ITALIC, path: OpenSansSemiBoldItalic },
+		{ name: FontNames.OPEN_SANS_SEMI_BOLD, path: OpenSansSemiBold },
+		{ name: FontNames.PT_SANS_BOLD_ITALIC, path: PTSansBoldItalic },
+		{ name: FontNames.PT_SANS_BOLD, path: PTSansBold },
+		{ name: FontNames.PT_SANS_REGULAR_ITALIC, path: PTSansRegularItalic },
+		{ name: FontNames.PT_SANS_REGULAR, path: PTSansRegular },
 	];
 	fonts.forEach((font: FontDefinition) => {
-		const { name, data } = font;
-		doc.addFileToVFS(`${name}.ttf`, data);
+		const { name, path } = font;
+		doc.addFileToVFS(`${name}.ttf`, path);
 		doc.addFont(`${name}.ttf`, name, 'normal');
 	});
 }

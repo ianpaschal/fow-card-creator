@@ -14,14 +14,10 @@ import {
 	updateModifierActionCreator,
 	removeModifierActionCreator,
 } from '../../store/editor/editorActionCreators';
-import {
-	MotivationAttributes,
-	MotivationRatings,
-} from '../../enums/MotivationRatings';
-import {
-	SkillAttributes,
-	SkillRatings,
-} from '../../enums/SkillRatings';
+import { MotivationRatings } from '../../enums/MotivationRatings';
+import { MotivationAttributes } from '../../enums/MotivationAttributes';
+import { SkillRatings } from '../../enums/SkillRatings';
+import { SkillAttributes } from '../../enums/SkillAttributes';
 import { HitOnRatings } from '../../enums/HitOnRatings';
 import { EditorSubSection } from './EditorSubSection';
 import { FormItem } from './FormItem';

@@ -1,7 +1,8 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Settings } from '../../Settings';
+import { CardSettings } from '../../CardSettings';
+import { FontNames } from '../../enums/FontNames';
 import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
@@ -31,7 +32,7 @@ export class MobilityBlockLayout {
 	}
 
 	get rowHeight(): number {
-		return this.props.height - (MobilityBlockLayout.headerHeight + Settings.STROKE_WIDTH);
+		return this.props.height - (MobilityBlockLayout.headerHeight + CardSettings.STROKE_WIDTH);
 	}
 
 	get frameProps(): FrameProps {
@@ -40,25 +41,25 @@ export class MobilityBlockLayout {
 			y: this.props.y,
 			width: this.props.width,
 			border: { top: MobilityBlockLayout.headerHeight },
-			radius: Settings.CORNER_RADIUS,
+			radius: CardSettings.CORNER_RADIUS,
 			height: this.props.height,
 			stroke: this.props.accentColor,
-			fill: '#FFFFFF',
+			fill: CardSettings.COLOR_WHITE,
 		};
 	}
 
 	get tableColumns(): any {
 		const headerStyle = {
 			align: 'center',
-			color: '#FFFFFF',
-			font: 'OpenSans-Bold',
+			color: CardSettings.COLOR_WHITE,
+			font: FontNames.OPEN_SANS_BOLD,
 			fontSize: 4.5,
 			height: MobilityBlockLayout.headerHeight,
 		};
 		const recordStyle = {
 			align: 'center',
-			color: '#000000',
-			font: 'OpenSans-SemiBold',
+			color: CardSettings.COLOR_BLACK,
+			font: FontNames.OPEN_SANS_SEMI_BOLD,
 			fontSize: 6,
 			height: this.rowHeight,
 		};
@@ -118,7 +119,7 @@ export class MobilityBlockLayout {
 			data: [this.props.mobility],
 			rowHeight: this.rowHeight,
 			headerHeight: MobilityBlockLayout.headerHeight,
-			radius: Settings.CORNER_RADIUS,
+			radius: CardSettings.CORNER_RADIUS,
 			stroke: this.props.accentColor,
 			width: this.props.width,
 			x: this.props.x,

@@ -10,8 +10,7 @@ import { MotivationRating } from '../../enums/MotivationRatings';
 import { SkillRating } from '../../enums/SkillRatings';
 import { HitOnRating } from '../../enums/HitOnRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
-import { MobilityAttribute } from '../../enums/Mobility';
-import { ArmorAttribute } from '../../enums/ArmorAttributes';
+import { MobilityField } from '../../enums/MobilityFields';
 import { SoftStatModifier } from '../../typing/SoftStatModifier';
 import { ArmorRating } from '../../typing/ArmorRating';
 import { SaveRating } from '../../typing/SaveRating';
@@ -328,7 +327,7 @@ export const editorSlice = createSlice({
 		},
 		setMobility: (
 			state: EditorState,
-			action: PayloadAction<{attribute: MobilityAttribute, value: number}>
+			action: PayloadAction<{attribute: MobilityField, value: number}>
 		): EditorState => ({
 			...state,
 			unitCard: {
@@ -359,23 +358,6 @@ export const editorSlice = createSlice({
 				},
 			};
 		},
-		setArmorAttribute: (
-			state: EditorState,
-			action: PayloadAction<{attribute: ArmorAttribute, value: number}>
-		): EditorState => ({
-			...state,
-			unitCard: {
-				...state.unitCard,
-				unit: {
-					...state.unitCard.unit,
-					armor: {
-						...state.unitCard.unit.armor,
-						[ action.payload.attribute ]: action.payload.value,
-					},
-					save: null,
-				},
-			},
-		}),
 		setSaveRating: (
 			state: EditorState,
 			action: PayloadAction<SaveRating>

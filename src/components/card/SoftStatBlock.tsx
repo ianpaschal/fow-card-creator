@@ -1,6 +1,6 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import { Settings } from '../../Settings';
+import { CardSettings } from '../../CardSettings';
 import { SoftStat } from '../../typing/SoftStat';
 import { pt } from '../../utils/convertDistance';
 import { FramePDF, FrameProps, FrameSVG } from './generic/Frame';
@@ -12,10 +12,12 @@ import {
 	SoftStatBaseRatingSVG,
 } from './SoftStatBaseRating';
 import {
+	SoftStatModifierLayout,
 	SoftStatModifierPDF,
 	SoftStatModifierProps,
 	SoftStatModifierSVG,
 } from './SoftStatModifier';
+import { FontNames } from '../../enums/FontNames';
 
 // Generic
 export interface SoftStatBlockProps {
@@ -28,63 +30,49 @@ export interface SoftStatBlockProps {
 }
 
 export class SoftStatBlockLayout {
-	static innerMargin = pt(0.5, 'mm');
-	static innerWidth = Settings.STAT_BLOCK_WIDTH - (2 * SoftStatBlockLayout.innerMargin);
-	static headerHeight = pt(1.9, 'mm');
+	static headerHeight: number = pt(1.9, 'mm');
+	static innerMargin: number = pt(0.5, 'mm');
+	static width: number = pt(23, 'mm');
+	static innerWidth: number = SoftStatBlockLayout.width - (2 * SoftStatBlockLayout.innerMargin);
+	static headerFontSize: number = 4;
 
 	static calcHeight(stat: SoftStat): number {
 		let height = 0;
 		height += SoftStatBlockLayout.headerHeight;
-		height += Settings.STROKE_WIDTH;
-		height += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		height += (Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT) * stat.modifiers.length;
-		height += Settings.STROKE_WIDTH; // Bottom space
-		height += Settings.STROKE_WIDTH; // Bottom border
+		height += CardSettings.STROKE_WIDTH;
+		height += SoftStatBaseRatingLayout.height;
+		height += (CardSettings.STROKE_WIDTH + SoftStatModifierLayout.height) * stat.modifiers.length;
+		height += CardSettings.STROKE_WIDTH; // Bottom space
+		height += CardSettings.STROKE_WIDTH; // Bottom border
 		return height;
 	}
 
 	constructor(readonly props: SoftStatBlockProps) {}
 
-	get height(): number {
-		let height = 0;
-		height += SoftStatBlockLayout.headerHeight;
-		height += Settings.STROKE_WIDTH;
-		height += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		// eslint-disable-next-line max-len
-		height += (Settings.STROKE_WIDTH + Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT) * this.props.stat.modifiers.length;
-		height += Settings.STROKE_WIDTH; // Bottom space
-		height += Settings.STROKE_WIDTH; // Bottom border
-		return height;
-	}
-
 	get frameProps(): FrameProps {
 		return {
-			x: this.props.x,
-			y: this.props.y,
-			width: Settings.STAT_BLOCK_WIDTH,
-			height: this.height,
-			radius: Settings.CORNER_RADIUS,
-			border: {
-				top: SoftStatBlockLayout.headerHeight,
-			},
-			stroke: this.props.accentColor,
-			fill: '#FFFFFF',
+			...this.props,
+			...SoftStatBlockLayout,
+			border: { top: SoftStatBlockLayout.headerHeight },
+			fill: CardSettings.COLOR_WHITE,
 			fillOpacity: 0.5,
+			height: SoftStatBlockLayout.calcHeight(this.props.stat),
+			radius: CardSettings.CORNER_RADIUS,
+			stroke: this.props.accentColor,
 		};
 	}
 
 	get headerProps(): TextProps {
 		return {
-			x: this.props.x,
-			y: this.props.y,
-			width: Settings.STAT_BLOCK_WIDTH,
-			height: SoftStatBlockLayout.headerHeight,
-			text: this.props.attribute === 'hitOn' ? 'IS HIT ON' : this.props.attribute.toUpperCase(),
-			fontSize: Settings.STAT_HEADER_FONT_SIZE,
-			color: '#FFFFFF',
-			font: 'OpenSans-Bold',
+			...this.props,
+			...SoftStatBlockLayout,
 			align: 'center',
+			color: CardSettings.COLOR_WHITE,
+			font: FontNames.OPEN_SANS_BOLD,
+			fontSize: SoftStatBlockLayout.headerFontSize,
+			height: SoftStatBlockLayout.headerHeight,
 			lineHeight: SoftStatBlockLayout.headerHeight,
+			text: this.props.attribute === 'hitOn' ? 'IS HIT ON' : this.props.attribute.toUpperCase(),
 		};
 	}
 
@@ -94,24 +82,24 @@ export class SoftStatBlockLayout {
 		const baseRating = this.props.stat.baseRating;
 
 		return {
-			x: this.props.x + pt(0.5, 'mm'),
-			y: this.props.y + SoftStatBlockLayout.headerHeight + Settings.STROKE_WIDTH,
 			label: !this.props.isComponent ? `${ratingEnum[ baseRating ]}`.toUpperCase() : 'AS PER UNIT',
 			value: !this.props.isComponent && numberEnum[ baseRating ],
+			x: this.props.x + pt(0.5, 'mm'),
+			y: this.props.y + SoftStatBlockLayout.headerHeight + CardSettings.STROKE_WIDTH,
 		};
 	}
 
 	getSoftStatModifierProps(i: number): SoftStatModifierProps {
 		let y = this.props.y;
 		y += SoftStatBlockLayout.headerHeight;
-		y += Settings.STROKE_WIDTH;
-		y += Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-		y += Settings.STROKE_WIDTH;
-		y += i * (Settings.SOFT_STAT_SECONDARY_RATING_HEIGHT + Settings.STROKE_WIDTH);
+		y += CardSettings.STROKE_WIDTH;
+		y += SoftStatBaseRatingLayout.height;
+		y += CardSettings.STROKE_WIDTH;
+		y += i * (SoftStatModifierLayout.height + CardSettings.STROKE_WIDTH);
 		return {
+			modifier: this.props.stat.modifiers[ i ],
 			x: this.props.x + pt(0.5, 'mm'),
 			y,
-			modifier: this.props.stat.modifiers[ i ],
 		};
 	}
 }

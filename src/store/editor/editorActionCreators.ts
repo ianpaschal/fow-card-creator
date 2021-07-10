@@ -1,9 +1,8 @@
 /* eslint-disable max-len */
 import { Dispatch } from '@reduxjs/toolkit';
-import { ArmorAttribute } from '../../enums/ArmorAttributes';
 import { Era } from '../../enums/Eras';
 import { ImageFormat } from '../../enums/ImageFormats';
-import { MobilityAttribute } from '../../enums/Mobility';
+import { MobilityField } from '../../enums/MobilityFields';
 import { Nationality } from '../../enums/Nations';
 import { SkillRating } from '../../enums/SkillRatings';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
@@ -117,7 +116,7 @@ export function removeModifierActionCreator(modifierType: 'motivation' | 'skill'
 	};
 }
 
-export function setMobilityActionCreator(attribute: MobilityAttribute, value: number) {
+export function setMobilityActionCreator(attribute: MobilityField, value: number) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.setMobility({ attribute, value }));
 	};
@@ -128,12 +127,7 @@ export function setArmorRatingActionCreator(rating: ArmorRating) {
 		dispatch(actions.setArmorRating(rating));
 	};
 }
-export function setArmorAttributeActionCreator(attribute: ArmorAttribute, value: number) {
-	return (dispatch: Dispatch) => {
-		// TODO: If there is a save instead of armor, remove it, or do nothing?
-		dispatch(actions.setArmorAttribute({ attribute, value }));
-	};
-}
+
 export function setSaveRatingActionCreator(rating: SaveRating) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.setSaveRating(rating));

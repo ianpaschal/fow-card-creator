@@ -6,7 +6,7 @@ import {
 	RoundedRectangleSVG,
 } from './generic/RoundedRectangle';
 import { UnitTypes } from '../../enums/UnitTypes';
-import { Settings } from '../../Settings';
+import { CardSettings } from '../../CardSettings';
 import { pt } from '../../utils/convertDistance';
 import { FramePDF, FrameProps, FrameSVG } from './generic/Frame';
 import { RootState, store } from '../../store';
@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { TextPDF, TextProps, TextSVG } from './generic/Text';
 import { SoftStatBlockLayout } from './SoftStatBlock';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
+import { FontNames } from '../../enums/FontNames';
 
 // Generic
 const mapStateToProps = (state: RootState) => ({
@@ -29,6 +30,8 @@ const mapStateToProps = (state: RootState) => ({
 export type SaveBlockProps = ReturnType<typeof mapStateToProps>;
 
 export class SaveBlockLayout {
+	static ratingHeight: number = pt(7, 'mm');
+
 	constructor(readonly props: SaveBlockProps) {}
 
 	get frameProps(): FrameProps {
@@ -37,10 +40,10 @@ export class SaveBlockLayout {
 			y: this.props.y,
 			width: this.props.width,
 			height: this.props.height,
-			radius: Settings.CORNER_RADIUS,
-			border: { top: Settings.STAT_BLOCK_HEADER_HEIGHT },
+			radius: CardSettings.CORNER_RADIUS,
+			border: { top: SoftStatBlockLayout.headerHeight },
 			stroke: this.props.accentColor,
-			fill: '#FFFFFF',
+			fill: CardSettings.COLOR_WHITE,
 		};
 	}
 
@@ -51,20 +54,20 @@ export class SaveBlockLayout {
 			width: this.props.width,
 			height: SoftStatBlockLayout.headerHeight,
 			text: 'SAVE',
-			fontSize: Settings.STAT_HEADER_FONT_SIZE,
-			color: '#FFFFFF',
-			font: 'OpenSans-Bold',
+			fontSize: SoftStatBlockLayout.headerFontSize,
+			color: CardSettings.COLOR_WHITE,
+			font: FontNames.OPEN_SANS_BOLD,
 			align: 'center',
 		};
 	}
 
 	get nameAreaProps(): RoundedRectangleProps {
 		return {
-			x: this.props.x + Settings.STAT_BLOCK_INNER_MARGIN,
-			y: this.props.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH,
+			x: this.props.x + SoftStatBlockLayout.innerMargin,
+			y: this.props.y + SoftStatBlockLayout.headerHeight + CardSettings.STROKE_WIDTH,
 			width: pt(16, 'mm'),
-			height: Settings.ARMOR_RATING_MISC_HEIGHT,
-			radius: Settings.CORNER_RADIUS - Settings.STAT_BLOCK_INNER_MARGIN,
+			height: SaveBlockLayout.ratingHeight,
+			radius: CardSettings.CORNER_RADIUS - SoftStatBlockLayout.innerMargin,
 			fill: this.props.accentColor,
 		};
 	}
@@ -72,13 +75,13 @@ export class SaveBlockLayout {
 	get ratingLabelProps(): TextProps {
 		const height = pt(2.5, 'mm');
 		return {
-			x: this.props.x + Settings.STAT_BLOCK_INNER_MARGIN,
+			x: this.props.x + SoftStatBlockLayout.innerMargin,
 			// eslint-disable-next-line max-len
-			y: this.props.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH + (Settings.ARMOR_RATING_MISC_HEIGHT - height),
+			y: this.props.y + SoftStatBlockLayout.headerHeight + CardSettings.STROKE_WIDTH + (SaveBlockLayout.ratingHeight - height),
 			width: pt(15.5, 'mm'),
 			height,
-			color: '#FFFFFF',
-			font: 'PTSans-Regular-Italic',
+			color: CardSettings.COLOR_WHITE,
+			font: FontNames.PT_SANS_REGULAR_ITALIC,
 			fontSize: 4.5,
 			text: UnitTypes[ this.props.save.type ],
 			align: 'center',
@@ -88,11 +91,11 @@ export class SaveBlockLayout {
 	get ratingValueProps(): TextProps {
 		return {
 			x: this.props.x + pt(17.5, 'mm'),
-			y: this.props.y + Settings.STAT_BLOCK_HEADER_HEIGHT + Settings.STROKE_WIDTH,
+			y: this.props.y + SoftStatBlockLayout.headerHeight + CardSettings.STROKE_WIDTH,
 			width: pt(4, 'mm'),
-			height: Settings.ARMOR_RATING_MISC_HEIGHT,
-			color: '#000000',
-			font: 'OpenSans-Bold',
+			height: SaveBlockLayout.ratingHeight,
+			color: CardSettings.COLOR_BLACK,
+			font: FontNames.OPEN_SANS_BOLD,
 			fontSize: 12,
 			text: formatDiceRoll(this.props.save.value, false),
 			align: 'center',

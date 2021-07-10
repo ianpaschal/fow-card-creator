@@ -14,7 +14,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
 		const elements = [];
 		for (let i = 0; i < 10; i++) {
 			elements.push(
-				<div className={classNames(
+				<div key={i} className={classNames(
 					'star-rating__half-star',
 					i % 2 == 0 ? 'star-rating__half-left' : 'star-rating__half-right'
 				)}>

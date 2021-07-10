@@ -3,7 +3,7 @@ import jsPDF from 'jspdf';
 import { connect } from 'react-redux';
 import { RootState, store } from '../../store';
 import { pt } from '../../utils/convertDistance';
-import { Settings } from '../../Settings';
+import { CardSettings } from '../../CardSettings';
 import { TextLayout, TextPDF, TextProps, TextSVG } from './generic/Text';
 import {
 	RoundedRectanglePDF,
@@ -12,6 +12,8 @@ import {
 } from './generic/RoundedRectangle';
 import { NationalInsigniaPDF, NationalInsigniaSVG } from './NationalInsignia';
 import HeaderOverlay from '../../../assets/images/unit-card-header-overlay.png';
+import { TextAlignment } from '../../typing/TextAlignment';
+import { FontNames } from '../../enums/FontNames';
 
 // Generic
 const mapStateToProps = (state: RootState) => ({
@@ -27,34 +29,34 @@ export type HeaderBlockProps = ReturnType<typeof mapStateToProps>;
 
 // TODO: Refactor constructor and props
 export class HeaderBlockLayout {
-	static x: number = Settings.CARD_MARGINS;
-	static y: number = Settings.CARD_MARGINS + pt(0.05, 'mm');
-	static width: number = Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS);
-	static radius: number = Settings.CORNER_RADIUS;
+	static x: number = CardSettings.MARGIN_OUTER;
+	static y: number = CardSettings.MARGIN_OUTER + pt(0.05, 'mm');
+	static width: number = CardSettings.WIDTH - (2 * CardSettings.MARGIN_OUTER);
+	static radius: number = CardSettings.CORNER_RADIUS;
 	static textXMargins = pt(10, 'mm');
 	static textX: number = HeaderBlockLayout.x + HeaderBlockLayout.textXMargins;
 	static textW: number = HeaderBlockLayout.width - (2 * HeaderBlockLayout.textXMargins);
 	static titleLineH: number = pt(4, 'mm');
 	static subTitleH: number = pt(1.5, 'mm');
 	static subTitleSpacing: number = pt(0.7, 'mm');
-	static font: string = 'OpenSans-Bold';
+	static font: string = FontNames.OPEN_SANS_BOLD;
 	static titleFontSize: number = 16;
 	static subTitleFontSize: number = 6;
-	static align: 'left' | 'center' | 'right' = 'center';
+	static align: TextAlignment = 'center';
 	static lineHeight: number = 0.825;
 	static letterSpacing: number = -0.4;
 
 	// Static
-	x: number = Settings.CARD_MARGINS;
-	y: number = Settings.CARD_MARGINS + pt(0.05, 'mm');
+	x: number = CardSettings.MARGIN_OUTER;
+	y: number = CardSettings.MARGIN_OUTER + pt(0.05, 'mm');
 	height: number;
-	width: number = Settings.CARD_WIDTH - (2 * Settings.CARD_MARGINS);
-	radius: number = Settings.CORNER_RADIUS;
+	width: number = CardSettings.WIDTH - (2 * CardSettings.MARGIN_OUTER);
+	radius: number = CardSettings.CORNER_RADIUS;
 	titleLineHeight: number = pt(4, 'mm');
 	xMargin: number = pt(10, 'mm');
-	font: string = 'OpenSans-Bold';
+	font: string = FontNames.OPEN_SANS_BOLD;
 	titleFontSize: number = 16;
-	align: 'left' | 'center' | 'right' = 'center';
+	align: TextAlignment = 'center';
 
 	titleLineCount: number;
 	title: string;
@@ -125,7 +127,7 @@ export class HeaderBlockLayout {
 			height: this.titleHeight,
 			fontSize: HeaderBlockLayout.titleFontSize,
 			text: this.titleText,
-			color: this.title ? '#FFFFFF' : '#CCCCCC',
+			color: this.title ? CardSettings.COLOR_WHITE : '#CCCCCC',
 			maxLines: 2,
 			lineHeight: this.titleHeight,
 		};
@@ -144,9 +146,9 @@ export class HeaderBlockLayout {
 			height: HeaderBlockLayout.subTitleH,
 			y,
 			fontSize: HeaderBlockLayout.subTitleFontSize,
-			font: 'OpenSans-Bold',
+			font: FontNames.OPEN_SANS_BOLD,
 			text: this.subTitle.toUpperCase(),
-			color: '#FFFFFF',
+			color: CardSettings.COLOR_WHITE,
 			maxLines: 1,
 			letterSpacing: 0,
 			lineHeight: HeaderBlockLayout.subTitleH,
@@ -195,11 +197,11 @@ export const ConnectedHeaderBlockSVG = connect(mapStateToProps, null)(HeaderBloc
 export const HeaderBlockPDF = (doc: jsPDF, props: HeaderBlockProps): void => {
 	const layout = new HeaderBlockLayout(props);
 	RoundedRectanglePDF(doc, {
-		x: Settings.CARD_MARGINS,
-		y: Settings.CARD_MARGINS + pt(0.05, 'mm'),
+		x: CardSettings.MARGIN_OUTER,
+		y: CardSettings.MARGIN_OUTER + pt(0.05, 'mm'),
 		width: pt(100, 'mm'),
 		height: pt(8.25, 'mm'),
-		radius: Settings.CORNER_RADIUS,
+		radius: CardSettings.CORNER_RADIUS,
 		fill: props.accentColor,
 	});
 	if (props.era === 'LW') {

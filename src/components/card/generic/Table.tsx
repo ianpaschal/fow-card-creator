@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 import jsPDF from 'jspdf';
 import React from 'react';
-import { Settings } from '../../../Settings';
+import { CardSettings } from '../../../CardSettings';
 import { TextPDF, TextProps, TextSVG } from './Text';
 import { FramePDF, FrameProps, FrameSVG } from './Frame';
 import { Area } from '../../../typing/Area';
 import { RectangleProps, RoundedRectangleProps } from './RoundedRectangle';
+import { TextAlignment } from '../../../typing/TextAlignment';
 
 export interface TableProps extends Omit<RoundedRectangleProps, 'height'> {
 	columns: ColumnDefinition[];
@@ -17,7 +18,7 @@ export interface TableProps extends Omit<RoundedRectangleProps, 'height'> {
 export interface ColumnDefinition {
     widthFactor: number; // 0.0 - 1.0
 	subColumns?: ColumnDefinition[];
-	align?: 'left' | 'center' | 'right';
+	align?: TextAlignment;
 	header: (x: number, y: number, width: number) => (RectangleProps | TextProps)[];
 	cell: (x: number, y: number, width: number, record: any) => (RectangleProps | TextProps)[];
 }
@@ -51,28 +52,28 @@ export class TableLayout {
 			y: this.y,
 			width: this.width,
 			border: { top: this.headerHeight },
-			radius: Settings.CORNER_RADIUS,
-			height: this.headerHeight + (this.data.length * this.rowHeight) + Settings.STROKE_WIDTH,
+			radius: CardSettings.CORNER_RADIUS,
+			height: this.headerHeight + (this.data.length * this.rowHeight) + CardSettings.STROKE_WIDTH,
 			stroke: this.stroke,
-			fill: '#FFFFFF',
+			fill: CardSettings.COLOR_WHITE,
 		};
 	}
 
 	computeColumnAreas(x, width, columns): Exclude<Area, 'y' | 'height'>[] {
 		const columnsAreas = [];
 		let columnX = x;
-		const usableWidth = width - ((columns.length - 1) * Settings.STROKE_WIDTH);
+		const usableWidth = width - ((columns.length - 1) * CardSettings.STROKE_WIDTH);
 		columns.forEach((column) => {
 			const columnWidth = usableWidth * column.widthFactor;
 			columnsAreas.push({ x: columnX, width: columnWidth });
-			columnX += columnWidth + Settings.STROKE_WIDTH;
+			columnX += columnWidth + CardSettings.STROKE_WIDTH;
 		});
 		return columnsAreas;
 	}
 
 	renderBodySVG(columns: ColumnDefinition[]): JSX.Element[] {
 		return columns.map((column, i) => {
-			const { x, width } = this.computeColumnAreas(this.x + Settings.STROKE_WIDTH, this.width - (2 * Settings.STROKE_WIDTH), this.columns)[ i ];
+			const { x, width } = this.computeColumnAreas(this.x + CardSettings.STROKE_WIDTH, this.width - (2 * CardSettings.STROKE_WIDTH), this.columns)[ i ];
 			return (
 				<React.Fragment key={i}>
 					{column.header(x, this.y, width).map((props: TextProps | RectangleProps, ii: number) => (
@@ -84,11 +85,11 @@ export class TableLayout {
 							<React.Fragment key={ii}>
 								{i > 0 && (
 									<rect
-										y={y - (Settings.STROKE_WIDTH / 2)}
-										x={x - Settings.STROKE_WIDTH}
+										y={y - (CardSettings.STROKE_WIDTH / 2)}
+										x={x - CardSettings.STROKE_WIDTH}
 										fill={this.stroke}
-										width={Settings.STROKE_WIDTH}
-										height={this.rowHeight + Settings.STROKE_WIDTH}
+										width={CardSettings.STROKE_WIDTH}
+										height={this.rowHeight + CardSettings.STROKE_WIDTH}
 									/>
 								)}
 								{column.cell(x, y, width, record).map((props: TextProps | RectangleProps, iii: number) => (
@@ -116,7 +117,7 @@ export class TableLayout {
 
 	renderBodyPDF(doc: jsPDF, columns: ColumnDefinition[]): void {
 		columns.forEach((column, i) => {
-			const { x, width } = this.computeColumnAreas(this.x + Settings.STROKE_WIDTH, this.width - (2 * Settings.STROKE_WIDTH), this.columns)[ i ];
+			const { x, width } = this.computeColumnAreas(this.x + CardSettings.STROKE_WIDTH, this.width - (2 * CardSettings.STROKE_WIDTH), this.columns)[ i ];
 			column.header(x, this.y, width).forEach((props: TextProps | RectangleProps, ii: number) => (
 				this.renderCellPDF(doc, props, ii)
 			));
@@ -125,10 +126,10 @@ export class TableLayout {
 				if (i > 0) {
 					doc.setFillColor(this.stroke);
 					doc.rect(
-						x - Settings.STROKE_WIDTH,
-						y - (Settings.STROKE_WIDTH / 2),
-						Settings.STROKE_WIDTH,
-						this.rowHeight + Settings.STROKE_WIDTH,
+						x - CardSettings.STROKE_WIDTH,
+						y - (CardSettings.STROKE_WIDTH / 2),
+						CardSettings.STROKE_WIDTH,
+						this.rowHeight + CardSettings.STROKE_WIDTH,
 						'F'
 					);
 				}

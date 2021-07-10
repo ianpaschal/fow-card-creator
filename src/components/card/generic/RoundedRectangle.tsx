@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { Constants } from '../../../Constants';
-import { Settings } from '../../../Settings';
+import { CardSettings } from '../../../CardSettings';
 import { Area } from '../../../typing/Area';
 
 export interface RectangleProps extends Area {
@@ -102,7 +102,7 @@ export const  RoundedRectanglePDF = (doc: jsPDF, props: RoundedRectangleProps): 
 		doc.setFillColor(props.fill);
 	}
 	if (props.stroke) {
-		doc.setLineWidth(Settings.STROKE_WIDTH).setDrawColor(props.stroke);
+		doc.setLineWidth(CardSettings.STROKE_WIDTH).setDrawColor(props.stroke);
 	}
 
 	// Create the shpae

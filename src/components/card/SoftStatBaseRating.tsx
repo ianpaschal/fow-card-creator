@@ -1,26 +1,21 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import {
-	HitOnNumbers,
-	HitOnRatings,
-} from '../../enums/HitOnRatings';
-import {
-	MotivationNumbers,
-	MotivationRatings,
-} from '../../enums/MotivationRatings';
-import {
-	SkillNumbers,
-	SkillRatings,
-} from '../../enums/SkillRatings';
-import { Settings } from '../../Settings';
-import { pt } from '../../utils/convertDistance';
+import { CardSettings } from '../../CardSettings';
 import { formatDiceRoll } from '../../utils/formatDiceRoll';
+import { HitOnNumbers } from '../../enums/HitOnNumbers';
+import { HitOnRatings } from '../../enums/HitOnRatings';
+import { MotivationNumbers } from '../../enums/MotivationNumbers';
+import { MotivationRatings } from '../../enums/MotivationRatings';
+import { pt } from '../../utils/convertDistance';
 import {
 	RoundedRectanglePDF,
 	RoundedRectangleProps,
 	RoundedRectangleSVG,
 } from './generic/RoundedRectangle';
 import { TextPDF, TextProps, TextSVG } from './generic/Text';
+import { SkillNumbers } from '../../enums/SkillNumbers';
+import { SkillRatings } from '../../enums/SkillRatings';
+import { TextAlignment } from '../../typing/TextAlignment';
 
 // Generic
 export interface SoftStatBaseRatingProps {
@@ -55,10 +50,15 @@ export class SoftStatBaseRatingLayout {
 		}
 	}
 
-	static width: number = Settings.STAT_BLOCK_WIDTH - (2 * pt(0.5, 'mm'));
-	static height: number = Settings.SOFT_STAT_PRIMARY_RATING_HEIGHT;
-	static radius: number = Settings.CORNER_RADIUS - pt(0.5, 'mm');
-	static fill: string = Settings.SOFT_STAT_PRIMARY_RATING_BACKGROUND_COLOR;
+	static align: TextAlignment = 'center';
+	static color: string = CardSettings.COLOR_WHITE;
+	static fill: string = CardSettings.COLOR_RED;
+	static font: string = 'OpenSans-Bold';
+	static fontSize: number = 8;
+	static height: number = pt(3.3, 'mm');
+	static lineHeight: number = SoftStatBaseRatingLayout.height;
+	static radius: number = CardSettings.CORNER_RADIUS - pt(0.5, 'mm');
+	static width: number = pt(22, 'mm'); // TODO: Use SoftStatBlockLayout.innerWidth
 
 	constructor(readonly props: SoftStatBaseRatingProps) {}
 
@@ -68,31 +68,20 @@ export class SoftStatBaseRatingLayout {
 
 	get labelProps(): TextProps {
 		return {
-			align: 'center',
-			color: '#FFFFFF',
-			font: 'OpenSans-Bold',
-			fontSize: Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE,
-			height: SoftStatBaseRatingLayout.height,
-			lineHeight: SoftStatBaseRatingLayout.height,
+			...this.props,
+			...SoftStatBaseRatingLayout,
 			text: this.props.label,
 			width: this.props.value ? SoftStatBaseRatingLayout.width - pt(4, 'mm') : SoftStatBaseRatingLayout.width,
-			x: this.props.x,
-			y: this.props.y,
 		};
 	}
 
 	get valueProps(): TextProps {
 		return {
-			align: 'center',
-			color: '#FFFFFF',
-			font: 'OpenSans-Bold',
-			fontSize: Settings.SOFT_STAT_PRIMARY_RATING_FONT_SIZE,
-			height: SoftStatBaseRatingLayout.height,
-			lineHeight: SoftStatBaseRatingLayout.height,
+			...this.props,
+			...SoftStatBaseRatingLayout,
 			text: formatDiceRoll(this.props.value),
 			width: pt(4, 'mm'),
 			x: this.props.x + SoftStatBaseRatingLayout.width - pt(4, 'mm'),
-			y: this.props.y,
 		};
 	}
 }

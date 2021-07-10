@@ -1,7 +1,8 @@
 import jsPDF from 'jspdf';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Settings } from '../../Settings';
+import { CardSettings } from '../../CardSettings';
+import { FontNames } from '../../enums/FontNames';
 import { RootState, store } from '../../store';
 import { Weapon } from '../../typing/Weapon';
 import { pt } from '../../utils/convertDistance';
@@ -38,8 +39,8 @@ export class WeaponsBlockLayout {
 						height: WeaponsBlockLayout.headerHeight,
 						text: 'WEAPON',
 						fontSize: 4.5,
-						font: 'OpenSans-Bold',
-						color: '#FFFFFF',
+						font: FontNames.OPEN_SANS_BOLD,
+						color: CardSettings.COLOR_WHITE,
 						align: 'left',
 						maxLines: 1,
 					},
@@ -52,8 +53,8 @@ export class WeaponsBlockLayout {
 						height: WeaponsBlockLayout.rowHeight,
 						text: record.name,
 						fontSize: 6.3,
-						font: 'OpenSans-SemiBold',
-						color: '#000000',
+						font: FontNames.OPEN_SANS_SEMI_BOLD,
+						color: CardSettings.COLOR_BLACK,
 						align: 'left',
 						maxLines: 2,
 						letterSpacing: -0.25,
@@ -62,7 +63,7 @@ export class WeaponsBlockLayout {
 			},
 			{
 				widthFactor: 0.15,
-				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'RANGE', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' }]),
+				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'RANGE', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' }]),
 				cell: (x, y, width, record) => ([
 					{
 						x,
@@ -71,8 +72,8 @@ export class WeaponsBlockLayout {
 						height: WeaponsBlockLayout.rowHeight,
 						text: formatDistance(record.range),
 						fontSize: 6.75,
-						font: 'OpenSans-SemiBold',
-						color: '#000000',
+						font: FontNames.OPEN_SANS_SEMI_BOLD,
+						color: CardSettings.COLOR_BLACK,
 						align: 'center',
 					},
 				]),
@@ -80,9 +81,9 @@ export class WeaponsBlockLayout {
 			{
 				widthFactor: 0.16,
 				header: (x, y, width) => ([
-					{ x, y, width, height: WeaponsBlockLayout.headerHeight / 2, text: 'ROF', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' },
-					{ x, y: y + WeaponsBlockLayout.headerHeight / 2, width: width / 2, height: WeaponsBlockLayout.headerHeight / 2, text: 'HALTED', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' },
-					{ x: x + width / 2, y: y + WeaponsBlockLayout.headerHeight / 2, width: width / 2, height: WeaponsBlockLayout.headerHeight / 2, text: 'MOVING', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' },
+					{ x, y, width, height: WeaponsBlockLayout.headerHeight / 2, text: 'ROF', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' },
+					{ x, y: y + WeaponsBlockLayout.headerHeight / 2, width: width / 2, height: WeaponsBlockLayout.headerHeight / 2, text: 'HALTED', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' },
+					{ x: x + width / 2, y: y + WeaponsBlockLayout.headerHeight / 2, width: width / 2, height: WeaponsBlockLayout.headerHeight / 2, text: 'MOVING', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' },
 				]),
 				cell: (x, y, width, record) => {
 					return record.template ? [
@@ -93,45 +94,45 @@ export class WeaponsBlockLayout {
 							height: WeaponsBlockLayout.rowHeight,
 							text: record.template.toUpperCase(),
 							fontSize: 6.75,
-							font: 'OpenSans-SemiBold',
-							color: '#000000',
+							font: FontNames.OPEN_SANS_SEMI_BOLD,
+							color: CardSettings.COLOR_BLACK,
 							align: 'center',
 						},
 						{
-							x: x - (Settings.STROKE_WIDTH / 2),
-							y: y + WeaponsBlockLayout.rowHeight - Settings.STROKE_WIDTH,
-							width: width + Settings.STROKE_WIDTH,
-							height: Settings.STROKE_WIDTH,
+							x: x - (CardSettings.STROKE_WIDTH / 2),
+							y: y + WeaponsBlockLayout.rowHeight - CardSettings.STROKE_WIDTH,
+							width: width + CardSettings.STROKE_WIDTH,
+							height: CardSettings.STROKE_WIDTH,
 							fill: this.props.accentColor,
 						},
 					] : [
 						{
 							x,
 							y,
-							width: (width - Settings.STROKE_WIDTH) / 2,
+							width: (width - CardSettings.STROKE_WIDTH) / 2,
 							height: WeaponsBlockLayout.rowHeight,
 							text: record.rof.halted.toString(),
 							fontSize: 6.75,
-							font: 'OpenSans-SemiBold',
-							color: '#000000',
+							font: FontNames.OPEN_SANS_SEMI_BOLD,
+							color: CardSettings.COLOR_BLACK,
 							align: 'center',
 						},
 						{
-							x: x + ((width - Settings.STROKE_WIDTH) / 2),
-							y: y - (Settings.STROKE_WIDTH / 2),
-							width: Settings.STROKE_WIDTH,
-							height: WeaponsBlockLayout.rowHeight + Settings.STROKE_WIDTH,
+							x: x + ((width - CardSettings.STROKE_WIDTH) / 2),
+							y: y - (CardSettings.STROKE_WIDTH / 2),
+							width: CardSettings.STROKE_WIDTH,
+							height: WeaponsBlockLayout.rowHeight + CardSettings.STROKE_WIDTH,
 							fill: this.props.accentColor,
 						},
 						{
-							x: x + ((width - Settings.STROKE_WIDTH) / 2) + Settings.STROKE_WIDTH,
+							x: x + ((width - CardSettings.STROKE_WIDTH) / 2) + CardSettings.STROKE_WIDTH,
 							y,
-							width: (width - Settings.STROKE_WIDTH) / 2,
+							width: (width - CardSettings.STROKE_WIDTH) / 2,
 							height: WeaponsBlockLayout.rowHeight,
 							text: record.rof.moving.toString(),
 							fontSize: 6.75,
-							font: 'OpenSans-SemiBold',
-							color: '#000000',
+							font: FontNames.OPEN_SANS_SEMI_BOLD,
+							color: CardSettings.COLOR_BLACK,
 							align: 'center',
 						},
 					];
@@ -139,7 +140,7 @@ export class WeaponsBlockLayout {
 			},
 			{
 				widthFactor: 0.07,
-				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'ANTI- TANK', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' }]),
+				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'ANTI- TANK', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' }]),
 				cell: (x, y, width, record) => ([
 					{
 						x,
@@ -148,15 +149,15 @@ export class WeaponsBlockLayout {
 						height: WeaponsBlockLayout.rowHeight,
 						text: record.antiTank.toString(),
 						fontSize: 6.75,
-						font: 'OpenSans-SemiBold',
-						color: '#000000',
+						font: FontNames.OPEN_SANS_SEMI_BOLD,
+						color: CardSettings.COLOR_BLACK,
 						align: 'center',
 					},
 				]),
 			},
 			{
 				widthFactor: 0.07,
-				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'FIRE- POWER', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' }]),
+				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'FIRE- POWER', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' }]),
 				cell: (x, y, width, record) => ([
 					{
 						x,
@@ -165,15 +166,15 @@ export class WeaponsBlockLayout {
 						height: WeaponsBlockLayout.rowHeight,
 						text: formatDiceRoll(record.firePower, true),
 						fontSize: 6.75,
-						font: 'OpenSans-SemiBold',
-						color: '#000000',
+						font: FontNames.OPEN_SANS_SEMI_BOLD,
+						color: CardSettings.COLOR_BLACK,
 						align: 'center',
 					},
 				]),
 			},
 			{
 				widthFactor: 0.3,
-				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'NOTES', fontSize: 4.5, font: 'OpenSans-Bold', color: '#FFFFFF', align: 'center' }]),
+				header: (x, y, width) => ([{ x, y, width, height: WeaponsBlockLayout.headerHeight, text: 'NOTES', fontSize: 4.5, font: FontNames.OPEN_SANS_BOLD, color: CardSettings.COLOR_WHITE, align: 'center' }]),
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				cell: (x, y, width) => ([]),
 			},
@@ -212,7 +213,7 @@ export class WeaponsBlockLayout {
 		return {
 			columns: this.tableColumns,
 			data: this.tableData,
-			radius: Settings.CORNER_RADIUS,
+			radius: CardSettings.CORNER_RADIUS,
 			stroke: this.props.accentColor,
 			width: this.props.width,
 			x: this.props.x,

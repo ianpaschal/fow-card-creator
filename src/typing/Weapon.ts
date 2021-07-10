@@ -1,3 +1,4 @@
+import { ArtilleryTemplateType } from '../enums/ArtilleryTemplateTypes';
 import { DiceRollValue } from './DiceRollValue';
 
 export type WeaponFiringMode = 'direct' | 'secondary' | 'bombardment';
@@ -19,7 +20,7 @@ export interface WeaponSecondaryFire extends WeaponDirectFire {
 
 export interface WeaponBombardment {
 	range: number;
-	template: 'artillery' | 'salvo';
+	template: ArtilleryTemplateType;
 	antiTank: number;
 	firePower: DiceRollValue;
 	notes: string[];
