@@ -1,5 +1,3 @@
-// Copyright (c) 2020 Ian Paschal
-
 import React from 'react';
 import classNamesDedupe from 'classnames/dedupe';
 import './FormItem.scss';

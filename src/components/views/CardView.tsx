@@ -1,5 +1,3 @@
-// Copyright (c) 2020 Ian Paschal
-
 import React from 'react';
 import { Button } from 'primereact/button';
 import './CardView.scss';
