@@ -1,31 +1,31 @@
 import React from 'react';
 import { Button } from 'primereact/button';
-import { ConnectedGeneralEditor } from '../editor/GeneralEditor';
-import { ConnectedMobilityEditor } from '../editor/MobilityEditor';
-import { ConnectedCharacteristicsEditor } from '../editor/CharacteristicsEditor';
-import { ConnectedWeaponsEditor } from '../editor/WeaponsEditor';
+import { ConnectedGeneralEditor } from '../../editor/GeneralEditor';
+import { ConnectedMobilityEditor } from '../../editor/MobilityEditor';
+import { ConnectedCharacteristicsEditor } from '../../editor/CharacteristicsEditor';
+import { ConnectedWeaponsEditor } from '../../editor/WeaponsEditor';
 import { SelectButton } from 'primereact/selectbutton';
 import './EditView.scss';
-import { ConnectedSoftStatEditor } from '../editor/SoftStatEditor';
+import { ConnectedSoftStatEditor } from '../../editor/SoftStatEditor';
 import { connect, ConnectedProps } from 'react-redux';
-import { RootState, store } from '../../store';
-import { UnitCardFrontSVG } from '../card/UnitCardFront';
-import { ConnectedArmorEditor } from '../editor/ArmorEditor';
-import { ConnectedSaveEditor } from '../editor/SaveEditor';
-import { auth, db } from '../../firebase';
+import { RootState, store } from '../../../store';
+import { UnitCardFrontSVG } from '../../card/UnitCardFront';
+import { ConnectedArmorEditor } from '../../editor/ArmorEditor';
+import { ConnectedSaveEditor } from '../../editor/SaveEditor';
+import { auth, db } from '../../../firebase';
 import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import {
 	setIsPublicActionCreator,
 	setUnitCardActionCreator,
-} from '../../store/editor/editorActionCreators';
-import { UnitCard } from '../../typing/UnitCard';
-import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
-import { ConnectedImagesEditor } from '../editor/ImagesSection';
-import { defaultUnitCard } from '../../store/editor/defaultUnitCard';
-import { UnitCardBackSVG } from '../card/UnitCardBack';
-import { DownloadCardButton } from '../DownloadCardButton/DownloadCardButton';
+} from '../../../store/editor/editorActionCreators';
+import { UnitCard } from '../../../typing/UnitCard';
+import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
+import { ConnectedImagesEditor } from '../../editor/ImagesSection';
+import { defaultUnitCard } from '../../../store/editor/defaultUnitCard';
+import { UnitCardBackSVG } from '../../card/UnitCardBack';
+import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -44,9 +44,7 @@ export interface OwnProps {
 	className?: string;
 }
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type EditViewProps = OwnProps & ReduxProps & RouteComponentProps;
+export type EditViewProps = OwnProps & ConnectedProps<typeof connector> & RouteComponentProps;
 
 export interface EditViewState {
 	view: 'editor' | 'split' | 'preview';

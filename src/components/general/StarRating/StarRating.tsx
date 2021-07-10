@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { RatingValue } from '../../typing/RatingValue';
+import { RatingValue } from '../../../typing/RatingValue';
 import './StarRating.scss';
 
 export interface StarRatingProps {

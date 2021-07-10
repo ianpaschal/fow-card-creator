@@ -1,9 +1,10 @@
+import { ArtilleryTemplateType } from '../../enums/ArtilleryTemplateTypes';
 import { DiceRollValue } from '../../typing/DiceRollValue';
 import { Weapon } from '../../typing/Weapon';
 
 export const defaultBombardment = {
 	range: 72,
-	template: 'artillery' as 'artillery' | 'salvo',
+	template: 'ARTILLERY' as ArtilleryTemplateType,
 	antiTank: 3,
 	firePower: 2 as DiceRollValue,
 	notes: ['Forward Firing', 'Smoke Bombardment'],

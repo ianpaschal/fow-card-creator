@@ -17,9 +17,7 @@ const connector = connect(
 	}, dispatch),
 );
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type MobilityEditorProps = ReduxProps;
+export type MobilityEditorProps = ConnectedProps<typeof connector>;
 
 export const MobilityEditor: React.FC<MobilityEditorProps> = ({
 	mobility,

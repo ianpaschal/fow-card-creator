@@ -3,4 +3,8 @@ module.exports = {
 	rules: {
 		"indentation": ["tab"],
 	},
-}
+	ignoreFiles: [
+		"**/*.ts",
+		"**/*.tsx",
+	],
+};

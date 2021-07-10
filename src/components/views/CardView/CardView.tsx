@@ -2,17 +2,17 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import './CardView.scss';
 import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../store';
-import { UnitCardFrontSVG } from '../card/UnitCardFront';
-import { auth, db } from '../../firebase';
+import { RootState } from '../../../store';
+import { UnitCardFrontSVG } from '../../card/UnitCardFront';
+import { auth, db } from '../../../firebase';
 import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
-import { setUnitCardActionCreator } from '../../store/editor/editorActionCreators';
-import { UnitCard } from '../../typing/UnitCard';
-import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
-import { UnitCardBackSVG } from '../card/UnitCardBack';
-import { DownloadCardButton } from '../DownloadCardButton/DownloadCardButton';
+import { setUnitCardActionCreator } from '../../../store/editor/editorActionCreators';
+import { UnitCard } from '../../../typing/UnitCard';
+import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
+import { UnitCardBackSVG } from '../../card/UnitCardBack';
+import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
 
 const connector = connect(
 	(state: RootState) => ({

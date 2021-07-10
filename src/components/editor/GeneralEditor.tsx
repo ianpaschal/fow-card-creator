@@ -39,9 +39,7 @@ const connector = connect(
 	}, dispatch),
 );
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type GeneralEditorProps = ReduxProps;
+export type GeneralEditorProps = ConnectedProps<typeof connector>;
 
 export const GeneralEditor: React.FC<GeneralEditorProps> = ({
 	title,

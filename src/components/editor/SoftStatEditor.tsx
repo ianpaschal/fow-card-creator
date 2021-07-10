@@ -17,9 +17,7 @@ const connector = connect(
 	}, dispatch),
 );
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type SoftStatEditorProps = ReduxProps;
+export type SoftStatEditorProps = ConnectedProps<typeof connector>;
 
 export const SoftStatEditor: React.FC<SoftStatEditorProps> = ({
 	isComponent,

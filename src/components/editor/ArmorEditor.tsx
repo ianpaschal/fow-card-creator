@@ -17,9 +17,7 @@ const connector = connect(
 	}, dispatch),
 );
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type ArmorEditorProps = ReduxProps;
+export type ArmorEditorProps = ConnectedProps<typeof connector>;
 
 export const ArmorEditor: React.FC<ArmorEditorProps> = ({
 	armor,

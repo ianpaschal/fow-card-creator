@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { UnitCard } from '../../typing/UnitCard';
-import { computeCardRating } from '../../utils/computeCardRating';
+import { UnitCard } from '../../../typing/UnitCard';
+import { computeCardRating } from '../../../utils/computeCardRating';
 import { StarRating } from '../StarRating/StarRating';
 import './UnitCardTile.scss';
 

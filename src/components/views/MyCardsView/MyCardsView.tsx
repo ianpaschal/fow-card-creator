@@ -1,10 +1,10 @@
 import React from 'react';
-import { UnitCard } from '../../typing/UnitCard';
-import { db } from '../../firebase';
+import { UnitCard } from '../../../typing/UnitCard';
+import { db } from '../../../firebase';
 import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import './MyCardsView.scss';
-import { UnitCardTile } from '../UnitCardTile/UnitCardTile';
+import { UnitCardTile } from '../../general/UnitCardTile';
 
 export interface MyCardsViewState {
 	cards: UnitCard[];

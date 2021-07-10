@@ -28,9 +28,9 @@ export function createUnitCardPDF(onComplete?: () => void) {
 
 	addFontsToPDF(doc);
 	loadPrimaryImage(unit.primaryImageURL).then((image) => {
-		UnitCardFrontPDF(doc, unit, image);
+		UnitCardFrontPDF(doc, image);
 		doc.addPage(format, orientation);
-		UnitCardBackPDF(doc, unit);
+		UnitCardBackPDF(doc);
 		if (onComplete) {
 			onComplete();
 		}

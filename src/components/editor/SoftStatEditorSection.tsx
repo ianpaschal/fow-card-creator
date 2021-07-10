@@ -19,7 +19,7 @@ import { MotivationAttributes } from '../../enums/MotivationAttributes';
 import { SkillRatings } from '../../enums/SkillRatings';
 import { SkillAttributes } from '../../enums/SkillAttributes';
 import { HitOnRatings } from '../../enums/HitOnRatings';
-import { EditorSubSection } from './EditorSubSection';
+import { EditorSubSection } from './EditorSubSection/EditorSubSection';
 import { FormItem } from './FormItem';
 import './SoftStatEditorSection.scss';
 
@@ -40,9 +40,7 @@ export interface OwnProps {
 	attribute: 'motivation' | 'skill' | 'hitOn';
 }
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type SoftStatEditorSectionProps = OwnProps & ReduxProps;
+export type SoftStatEditorSectionProps = OwnProps & ConnectedProps<typeof connector>;
 
 export class SoftStatEditorSection extends React.Component<SoftStatEditorSectionProps> {
 	render() {

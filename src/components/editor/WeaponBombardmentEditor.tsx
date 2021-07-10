@@ -17,9 +17,7 @@ export interface OwnProps {
 	weapon: Weapon;
 }
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type WeaponBombardmentEditorProps = OwnProps & ReduxProps;
+export type WeaponBombardmentEditorProps = OwnProps & ConnectedProps<typeof connector>;
 
 export const WeaponBombardmentEditor: React.FC<WeaponBombardmentEditorProps> = ({
 	i,
@@ -42,14 +40,14 @@ export const WeaponBombardmentEditor: React.FC<WeaponBombardmentEditorProps> = (
 				value="artillery"
 				name="bombardment-type"
 				onChange={(e) => updateWeapon(i, 'bombardment', { ...weapon.bombardment, template: e.value })}
-				checked={weapon.bombardment.template === 'artillery'}
+				checked={weapon.bombardment.template === 'BOMBARDMENT'}
 			/>
 			<label htmlFor="bombardment-type-artillery">Artillery</label>
 			<RadioButton
 				value="salvo"
 				name="bombardment-type"
 				onChange={(e) => updateWeapon(i, 'bombardment', { ...weapon.bombardment, template: e.value })}
-				checked={weapon.bombardment.template === 'salvo'}
+				checked={weapon.bombardment.template === 'SALVO'}
 			/>
 			<label htmlFor="bombardment-type-salvo">Salvo</label>
 		</FormItem>

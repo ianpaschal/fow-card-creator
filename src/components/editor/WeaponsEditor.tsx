@@ -35,9 +35,7 @@ export interface OwnProps {
 	className?: string;
 }
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type WeaponsEditorProps = OwnProps & ReduxProps;
+export type WeaponsEditorProps = OwnProps & ConnectedProps<typeof connector>;
 
 export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 	className: extraClassName,

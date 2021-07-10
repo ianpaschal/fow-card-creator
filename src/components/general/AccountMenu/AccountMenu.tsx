@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
 
-import { auth } from '../firebase';
+import { auth } from '../../../firebase';
 
 export class AccountMenu extends React.Component<RouteComponentProps> {
 	menuRef: React.RefObject<Menu> = React.createRef();

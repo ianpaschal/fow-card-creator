@@ -2,16 +2,16 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link, Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
 
-import { RootState } from '../store';
-import { SiteSettings } from '../SiteSettings';
+import { RootState } from '../../../store';
+import { SiteSettings } from '../../../SiteSettings';
 
-import { RoutedAccountMenu } from './AccountMenu';
-import { BrowseView } from './views/BrowseView';
-import { ConnectedEditView }from './views/EditView';
-import { ConnectedMyCardsView } from './views/MyCardsView';
-import { RoutedSignInView } from './views/SignInView';
-import { RoutedSignUpView } from './views/SignUpView';
-import { ConnectedCardView } from './views/CardView';
+import { RoutedAccountMenu } from '../AccountMenu';
+import { BrowseView } from '../../views/BrowseView/';
+import { ConnectedEditView }from '../../views/EditView';
+import { ConnectedMyCardsView } from '../../views/MyCardsView';
+import { RoutedSignInView } from '../../views/SignInView';
+import { RoutedRegisterView } from '../../views/RegisterView';
+import { ConnectedCardView } from '../../views/CardView';
 
 import './App.scss';
 
@@ -60,7 +60,7 @@ export const App: React.FC<AppProps> = ({
 						<RoutedSignInView />
 					</Route>
 					<Route path={SiteSettings.ROUTE_REGISTER} exact>
-						<RoutedSignUpView />
+						<RoutedRegisterView />
 					</Route>
 				</Switch>
 			</div>

@@ -18,9 +18,7 @@ export interface OwnProps {
 	weapon: Weapon;
 }
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type WeaponDirectEditorProps = OwnProps & ReduxProps;
+export type WeaponDirectEditorProps = OwnProps & ConnectedProps<typeof connector>;
 
 export const WeaponDirectEditor: React.FC<WeaponDirectEditorProps> = ({
 	i,

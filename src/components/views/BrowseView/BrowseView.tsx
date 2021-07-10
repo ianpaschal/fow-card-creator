@@ -1,17 +1,14 @@
 import React from 'react';
-import { UnitCard } from '../../typing/UnitCard';
-import { db } from '../../firebase';
+import { UnitCard } from '../../../typing/UnitCard';
+import { db } from '../../../firebase';
 import './BrowseView.scss';
-import { UnitCardTile } from '../UnitCardTile/UnitCardTile';
-
-export interface BrowseViewProps {
-}
+import { UnitCardTile } from '../../general/UnitCardTile';
 
 export interface BrowseViewState {
 	cards: UnitCard[]
 }
 
-export class BrowseView extends React.Component<BrowseViewProps, BrowseViewState> {
+export class BrowseView extends React.Component<{}, BrowseViewState> {
 	constructor(props: BrowseView) {
 		super(props);
 		this.state = {

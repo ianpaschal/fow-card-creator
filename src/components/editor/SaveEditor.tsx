@@ -18,9 +18,7 @@ const connector = connect(
 	}, dispatch),
 );
 
-export type ReduxProps = ConnectedProps<typeof connector>;
-
-export type SaveEditorProps = ReduxProps;
+export type SaveEditorProps = ConnectedProps<typeof connector>;
 
 export const SaveEditor: React.FC<SaveEditorProps> = ({
 	save,

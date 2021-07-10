@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { createUnitCardPDF } from '../../utils/createUnitCardPDF';
+import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
 import './DownloadCardButton.scss';
 
 export const DownloadCardButton: React.FC = () => {
+	// HOOKS? That's not a pattern we use elsewhere!
 	const [isGenerating, setIsGenerating] = useState(false);
 	const downloadPDF = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -16,6 +17,7 @@ export const DownloadCardButton: React.FC = () => {
 	return (
 		<div className="download-card-button">
 			<Button
+				className="download-card-button__button"
 				label="Export PDF"
 				icon="pi pi-download"
 				iconPos="right"

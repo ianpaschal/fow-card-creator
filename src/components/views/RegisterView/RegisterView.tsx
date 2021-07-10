@@ -2,14 +2,10 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { auth } from '../../firebase';
+import { auth } from '../../../firebase';
 
-export interface SignUpViewProps extends RouteComponentProps {
-	className?: string;
-}
-
-export class SignUpView extends React.Component<SignUpViewProps, {}> {
-	constructor(props: SignUpViewProps) {
+export class RegisterView extends React.Component<RouteComponentProps> {
+	constructor(props: RouteComponentProps) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
 	}
@@ -38,4 +34,4 @@ export class SignUpView extends React.Component<SignUpViewProps, {}> {
 	}
 }
 
-export const RoutedSignUpView = withRouter(SignUpView);
+export const RoutedRegisterView = withRouter(RegisterView);

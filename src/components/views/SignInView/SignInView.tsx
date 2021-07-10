@@ -2,16 +2,12 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { auth } from '../../firebase';
+import { auth } from '../../../firebase';
 import { Password } from 'primereact/password';
 import './SignInView.scss';
 
-export interface SignInViewProps extends RouteComponentProps {
-	className?: string;
-}
-
-export class SignInView extends React.Component<SignInViewProps, {}> {
-	constructor(props: SignInViewProps) {
+export class SignInView extends React.Component<RouteComponentProps> {
+	constructor(props: RouteComponentProps) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
 	}
