@@ -43,7 +43,7 @@ Our goal is to streamline and crowd-source this process.
 ## FAQ
 
 - Do you use any Battlefront graphical assets?
-    - No! Everything is created by @ianpaschal. The goal was to get the quality on par with Battlefront's, however all graphics, symbols, etc. are created from scratch (or open-source materials).
+    - No! Everything is created by [@ianpaschal](https://github.com/ianpaschal). The goal was to get the quality on par with Battlefront's, however all graphics, symbols, etc. are created from scratch (or open-source materials).
 - Can I create copies of Battlefront's unit cards?
     - No! If you want official units, buy the unit cards!
 

@@ -11,8 +11,11 @@
     "lint": "npm run lint:ts && npm run lint:scss",
     "deploy": "firebase deploy --only hosting"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Ian Paschal",
+    "url": "https://github.com/ianpaschal"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@types/blob-stream": "^0.1.30",
     "@types/classnames": "^2.2.11",
