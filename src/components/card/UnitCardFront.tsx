@@ -1,7 +1,5 @@
 import jsPDF from 'jspdf';
 import React from 'react';
-import { Unit } from '../../typing/Unit';
-import { CardSettings } from '../../CardSettings';
 import { ConnectedArmorBlockPDF, ConnectedArmorBlockSVG } from './ArmorBlock';
 import { ConnectedBackgroundPDF, ConnectedBackgroundSVG } from './Background';
 import { ConnectedHeaderBlockPDF, ConnectedHeaderBlockSVG } from './HeaderBlock';
@@ -13,19 +11,11 @@ import { ConnectedSaveBlockPDF, ConnectedSaveBlockSVG } from './SaveBlock';
 import { ConnectedSkillBlockPDF, ConnectedSkillBlockSVG } from './SkillBlock';
 import { ConnectedSpecialRulesListPDF, ConnectedSpecialRulesListSVG } from './SpecialRulesList';
 import { ConnectedWeaponsBlockPDF, ConnectedWeaponsBlockSVG } from './WeaponsBlock';
+import { SVGWrapper } from './SVGWrapper';
 
 export const UnitCardFrontSVG: React.FC = () => {
 	return (
-		<svg
-			id="card-print-front"
-			xmlns="http://www.w3.org/2000/svg"
-			xmlnsXlink="http://www.w3.org/1999/xlink"
-			version="1.1"
-			width={CardSettings.WIDTH}
-			height={CardSettings.HEIGHT}
-			viewBox={`0 0 ${CardSettings.WIDTH} ${CardSettings.HEIGHT}`}
-			preserveAspectRatio="xMidYMid meet"
-		>
+		<SVGWrapper>
 			<ConnectedBackgroundSVG />
 			<ConnectedPrimaryImageSVG />
 			<ConnectedHeaderBlockSVG />
@@ -37,11 +27,11 @@ export const UnitCardFrontSVG: React.FC = () => {
 			<ConnectedSaveBlockSVG />
 			<ConnectedMobilityBlockSVG />
 			<ConnectedWeaponsBlockSVG />
-		</svg>
+		</SVGWrapper>
 	);
 };
 
-export const UnitCardFrontPDF = (doc: jsPDF, unit: Unit, primaryImage: HTMLImageElement): void => {
+export const UnitCardFrontPDF = (doc: jsPDF, primaryImage: HTMLImageElement): void => {
 	ConnectedBackgroundPDF(doc);
 	ConnectedPrimaryImagePDF(doc, primaryImage);
 	ConnectedHeaderBlockPDF(doc);
