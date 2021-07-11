@@ -57,5 +57,5 @@ Therefore, all symbols or iconography within the app must be understood to serve
 
 ## License
 
-Cura is released under the terms of the MIT License.
+FoW Card Creator is released under the terms of the MIT License.
 A copy of this license should be included with the software.
