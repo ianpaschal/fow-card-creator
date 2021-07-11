@@ -36,12 +36,14 @@ export class SoftStatBlockLayout {
 	static innerWidth: number = SoftStatBlockLayout.width - (2 * SoftStatBlockLayout.innerMargin);
 	static headerFontSize: number = 4;
 
-	static calcHeight(stat: SoftStat): number {
+	static calcHeight(stat: SoftStat, isComponent = false): number {
 		let height = 0;
 		height += SoftStatBlockLayout.headerHeight;
 		height += CardSettings.STROKE_WIDTH;
 		height += SoftStatBaseRatingLayout.height;
-		height += (CardSettings.STROKE_WIDTH + SoftStatModifierLayout.height) * stat.modifiers.length;
+		if (!isComponent) {
+			height += (CardSettings.STROKE_WIDTH + SoftStatModifierLayout.height) * stat.modifiers.length;
+		}
 		height += CardSettings.STROKE_WIDTH; // Bottom space
 		height += CardSettings.STROKE_WIDTH; // Bottom border
 		return height;
@@ -56,7 +58,7 @@ export class SoftStatBlockLayout {
 			border: { top: SoftStatBlockLayout.headerHeight },
 			fill: CardSettings.COLOR_WHITE,
 			fillOpacity: 0.5,
-			height: SoftStatBlockLayout.calcHeight(this.props.stat),
+			height: SoftStatBlockLayout.calcHeight(this.props.stat, this.props.isComponent),
 			radius: CardSettings.CORNER_RADIUS,
 			stroke: this.props.accentColor,
 		};
@@ -112,7 +114,7 @@ export const SoftStatBlockSVG: React.FC<SoftStatBlockProps> = (props: SoftStatBl
 			<FrameSVG {...layout.frameProps} />
 			<TextSVG {...layout.headerProps} />
 			<SoftStatBaseRatingSVG {...layout.softStatBaseRatingProps} />
-			{props.stat.modifiers.map((_modifier, i) => (
+			{!props.isComponent && props.stat.modifiers.map((_modifier, i) => (
 				<SoftStatModifierSVG key={i} {...layout.getSoftStatModifierProps(i)} />
 			))}
 		</>
@@ -125,7 +127,9 @@ export const SoftStatBlockPDF = (doc: jsPDF, props: SoftStatBlockProps) => {
 	FramePDF(doc, layout.frameProps);
 	TextPDF(doc, layout.headerProps);
 	SoftStatBaseRatingPDF(doc, layout.softStatBaseRatingProps);
-	props.stat.modifiers.forEach((_modifier, i) => (
-		SoftStatModifierPDF(doc, layout.getSoftStatModifierProps(i))
-	));
+	if (!props.isComponent) {
+		props.stat.modifiers.forEach((_modifier, i) => (
+			SoftStatModifierPDF(doc, layout.getSoftStatModifierProps(i))
+		));
+	}
 };
