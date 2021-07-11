@@ -34,7 +34,7 @@ Some examples are below:
 
 In fact, Battlefront themselves also began releasing "community-created, Battlefront-approved" unit cards which matched the official cards in graphic design quality:
 
-- [Custom Unit Cards](https://www.flamesofwar.com/Default.aspx?tabid=109&art_id=6088)
+- [Community Unit Cards](https://www.flamesofwar.com/Default.aspx?tabid=109&art_id=6088)
 
 Our goal is to streamline and crowd-source this process.
 
