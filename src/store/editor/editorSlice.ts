@@ -19,7 +19,7 @@ import { getBaseColor } from '../../utils/getBaseColor';
 import { UnitCard } from '../../typing/UnitCard';
 import { ImageFormat } from '../../enums/ImageFormats';
 import { computeCardLayout } from '../../utils/computeCardLayout';
-import { defaultUnitCard } from './defaultUnitCard';
+import { createDefaultUnitCard } from '../../utils/createDefaultUnitCard';
 
 export interface EditorState {
 	unitCard: UnitCard | null;
@@ -27,7 +27,7 @@ export interface EditorState {
 }
 
 export const initialState: EditorState = {
-	unitCard: defaultUnitCard,
+	unitCard: createDefaultUnitCard(),
 	availableSpecialRules: filterUnitSpecialRules(undefined),
 };
 

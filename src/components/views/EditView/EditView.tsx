@@ -23,9 +23,9 @@ import {
 import { UnitCard } from '../../../typing/UnitCard';
 import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
 import { ConnectedImagesEditor } from '../../editor/ImagesSection';
-import { defaultUnitCard } from '../../../store/editor/defaultUnitCard';
 import { UnitCardBackSVG } from '../../card/UnitCardBack';
 import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
+import { createDefaultUnitCard } from '../../../utils/createDefaultUnitCard';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -100,7 +100,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		}
 		const ref = db.collection('cards').doc();
 		setUnitCard({
-			...defaultUnitCard,
+			...createDefaultUnitCard(),
 			authorID: auth.currentUser.uid,
 			id: ref.id,
 		});

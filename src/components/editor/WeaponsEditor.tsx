@@ -9,7 +9,11 @@ import {
 	updateWeaponActionCreator,
 	updateWeaponNameActionCreator,
 } from '../../store/editor/editorActionCreators';
-import { defaultBombardment, defaultDirectFire, defaultWeapon } from '../../store/editor/defaultWeapon';
+import {
+	createDefaultBombardment,
+	createDefaultDirectFire,
+	createDefaultWeapon,
+} from '../../utils/createDefaultWeapon';
 import { InputText } from 'primereact/inputtext';
 import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
@@ -60,7 +64,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 				<FormItem label="Can Bombard">
 					<Checkbox
 						checked={Boolean(weapon.bombardment)}
-						onChange={(e) => updateWeapon(i, 'bombardment', e.checked ? defaultBombardment : null)}
+						onChange={(e) => updateWeapon(i, 'bombardment', e.checked ? createDefaultBombardment() : null)}
 					/>
 				</FormItem>
 				{Boolean(weapon.bombardment) && (
@@ -71,7 +75,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 				<FormItem label="Can Direct Fire">
 					<Checkbox
 						checked={Boolean(weapon.direct)}
-						onChange={(e) => updateWeapon(i, 'direct', e.checked ? defaultDirectFire : null)}
+						onChange={(e) => updateWeapon(i, 'direct', e.checked ? createDefaultDirectFire() : null)}
 					/>
 				</FormItem>
 				{Boolean(weapon.direct) && (
@@ -83,7 +87,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 					<Checkbox
 						checked={Boolean(weapon.secondary)}
 						onChange={(e) => updateWeapon(i, 'secondary', e.checked ? {
-							...defaultDirectFire,
+							...createDefaultDirectFire(),
 							name: '',
 						} : null)}
 					/>
@@ -99,7 +103,7 @@ export const WeaponsEditor: React.FC<WeaponsEditorProps> = ({
 				icon="pi pi-plus" iconPos="left"
 				onClick={(e) => {
 					e.preventDefault();
-					addWeapon(defaultWeapon);
+					addWeapon(createDefaultWeapon());
 				}}
 			/>
 		</div>

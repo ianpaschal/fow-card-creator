@@ -1,18 +1,18 @@
-/* eslint-disable max-len */
+import { actions } from './editorSlice';
+import { ArmorRating } from '../../typing/ArmorRating';
 import { Dispatch } from '@reduxjs/toolkit';
 import { Era } from '../../enums/Eras';
 import { ImageFormat } from '../../enums/ImageFormats';
+import { isHitOnRating, isMotivationRating, isSkillRating, SoftStatBaseRating } from '../../typing/SoftStat';
 import { MobilityField } from '../../enums/MobilityFields';
 import { Nationality } from '../../enums/Nations';
+import { SaveRating } from '../../typing/SaveRating';
 import { SkillRating } from '../../enums/SkillRatings';
+import { SoftStatField } from '../../enums/SoftStatFields';
+import { UnitCard } from '../../typing/UnitCard';
 import { UnitSpecialRuleName } from '../../enums/UnitSpecialRuleNames';
 import { UnitType } from '../../enums/UnitTypes';
-import { ArmorRating } from '../../typing/ArmorRating';
-import { SaveRating } from '../../typing/SaveRating';
-import { isHitOnRating, isMotivationRating, isSkillRating, SoftStatBaseRating } from '../../typing/SoftStat';
-import { UnitCard } from '../../typing/UnitCard';
 import { Weapon, WeaponFiringData, WeaponFiringMode } from '../../typing/Weapon';
-import { actions } from './editorSlice';
 
 export const setUnitCardActionCreator = (unitCard: UnitCard) => (dispatch: Dispatch) => {
 	dispatch(actions.setUnitCard(unitCard));
@@ -78,15 +78,15 @@ export function setSpecialRulesActionCreator(specialRules: UnitSpecialRuleName[]
 	};
 }
 
-export function setBaseRatingActionCreator(softStat: string, rating: SoftStatBaseRating) {
+export function setBaseRatingActionCreator(field: SoftStatField, rating: SoftStatBaseRating) {
 	return (dispatch: Dispatch) => {
-		if (isMotivationRating(rating)) {
+		if (field === 'motivation' && isMotivationRating(rating)) {
 			dispatch(actions.setMotivationBaseRating(rating));
 		}
-		if (isSkillRating(rating)) {
+		if (field === 'skill' && isSkillRating(rating)) {
 			dispatch(actions.setSkillBaseRating(rating));
 		}
-		if (isHitOnRating(rating)) {
+		if (field === 'hitOn' && isHitOnRating(rating)) {
 			dispatch(actions.setHitOnBaseRating(rating));
 		}
 	};
@@ -98,19 +98,20 @@ export function setSkillBaseRatingActionCreator(skillBaseRating: SkillRating) {
 	};
 }
 
-export function addModifierActionCreator(modifierType: 'motivation' | 'skill' | 'hitOn', modifier: any) {
+// TODO: Combine the following three action creators into one
+export function addModifierActionCreator(modifierType: SoftStatField, modifier: any) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.addModifier({ modifierType, modifier }));
 	};
 }
 
-export function updateModifierActionCreator(modifierType: 'motivation' | 'skill' | 'hitOn', index: number, modifier: any) {
+export function updateModifierActionCreator(modifierType: SoftStatField, index: number, modifier: any) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.updateModifier({ modifierType, index, modifier }));
 	};
 }
 
-export function removeModifierActionCreator(modifierType: 'motivation' | 'skill' | 'hitOn', index: number) {
+export function removeModifierActionCreator(modifierType: SoftStatField, index: number) {
 	return (dispatch: Dispatch) => {
 		dispatch(actions.removeModifier({ modifierType, index }));
 	};

@@ -8,7 +8,7 @@ import { SiteSettings } from '../../../SiteSettings';
 import { RoutedAccountMenu } from '../AccountMenu';
 import { BrowseView } from '../../views/BrowseView/';
 import { ConnectedEditView }from '../../views/EditView';
-import { ConnectedMyCardsView } from '../../views/MyCardsView';
+import { MyCardsView } from '../../views/MyCardsView';
 import { RoutedSignInView } from '../../views/SignInView';
 import { RoutedRegisterView } from '../../views/RegisterView';
 import { ConnectedCardView } from '../../views/CardView';
@@ -45,7 +45,7 @@ export const App: React.FC<AppProps> = ({
 						<BrowseView />
 					</Route>
 					<Route path={SiteSettings.ROUTE_MY_CARDS} exact>
-						<ConnectedMyCardsView />
+						<MyCardsView />
 					</Route>
 					<Route path={SiteSettings.ROUTE_EDIT} exact>
 						<ConnectedEditView />
