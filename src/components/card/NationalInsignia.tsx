@@ -4,6 +4,7 @@ import { pt } from '../../utils/convertDistance';
 import { Nationality } from '../../enums/Nations';
 import { Era } from '../../enums/Eras';
 
+import BE from '../../../assets/images/insignia/insignia-be.png';
 import BR from '../../../assets/images/insignia/insignia-br.png';
 import FI_MW from '../../../assets/images/insignia/insignia-fi-mw.png';
 import FI_LW from '../../../assets/images/insignia/insignia-fi-lw.png';
@@ -11,10 +12,12 @@ import FR from '../../../assets/images/insignia/insignia-fr.png';
 import GE_MW from '../../../assets/images/insignia/insignia-ge-mw.png';
 import GE_LW from '../../../assets/images/insignia/insignia-ge-lw.png';
 import HU from '../../../assets/images/insignia/insignia-hu.png';
+import PL from '../../../assets/images/insignia/insignia-pl.png';
 import SU from '../../../assets/images/insignia/insignia-su.png';
+import US from '../../../assets/images/insignia/insignia-us.png';
 
 const insignia: Record<Nationality, string | {EW: string, MW: string, LW: string}> = {
-	'BE': null,
+	'BE': BE,
 	'BR': BR,
 	'CN': null,
 	'FI': {
@@ -33,10 +36,10 @@ const insignia: Record<Nationality, string | {EW: string, MW: string, LW: string
 	'JP': null,
 	'NL': null,
 	'NO': null,
-	'PL': null,
+	'PL': PL,
 	'RO': null,
 	'SU': SU,
-	'US': null,
+	'US': US,
 };
 
 export interface NationalInsigniaProps {
