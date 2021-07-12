@@ -28,9 +28,8 @@ export class SignInView extends React.Component<RouteComponentProps> {
 			<div className="sign-in-view">
 				<h1>Sign In</h1>
 				<form onSubmit={this.onSubmit}>
-					<InputText placeholder="email" />
-					<Password feedback={false} />
-
+					<InputText placeholder="Email" />
+					<Password placeholder="Password" feedback={false} />
 					<Button type={'submit'}>Sign In</Button>
 				</form>
 			</div>
