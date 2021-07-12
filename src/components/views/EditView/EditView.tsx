@@ -4,7 +4,6 @@ import { ConnectedGeneralEditor } from '../../editor/GeneralEditor';
 import { ConnectedMobilityEditor } from '../../editor/MobilityEditor';
 import { ConnectedCharacteristicsEditor } from '../../editor/CharacteristicsEditor';
 import { ConnectedWeaponsEditor } from '../../editor/WeaponsEditor';
-import { SelectButton } from 'primereact/selectbutton';
 import './EditView.scss';
 import { ConnectedSoftStatEditor } from '../../editor/SoftStatEditor';
 import { connect, ConnectedProps } from 'react-redux';
@@ -27,6 +26,7 @@ import { UnitCardBackSVG } from '../../card/UnitCardBack';
 import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
 import { createDefaultUnitCard } from '../../../utils/createDefaultUnitCard';
 import { SiteSettings } from '../../../SiteSettings';
+import { SplitButton } from 'primereact/splitbutton';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -50,19 +50,22 @@ export type EditViewProps = OwnProps & ConnectedProps<typeof connector> & RouteC
 export interface EditViewState {
 	view: 'editor' | 'split' | 'preview';
 	isPDFGenerating: boolean;
+	windowWidth: number;
 }
 
 export class EditView extends React.Component<EditViewProps, EditViewState> {
 	constructor(props: EditViewProps) {
 		super(props);
 		this.state = {
-			view: window.innerWidth > 800 ? 'split' : 'preview',
+			windowWidth: window.innerWidth,
+			view: window.innerWidth > 800 ? 'split' : 'editor',
 			isPDFGenerating: false,
 		};
 		this.downloadPDF = this.downloadPDF.bind(this);
 		this.loadCard = this.loadCard.bind(this);
 		this.saveCard = this.saveCard.bind(this);
 		this.createCard = this.createCard.bind(this);
+		this.onWindowResize = this.onWindowResize.bind(this);
 	}
 
 	// TODO: Convert to useEffect hook?
@@ -74,6 +77,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		} else {
 			this.createCard();
 		}
+		window.addEventListener('resize', this.onWindowResize);
 	}
 
 	// TODO: Convert to useEffect hook?
@@ -94,6 +98,18 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 				this.createCard();
 			}
 		}
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.onWindowResize);
+	}
+
+	onWindowResize() {
+		const { view } = this.state;
+		this.setState({
+			windowWidth: window.innerWidth,
+			view: window.innerWidth < 800 && view === 'split' ? 'editor' : view,
+		});
 	}
 
 	// TODO: Move to middleware?
@@ -152,7 +168,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 	// eslint-disable-next-line complexity
 	render() {
 		const { armor, save } = this.props;
-		const { view } = this.state;
+		const { view, windowWidth } = this.state;
 		return (
 			<form className="edit-view" onSubmit={this.saveCard}>
 
@@ -165,20 +181,14 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 					</div> */}
 
 					<div className="edit-view__toolbar-section">
-						<SelectButton
-							value={view}
-							options={[
-								{ label: 'Editor', value: 'editor' },
-								...(window.innerWidth > 800 ? [{ label: 'Split', value: 'split' }] : []),
-								{ label: 'Preview', value: 'preview' },
+						<SplitButton
+							label={view[ 0 ].toUpperCase() + view.substring(1)}
+							model={[
+								{ label: 'Editor', value: 'editor', command: () => this.setState({ view: 'editor' }) },
+								...(windowWidth > 800 ? [{ label: 'Split', value: 'split', command: () => this.setState({ view: 'split' })  }] : []),
+								{ label: 'Preview', value: 'preview', command: () => this.setState({ view: 'preview' })  },
 							]}
-							onChange={(e) => {
-								if (!e.value || e.value === view) {
-									return;
-								}
-								this.setState({ view: e.value });
-							}}
-						></SelectButton>
+						/>
 					</div>
 					<div className="edit-view__toolbar-section">
 						<DownloadCardButton />

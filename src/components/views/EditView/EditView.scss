@@ -22,9 +22,10 @@
 		height: 65px;
 		display: flex;
 		flex-direction: row;
-		padding: 16px 32px;
+		padding: 16px;
 		border-bottom: 1px solid rgb(225, 228, 232);
 		z-index: 5;
+		align-items: center;
 
 		.edit-view__toolbar-section {
 			margin-left: 1rem;
@@ -50,7 +51,7 @@
 			overflow-y: scroll;
 			min-width: 360px;
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
 		}
 
 		.edit-view__preview-pane {
