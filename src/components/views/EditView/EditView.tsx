@@ -26,6 +26,7 @@ import { ConnectedImagesEditor } from '../../editor/ImagesSection';
 import { UnitCardBackSVG } from '../../card/UnitCardBack';
 import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
 import { createDefaultUnitCard } from '../../../utils/createDefaultUnitCard';
+import { SiteSettings } from '../../../SiteSettings';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -64,6 +65,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		this.createCard = this.createCard.bind(this);
 	}
 
+	// TODO: Convert to useEffect hook?
 	componentDidMount() {
 		const { location } = this.props;
 		const cardID = location.pathname.split('/')[ 2 ];
@@ -74,6 +76,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		}
 	}
 
+	// TODO: Convert to useEffect hook?
 	componentDidUpdate(prevProps: EditViewProps) {
 		if (this.props.currentUserID !== prevProps.currentUserID) {
 			const cardID = location.pathname.split('/')[ 2 ];
@@ -93,6 +96,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		}
 	}
 
+	// TODO: Move to middleware?
 	async createCard(): Promise<void> {
 		const { setUnitCard } = this.props;
 		if (!auth.currentUser) {
@@ -104,8 +108,9 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 			authorID: auth.currentUser.uid,
 			id: ref.id,
 		});
-	  }
+	}
 
+	// TODO: Move to middleware?
 	async loadCard(): Promise<void> {
 		const { location, setUnitCard } = this.props;
 		const cardID = location.pathname.split('/')[ 2 ];
@@ -116,6 +121,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		setUnitCard(document.data() as UnitCard);
 	}
 
+	// TODO: Move to middleware?
 	async saveCard(e: React.FormEvent<HTMLFormElement>): Promise<void> {
 		e.preventDefault();
 		const { history, currentUserID } = this.props;
@@ -127,7 +133,7 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 			authorID: currentUserID,
 		};
 		await db.collection('cards').doc(data.id).set(data);
-		history.push('/mycards');
+		history.push(SiteSettings.ROUTE_MY_CARDS);
 	}
 
 	downloadPDF(e: React.MouseEvent) {

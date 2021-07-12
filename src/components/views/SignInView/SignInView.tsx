@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { auth } from '../../../firebase';
 import { Password } from 'primereact/password';
 import './SignInView.scss';
+import { SiteSettings } from '../../../SiteSettings';
 
 export class SignInView extends React.Component<RouteComponentProps> {
 	constructor(props: RouteComponentProps) {
@@ -16,7 +17,7 @@ export class SignInView extends React.Component<RouteComponentProps> {
 		const { history } = this.props;
 		e.preventDefault();
 		auth.signInWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((_user) => {
-			history.push('/mycards');
+			history.push(SiteSettings.ROUTE_MY_CARDS);
 		}).catch((error) => {
 			console.error(error);
 		});

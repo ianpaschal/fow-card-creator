@@ -5,6 +5,7 @@ import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
 
 import { auth } from '../../../firebase';
+import { SiteSettings } from '../../../SiteSettings';
 
 export class AccountMenu extends React.Component<RouteComponentProps> {
 	menuRef: React.RefObject<Menu> = React.createRef();
@@ -17,7 +18,7 @@ export class AccountMenu extends React.Component<RouteComponentProps> {
 	signOut() {
 		const { history } = this.props;
 		auth.signOut().then(() => {
-			history.push('/');
+			history.push(SiteSettings.ROUTE_BROWSE);
 		}).catch((error) => {
 			console.warn(error);
 		});
@@ -30,12 +31,12 @@ export class AccountMenu extends React.Component<RouteComponentProps> {
 				{
 					label: 'Sign In',
 					icon: 'pi pi-fw pi-cog',
-					command: () => history.push('/signin'),
+					command: () => history.push(SiteSettings.ROUTE_SIGN_IN),
 				},
 				{
 					label: 'Register',
 					icon: 'pi pi-fw pi-cog',
-					command: () => history.push('/register'),
+					command: () => history.push(SiteSettings.ROUTE_REGISTER),
 				},
 			] : [{ label: 'Sign Out', icon: 'pi pi-fw pi-power-off', command: this.signOut }]),
 		];

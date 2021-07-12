@@ -3,6 +3,7 @@ import { InputText } from 'primereact/inputtext';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { auth } from '../../../firebase';
+import { SiteSettings } from '../../../SiteSettings';
 
 export class RegisterView extends React.Component<RouteComponentProps> {
 	constructor(props: RouteComponentProps) {
@@ -14,7 +15,7 @@ export class RegisterView extends React.Component<RouteComponentProps> {
 		const { history } = this.props;
 		e.preventDefault();
 		auth.createUserWithEmailAndPassword(e.target[ 0 ].value, e.target[ 1 ].value).then((_user) => {
-			history.push('/');
+			history.push(SiteSettings.ROUTE_BROWSE);
 		}).catch((error) => {
 			console.error(error);
 		});
