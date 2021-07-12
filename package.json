@@ -9,6 +9,7 @@
     "lint:ts": "eslint --fix './src/**/*.{ts,tsx}'",
     "lint:scss": "stylelint --fix '**/*.scss'",
     "lint": "npm run lint:ts && npm run lint:scss",
+    "predeploy": "npm run build:client",
     "deploy": "firebase deploy --only hosting"
   },
   "author": {
