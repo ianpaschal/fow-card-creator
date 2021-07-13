@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useWindowWidth } from '@react-hook/window-size';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
 import './DownloadCardButton.scss';
 
 export const DownloadCardButton: React.FC = () => {
-	// HOOKS? That's not a pattern we use elsewhere!
+	const windowWidth = useWindowWidth();
 	const [isGenerating, setIsGenerating] = useState(false);
 	const downloadPDF = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -18,7 +19,7 @@ export const DownloadCardButton: React.FC = () => {
 		<div className="download-card-button">
 			<Button
 				className="download-card-button__button"
-				label="Export PDF"
+				label={windowWidth >= 720 ? 'Export PDF' : null}
 				icon="pi pi-download"
 				iconPos="right"
 				tooltipOptions={{ position: 'bottom' }}

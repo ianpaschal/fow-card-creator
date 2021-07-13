@@ -27,6 +27,7 @@ import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCar
 import { createDefaultUnitCard } from '../../../utils/createDefaultUnitCard';
 import { SiteSettings } from '../../../SiteSettings';
 import { SplitButton } from 'primereact/splitbutton';
+import { Page } from '../../general/Page/Page';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -170,33 +171,27 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 		const { armor, save } = this.props;
 		const { view, windowWidth } = this.state;
 		return (
-			<form className="edit-view" onSubmit={this.saveCard}>
-
-				<div className="edit-view__toolbar">
-					<div className="edit-view__toolbar-section">
-						<Button type="submit" label="Save &amp; Close" icon="pi pi-arrow-left" iconPos="left" />
-					</div>
-					{/* <div className="edit-view__toolbar-section">
-						<Button label="Duplicate" className="p-button-secondary p-button-outlined" />
-					</div> */}
-
-					<div className="edit-view__toolbar-section">
-						<SplitButton
-							label={view[ 0 ].toUpperCase() + view.substring(1)}
-							model={[
-								{ label: 'Editor', value: 'editor', command: () => this.setState({ view: 'editor' }) },
-								...(windowWidth > 800 ? [{ label: 'Split', value: 'split', command: () => this.setState({ view: 'split' })  }] : []),
-								{ label: 'Preview', value: 'preview', command: () => this.setState({ view: 'preview' })  },
-							]}
-						/>
-					</div>
-					<div className="edit-view__toolbar-section">
-						<DownloadCardButton />
-					</div>
-				</div>
-				<div className="edit-view__main">
-					{(view === 'editor' || view === 'split') && (
-						<div className="edit-view__edit-pane">
+			<Page className="edit-view" toolbarItems={[
+				<div key="save-close-button">
+					<Button type="submit" label={windowWidth >= 720 ? 'Save & Close' : null} icon="pi pi-save" iconPos="left" />
+				</div>,
+				<div key="view-select-button">
+					<SplitButton
+						label={view[ 0 ].toUpperCase() + view.substring(1)}
+						model={[
+							{ label: 'Editor', value: 'editor', command: () => this.setState({ view: 'editor' }) },
+							...(windowWidth >= 720 ? [{ label: 'Split', value: 'split', command: () => this.setState({ view: 'split' })  }] : []),
+							{ label: 'Preview', value: 'preview', command: () => this.setState({ view: 'preview' })  },
+						]}
+					/>
+				</div>,
+				<div key="download-button">
+					<DownloadCardButton />
+				</div>,
+			]}>
+				{(view === 'editor' || view === 'split') && (
+					<div className="edit-view__edit-pane">
+						<form onSubmit={this.saveCard}>
 							<ConnectedGeneralEditor />
 							<ConnectedImagesEditor />
 							<ConnectedCharacteristicsEditor />
@@ -209,16 +204,16 @@ export class EditView extends React.Component<EditViewProps, EditViewState> {
 							<ConnectedSoftStatEditor />
 							<ConnectedMobilityEditor />
 							<ConnectedWeaponsEditor />
-						</div>
-					)}
-					{(view === 'preview' || view === 'split') && (
-						<div className="edit-view__preview-pane">
-							<UnitCardFrontSVG />
-							<UnitCardBackSVG />
-						</div>
-					)}
-				</div>
-			</form>
+						</form>
+					</div>
+				)}
+				{(view === 'preview' || view === 'split') && (
+					<div className="edit-view__preview-pane">
+						<UnitCardFrontSVG />
+						<UnitCardBackSVG />
+					</div>
+				)}
+			</Page>
 		);
 	}
 }

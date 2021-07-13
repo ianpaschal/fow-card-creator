@@ -4,6 +4,7 @@ import { RootState } from '../../../store';
 import { UnitCardTile } from '../../general/UnitCardTile';
 import { fetchCardsByAuthorID } from '../../../store/cards/actions/fetchCardsByAuthorID';
 import './MyCardsView.scss';
+import { Page } from '../../general/Page/Page';
 
 export const MyCardsView = () => {
 	const dispatch = useDispatch();
@@ -15,13 +16,13 @@ export const MyCardsView = () => {
 		}
 	});
 	return (
-		<div className="my-cards-view">
+		<Page className="my-cards-view">
 			<h1>My Cards</h1>
 			<div className="my-cards-view__cards">
 				{cards && cards.map((card, i) => (
 					<UnitCardTile key={i} card={card} linkURL={`/edit/${card.id}`} />
 				))}
 			</div>
-		</div>
+		</Page>
 	);
 };

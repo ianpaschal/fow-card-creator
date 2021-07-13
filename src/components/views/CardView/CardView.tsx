@@ -13,6 +13,7 @@ import { UnitCard } from '../../../typing/UnitCard';
 import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
 import { UnitCardBackSVG } from '../../card/UnitCardBack';
 import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
+import { Page } from '../../general/Page/Page';
 
 const connector = connect(
 	(state: RootState) => ({
@@ -70,31 +71,32 @@ export class CardView extends React.Component<CardViewProps> {
 		history.push(`/edit/${this.cardID}`);
 	}
 
+	getToolbarItems() {
+
+	}
+
 	render() {
 		const { currentUserID, cardAuthorID } = this.props;
 		return (
-			<div className="card-view">
-				<div className="card-view__toolbar">
-					{(currentUserID === cardAuthorID) && (
-						<div className="card-view__toolbar-section">
-							<Button
-								className="p-button-success"
-								label="Edit"
-								icon="pi pi-pencil"
-								iconPos="left"
-								onClick={this.editCard}
-							/>
-						</div>
-					)}
-					<div className="card-view__toolbar-section">
-						<DownloadCardButton />
-					</div>
-				</div>
-				<div className="card-view__main">
-					<UnitCardFrontSVG />
-					<UnitCardBackSVG />
-				</div>
-			</div>
+			<Page className="card-view" toolbarItems={[
+				...(currentUserID === cardAuthorID ? [
+					<div key="edit-button">
+						<Button
+							className="p-button-success"
+							label="Edit"
+							icon="pi pi-pencil"
+							iconPos="left"
+							onClick={this.editCard}
+						/>
+					</div>,
+				] : []),
+				(<div key="download-button">
+					<DownloadCardButton />
+				</div>),
+			]}>
+				<UnitCardFrontSVG />
+				<UnitCardBackSVG />
+			</Page>
 		);
 	}
 }
