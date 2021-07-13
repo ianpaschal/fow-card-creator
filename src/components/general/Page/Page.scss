@@ -40,7 +40,7 @@ $toolbar-height: $base-height + 2 * $padding + $border-width;
 	}
 
 	&__content--toolbar {
-		padding-top: $toolbar-height;
+		margin-top: $toolbar-height;
 	}
 
 	&__toolbar--desktop {

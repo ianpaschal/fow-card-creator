@@ -27,7 +27,7 @@ import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCar
 import { createDefaultUnitCard } from '../../../utils/createDefaultUnitCard';
 import { SiteSettings } from '../../../SiteSettings';
 import { SplitButton } from 'primereact/splitbutton';
-import { Page } from '../../general/Page/Page';
+import { Page } from '../../general/Page';
 
 const connector = connect(
 	(state: RootState) => ({

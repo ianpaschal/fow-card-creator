@@ -7,9 +7,7 @@ export const SignOutView: React.FC = () => {
 	useEffect(() => {
 		auth.signOut();
 	});
-	return (
-		<Redirect to={SiteSettings.ROUTE_BROWSE} />
-	);
+	return <Redirect to={SiteSettings.ROUTE_BROWSE} />;
 };
 
 export const RoutedSignOutView = withRouter(SignOutView);

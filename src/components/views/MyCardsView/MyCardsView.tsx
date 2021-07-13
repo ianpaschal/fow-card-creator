@@ -4,7 +4,7 @@ import { RootState } from '../../../store';
 import { UnitCardTile } from '../../general/UnitCardTile';
 import { fetchCardsByAuthorID } from '../../../store/cards/actions/fetchCardsByAuthorID';
 import './MyCardsView.scss';
-import { Page } from '../../general/Page/Page';
+import { Page } from '../../general/Page';
 
 export const MyCardsView = () => {
 	const dispatch = useDispatch();

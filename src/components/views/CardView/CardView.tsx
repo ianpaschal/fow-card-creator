@@ -13,7 +13,7 @@ import { UnitCard } from '../../../typing/UnitCard';
 import { createUnitCardPDF } from '../../../utils/createUnitCardPDF';
 import { UnitCardBackSVG } from '../../card/UnitCardBack';
 import { DownloadCardButton } from '../../general/DownloadCardButton/DownloadCardButton';
-import { Page } from '../../general/Page/Page';
+import { Page } from '../../general/Page';
 
 const connector = connect(
 	(state: RootState) => ({

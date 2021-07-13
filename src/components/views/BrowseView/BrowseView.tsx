@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { fetchAllPublicCards } from '../../../store/cards/actions/fetchAllPublicCards';
 import './BrowseView.scss';
-import { Page } from '../../general/Page/Page';
+import { Page } from '../../general/Page';
 
 export const BrowseView = () => {
 	const dispatch = useDispatch();

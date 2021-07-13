@@ -6,6 +6,7 @@ import { auth } from '../../../firebase';
 import { SiteSettings } from '../../../SiteSettings';
 import { Password } from 'primereact/password';
 import './RegisterView.scss';
+import { Page } from '../../general/Page';
 
 export class RegisterView extends React.Component<RouteComponentProps> {
 	constructor(props: RouteComponentProps) {
@@ -25,14 +26,14 @@ export class RegisterView extends React.Component<RouteComponentProps> {
 
 	render() {
 		return (
-			<div className="register-view">
-				<h1>Sign Up</h1>
+			<Page className="register-view">
+				<h1>Register</h1>
 				<form onSubmit={this.onSubmit}>
 					<InputText placeholder="Email" />
 					<Password placeholder="Password" feedback={false} />
 					<Button type={'submit'}>Sign Up</Button>
 				</form>
-			</div>
+			</Page>
 		);
 	}
 }

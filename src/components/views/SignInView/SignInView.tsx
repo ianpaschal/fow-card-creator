@@ -6,6 +6,7 @@ import { auth } from '../../../firebase';
 import { Password } from 'primereact/password';
 import './SignInView.scss';
 import { SiteSettings } from '../../../SiteSettings';
+import { Page } from '../../general/Page';
 
 export class SignInView extends React.Component<RouteComponentProps> {
 	constructor(props: RouteComponentProps) {
@@ -25,14 +26,14 @@ export class SignInView extends React.Component<RouteComponentProps> {
 
 	render() {
 		return (
-			<div className="sign-in-view">
+			<Page className="sign-in-view">
 				<h1>Sign In</h1>
 				<form onSubmit={this.onSubmit}>
 					<InputText placeholder="Email" />
 					<Password placeholder="Password" feedback={false} />
 					<Button type={'submit'}>Sign In</Button>
 				</form>
-			</div>
+			</Page>
 		);
 	}
 }
