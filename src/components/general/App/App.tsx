@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Link, Route, RouteComponentProps, Switch, useHistory, withRouter } from 'react-router-dom';
+import { NavLink, Route, RouteComponentProps, Switch, useHistory, withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { RootState } from '../../../store';
@@ -76,17 +76,18 @@ export const App: React.FC<AppProps> = ({
 		<div className={classNames('app', !isMobile && 'app--desktop')}>
 			<Sidebar isOpen={sidebarOpen} isMobile={isMobile} onToggle={toggleSidebar}>
 				<h1>FoW Card Creator</h1>
-				<Link to={SiteSettings.ROUTE_BROWSE}>Browse</Link>
+				{/* TODO: This code could be looped probably... */}
+				<NavLink to={SiteSettings.ROUTE_BROWSE} exact activeClassName="sidebar__active-link">Browse</NavLink>
 				{currentUserID ? (
 					<>
-						<Link to={SiteSettings.ROUTE_MY_CARDS}>My Cards</Link>
-						<Link to={SiteSettings.ROUTE_CREATE}>Create</Link>
-						<Link to={SiteSettings.ROUTE_SIGN_OUT}>Sign Out</Link>
+						<NavLink to={SiteSettings.ROUTE_MY_CARDS} exact activeClassName="sidebar__active-link">My Cards</NavLink>
+						<NavLink to={SiteSettings.ROUTE_CREATE} exact activeClassName="sidebar__active-link">Create</NavLink>
+						<NavLink to={SiteSettings.ROUTE_SIGN_OUT} exact activeClassName="sidebar__active-link">Sign Out</NavLink>
 					</>
 				) : (
 					<>
-						<Link to={SiteSettings.ROUTE_SIGN_IN}>Sign In</Link>
-						<Link to={SiteSettings.ROUTE_REGISTER}>Register</Link>
+						<NavLink to={SiteSettings.ROUTE_SIGN_IN} exact activeClassName="sidebar__active-link">Sign In</NavLink>
+						<NavLink to={SiteSettings.ROUTE_REGISTER} exact activeClassName="sidebar__active-link">Register</NavLink>
 					</>
 				)}
 			</Sidebar>
