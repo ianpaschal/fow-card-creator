@@ -45,18 +45,14 @@ export class CardView extends React.Component<CardViewProps> {
 	}
 
 	componentDidUpdate(prevProps: CardViewProps) {
-		const userIDChanged = this.props.currentUserID !== prevProps.currentUserID;
 		const locationChanged = this.props.location !== prevProps.location;
-		if (userIDChanged || locationChanged) {
+		if (locationChanged) {
 			this.loadCard();
 		}
 	}
 
 	async loadCard(): Promise<void> {
 		const { setUnitCard } = this.props;
-		if (!auth.currentUser) {
-			return;
-		}
 		const document = await db.collection('cards').doc(this.cardID).get();
 		setUnitCard(document.data() as UnitCard);
 	}
